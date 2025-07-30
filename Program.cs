@@ -11,6 +11,7 @@ using Workforce.Business.Infra.HumanResource.Repository;
 using Workforce.Business.Infra.HumanResource.Technique.Repository;
 using Workforce.Business.Infra.Party.Repository;
 using Workforce.Business.Infra.PartyRole.Repository;
+using Workforce.Business.Infra.Role.Repository;
 using Workforce.Business.Infra.WorkAgreement.Repository;
 using Workforce.Business.Infra.WorkingHours;
 using Workforce.Business.Infra.WorkUnit.Repository;
@@ -98,6 +99,9 @@ builder.Services.AddScoped<OrganizationRepository>();
 
 // Infra - PartyRole
 builder.Services.AddScoped<UserRepository>();
+
+// Infra - Role
+builder.Services.AddScoped<FacilityRepository>();
 
 // Infra - HumanResource
 builder.Services.AddScoped<HumanResourceRepository>();
