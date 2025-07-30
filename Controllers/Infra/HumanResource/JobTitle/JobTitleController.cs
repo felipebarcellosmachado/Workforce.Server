@@ -33,6 +33,38 @@ namespace Workforce.Server.Controllers.Infra.HumanResource.JobTitle
             }
         }
 
+        [HttpGet("environment/{environmentId}/{id}")]
+        public async Task<ActionResult<Domain.Infra.HumanResource.JobTitle.Entity.JobTitle>> GetByEnvironmentIdAndId(int environmentId, int id)
+        {
+            try
+            {
+                var jobTitle = await _jobTitleRepository.GetByEnvironmentIdAndId(environmentId, id);
+                if (jobTitle == null)
+                {
+                    return NotFound();
+                }
+                return Ok(jobTitle);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("all/environment/{environmentId}")]
+        public async Task<ActionResult<List<Domain.Infra.HumanResource.JobTitle.Entity.JobTitle>>> GetAllByEnvironmentId(int environmentId)
+        {
+            try
+            {
+                var jobTitles = await _jobTitleRepository.GetAllByEnvironmentId(environmentId);
+                return Ok(jobTitles);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
         [HttpGet("all")]
         public async Task<ActionResult<List<Domain.Infra.HumanResource.JobTitle.Entity.JobTitle>>> GetAll()
         {
