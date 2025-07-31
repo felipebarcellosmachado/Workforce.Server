@@ -9,7 +9,6 @@ using Workforce.Business.Infra.HumanResource.JobTitle.Repository;
 using Workforce.Business.Infra.HumanResource.Knowledge.Repository;
 using Workforce.Business.Infra.HumanResource.Repository;
 using Workforce.Business.Infra.HumanResource.Technique.Repository;
-using Workforce.Business.Infra.Party.Repository;
 using Workforce.Business.Infra.PartyRole.Repository;
 using Workforce.Business.Infra.Role.Repository;
 using Workforce.Business.Infra.WorkAgreement.Repository;
@@ -27,6 +26,8 @@ using Workforce.Client.State;
 using Workforce.Services.Infra.Role.User;
 using Workforce.Services.Infra.WorkUnit;
 using WorkUnitService = Workforce.Services.Infra.WorkUnit.WorkUnitService;
+using Workforce.Business.Infra.Party.Organization;
+using Workforce.Business.Infra.Party.Person;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Business.Infra.Party.Repository;
+using Workforce.Business.Infra.Party.Organization;
 using Workforce.Domain.Infra.Party.Entity;
 
 namespace Workforce.Server.Controllers.Infra.Party
@@ -39,6 +39,20 @@ namespace Workforce.Server.Controllers.Infra.Party
             try
             {
                 var organizations = await _organizationRepository.GetAll();
+                return Ok(organizations);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("environment/{environmentId}")]
+        public async Task<ActionResult<List<Organization>>> GetAllByEnvironmentId(int environmentId)
+        {
+            try
+            {
+                var organizations = await _organizationRepository.GetAllByEnvironmentId(environmentId);
                 return Ok(organizations);
             }
             catch (Exception ex)
