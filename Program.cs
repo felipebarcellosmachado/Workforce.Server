@@ -25,6 +25,8 @@ using Workforce.Services.Infra.Party;
 using Workforce.Services.Infra.Profile;
 using Workforce.Client.State;
 using Workforce.Services.Infra.Role.User;
+using Workforce.Services.Infra.WorkUnit;
+using WorkUnitService = Workforce.Services.Infra.WorkUnit.WorkUnitService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -77,6 +79,12 @@ builder.Services.AddScoped<IUserService>(sp =>
 {
     var httpClient = sp.GetRequiredService<HttpClient>();
     return new UserService(httpClient);
+});
+
+builder.Services.AddScoped<IWorkUnitService>(sp => 
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new WorkUnitService(httpClient);
 });
 
 // State Management (for server-side compatibility)
