@@ -23,8 +23,8 @@ using Workforce.Services.Admin.Session;
 using Workforce.Services.Infra.Environment;
 using Workforce.Services.Infra.Party;
 using Workforce.Services.Infra.Profile;
-using Workforce.Services.Role;
 using Workforce.Client.State;
+using Workforce.Services.Infra.Role.User;
 
 var builder = WebApplication.CreateBuilder(args);
 
