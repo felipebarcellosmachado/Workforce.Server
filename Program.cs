@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Radzen;
+using Workforce.Business.Admin.Culture.Repository;
 using Workforce.Business.Admin.Session.Repository;
 using Workforce.Business.Core.WorkdaySchedule.BaseWorkdaySchedule.Repository;
 using Workforce.Business.Infra.Environment.Repository;
@@ -95,6 +96,7 @@ builder.Services.AddScoped<IAppState, AppState>();
 
 // Admin
 builder.Services.AddScoped<SessionRepository>();
+builder.Services.AddScoped<CultureRepository>();
 
 // Core
 builder.Services.AddScoped<BaseWorkdayScheduleRepository>();
