@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Workforce.Business.Infra.HumanResource.Repository;
-using Workforce.Domain.Infra.Role.Entity;
 
 namespace Workforce.Server.Controllers.Infra.HumanResource
 {
@@ -16,7 +15,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Domain.Infra.Role.Entity.HumanResource>> GetById(int id)
+        public async Task<ActionResult<Domain.Infra.Role.HumanResource.Entity.HumanResource>> GetById(int id)
         {
             try
             {
@@ -34,7 +33,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource
         }
 
         [HttpGet("environment/{environmentId}/{id}")]
-        public async Task<ActionResult<Domain.Infra.Role.Entity.HumanResource>> GetByEnvironmentIdAndId(int environmentId, int id)
+        public async Task<ActionResult<Domain.Infra.Role.HumanResource.Entity.HumanResource>> GetByEnvironmentIdAndId(int environmentId, int id)
         {
             try
             {
@@ -52,7 +51,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource
         }
 
         [HttpGet("all/environment/{environmentId}")]
-        public async Task<ActionResult<IList<Domain.Infra.Role.Entity.HumanResource>>> GetAllByEnvironmentId(int environmentId)
+        public async Task<ActionResult<IList<Domain.Infra.Role.HumanResource.Entity.HumanResource>>> GetAllByEnvironmentId(int environmentId)
         {
             try
             {
@@ -66,7 +65,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<IList<Domain.Infra.Role.Entity.HumanResource>>> GetAll()
+        public async Task<ActionResult<IList<Domain.Infra.Role.HumanResource.Entity.HumanResource>>> GetAll()
         {
             try
             {
@@ -80,7 +79,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource
         }
 
         [HttpPost]
-        public async Task<ActionResult<Domain.Infra.Role.Entity.HumanResource>> Insert([FromBody] Domain.Infra.Role.Entity.HumanResource humanResource)
+        public async Task<ActionResult<Domain.Infra.Role.HumanResource.Entity.HumanResource>> Insert([FromBody] Domain.Infra.Role.HumanResource.Entity.HumanResource humanResource)
         {
             try
             {
@@ -99,7 +98,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Domain.Infra.Role.Entity.HumanResource>> Update(int id, [FromBody] Domain.Infra.Role.Entity.HumanResource humanResource)
+        public async Task<ActionResult<Domain.Infra.Role.HumanResource.Entity.HumanResource>> Update(int id, [FromBody] Domain.Infra.Role.HumanResource.Entity.HumanResource humanResource)
         {
             try
             {

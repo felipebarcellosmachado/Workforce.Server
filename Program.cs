@@ -55,7 +55,7 @@ builder.Services.AddSingleton<Microsoft.Extensions.Localization.IStringLocalizer
 {
     return new Workforce.Client.Resources.LocalizedStrings();
 });
-builder.Services.AddSingleton<Workforce.Client.Services.ICultureService, Workforce.Client.Services.CultureService>();
+builder.Services.AddScoped<Workforce.Client.Services.ICultureService, Workforce.Client.Services.CultureService>();
 
 // Register HttpClient for server-side services
 builder.Services.AddHttpClient();
