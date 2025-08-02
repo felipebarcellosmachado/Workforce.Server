@@ -30,6 +30,11 @@ using WorkUnitService = Workforce.Services.Infra.WorkUnit.WorkUnitService;
 using Workforce.Business.Infra.Party.Organization;
 using Workforce.Business.Infra.Party.Person;
 
+// Import localization
+using Microsoft.Extensions.Localization;
+using Workforce.Client.Resources;
+using Workforce.Client.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -43,6 +48,15 @@ builder.Services.AddRadzenComponents();
 builder.Services.AddDbContext<WorkforceDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") ?? 
                      "Host=localhost;Database=WorkforceDb;Username=postgres;Password=yourpassword"));
+
+// Configuração de Localização para Server-side rendering
+builder.Services.AddLocalization();
+builder.Services.AddSingleton<Microsoft.Extensions.Localization.IStringLocalizer<Workforce.Client.Resources.SharedResources>>(provider =>
+{
+    return new Workforce.Client.Resources.LocalizedStrings();
+});
+builder.Services.AddSingleton<Workforce.Client.Services.ICultureService, Workforce.Client.Services.CultureService>();
+
 // Register HttpClient for server-side services
 builder.Services.AddHttpClient();
 // Register Server-side dummy services for static rendering (will be replaced by WebAssembly)
