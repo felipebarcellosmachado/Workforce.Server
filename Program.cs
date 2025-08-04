@@ -3,6 +3,7 @@ using Radzen;
 using Workforce.Business.Admin.Culture.Repository;
 using Workforce.Business.Admin.Session.Repository;
 using Workforce.Business.Core.WorkdaySchedule.BaseWorkdaySchedule.Repository;
+using Workforce.Business.Core.DemandPlanning.Repository;
 using Workforce.Business.Infra.Environment.Repository;
 using Workforce.Business.Infra.HumanResource.Behaviour.Repository;
 using Workforce.Business.Infra.HumanResource.CompetenceLevel.Repository;
@@ -114,6 +115,7 @@ builder.Services.AddScoped<CultureRepository>();
 
 // Core
 builder.Services.AddScoped<BaseWorkdayScheduleRepository>();
+builder.Services.AddScoped<DemandPlanningRepository>();
 
 // Infra - Environment
 builder.Services.AddScoped<EnvironmentRepository>();
