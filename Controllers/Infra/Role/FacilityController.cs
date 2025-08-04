@@ -55,6 +55,22 @@ namespace Workforce.Server.Controllers.Infra.Role
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+        [HttpGet("environment/{environmentId}")]
+        public async Task<ActionResult<List<Facility>>> GetAllByEnvironmentId(int environmentId)
+        {
+            try
+            {
+                _logger.LogInformation("Getting all facilities for environment ID: {EnvironmentId}", environmentId);
+                var facilities = await _facilityRepository.GetAllByEnvironmentId(environmentId);
+                _logger.LogInformation("Successfully retrieved {Count} facilities for environment ID: {EnvironmentId}", facilities.Count, environmentId);
+                return Ok(facilities);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting all facilities");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
 
         [HttpPost]
         public async Task<ActionResult<Facility>> Insert([FromBody] Facility facility)
