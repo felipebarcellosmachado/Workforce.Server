@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Business.Infra.WorkingHours;
+using Workforce.Business.Infra.WorkingHour;
 using Workforce.Domain.Infra.WorkingHour.Entity;
 
 namespace Workforce.Server.Controllers.Infra.WorkingHour

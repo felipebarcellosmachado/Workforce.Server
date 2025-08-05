@@ -14,7 +14,7 @@ using Workforce.Business.Infra.HumanResource.Technique.Repository;
 using Workforce.Business.Infra.PartyRole.Repository;
 using Workforce.Business.Infra.Role.Repository;
 using Workforce.Business.Infra.WorkAgreement.Repository;
-using Workforce.Business.Infra.WorkingHours;
+using Workforce.Business.Infra.WorkingHour;
 using Workforce.Business.Infra.WorkUnit.Repository;
 using Workforce.Db.Db;
 using Workforce.Server.Components;
@@ -141,7 +141,7 @@ builder.Services.AddScoped<TechniqueRepository>();
 // Infra - WorkAgreement
 builder.Services.AddScoped<WorkAgreementRepository>();
 
-// Infra - WorkingHours
+// Infra - WorkingHour
 builder.Services.AddScoped<WorkingHourRepository>();
 builder.Services.AddScoped<JourRepository>();
 
