@@ -36,6 +36,7 @@ using Microsoft.Extensions.Localization;
 using Workforce.Client.Resources;
 using Workforce.Client.Services;
 using Workforce.Business.Infra.HumanResource.Skill.Repository;
+using Workforce.Business.Infra.HumanResource.Qualification.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -139,6 +140,7 @@ builder.Services.AddScoped<JobTitleRepository>();
 builder.Services.AddScoped<KnowledgeRepository>();
 builder.Services.AddScoped<TechniqueRepository>();
 builder.Services.AddScoped<SkillRepository>();
+builder.Services.AddScoped<QualificationRepository>();
 
 // Infra - WorkAgreement
 builder.Services.AddScoped<WorkAgreementRepository>();
