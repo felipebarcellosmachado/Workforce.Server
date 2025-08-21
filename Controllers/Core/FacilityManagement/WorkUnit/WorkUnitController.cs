@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Business.Infra.WorkUnit.Repository;
-using Workforce.Domain.Infra.WorkUnit.Entity;
+using Workforce.Business.Core.FacilityManagement.WorkUnit.Repository;
 
-namespace Workforce.Server.Controllers.Infra.WorkUnit
+namespace Workforce.Server.Controllers.Core.FacilityManagement.WorkUnit
 {
     [ApiController]
     [Route("api/infra/[controller]")]
@@ -16,7 +15,7 @@ namespace Workforce.Server.Controllers.Infra.WorkUnit
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Domain.Infra.WorkUnit.Entity.WorkUnit>> GetById(int id)
+        public async Task<ActionResult<Domain.Core.FacilityManagement.WorkUnit.Entity.WorkUnit>> GetById(int id)
         {
             try
             {
@@ -34,7 +33,7 @@ namespace Workforce.Server.Controllers.Infra.WorkUnit
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<IList<Domain.Infra.WorkUnit.Entity.WorkUnit>>> GetAll()
+        public async Task<ActionResult<IList<Domain.Core.FacilityManagement.WorkUnit.Entity.WorkUnit>>> GetAll()
         {
             try
             {
@@ -48,7 +47,7 @@ namespace Workforce.Server.Controllers.Infra.WorkUnit
         }
 
         [HttpPost]
-        public async Task<ActionResult<Domain.Infra.WorkUnit.Entity.WorkUnit>> Insert([FromBody] Domain.Infra.WorkUnit.Entity.WorkUnit workUnit)
+        public async Task<ActionResult<Domain.Core.FacilityManagement.WorkUnit.Entity.WorkUnit>> Insert([FromBody] Domain.Core.FacilityManagement.WorkUnit.Entity.WorkUnit workUnit)
         {
             try
             {
@@ -67,7 +66,7 @@ namespace Workforce.Server.Controllers.Infra.WorkUnit
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Domain.Infra.WorkUnit.Entity.WorkUnit>> Update(int id, [FromBody] Domain.Infra.WorkUnit.Entity.WorkUnit workUnit)
+        public async Task<ActionResult<Domain.Core.FacilityManagement.WorkUnit.Entity.WorkUnit>> Update(int id, [FromBody] Domain.Core.FacilityManagement.WorkUnit.Entity.WorkUnit workUnit)
         {
             try
             {

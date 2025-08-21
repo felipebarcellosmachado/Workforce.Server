@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Business.Infra.WorkAgreement.Repository;
-using Workforce.Domain.Infra.WorkAgreement.Entity;
+using Workforce.Business.Core.HumanResourceManagement.WorkAgreement.Repository;
 
-namespace Workforce.Server.Controllers.Infra.WorkAgreement
+namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkAgreement
 {
     [ApiController]
     [Route("api/infra/[controller]")]
@@ -16,7 +15,7 @@ namespace Workforce.Server.Controllers.Infra.WorkAgreement
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Domain.Infra.WorkAgreement.Entity.WorkAgreement>> GetById(int id)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.WorkAgreement.Entity.WorkAgreement>> GetById(int id)
         {
             try
             {
@@ -34,7 +33,7 @@ namespace Workforce.Server.Controllers.Infra.WorkAgreement
         }
 
         [HttpGet("environment/{environmentId}/{id}")]
-        public async Task<ActionResult<Domain.Infra.WorkAgreement.Entity.WorkAgreement>> GetByEnvironmentIdAndId(int environmentId, int id)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.WorkAgreement.Entity.WorkAgreement>> GetByEnvironmentIdAndId(int environmentId, int id)
         {
             try
             {
@@ -52,7 +51,7 @@ namespace Workforce.Server.Controllers.Infra.WorkAgreement
         }
 
         [HttpGet("all/environment/{environmentId}")]
-        public async Task<ActionResult<IList<Domain.Infra.WorkAgreement.Entity.WorkAgreement>>> GetAllByEnvironmentId(int environmentId)
+        public async Task<ActionResult<IList<Domain.Core.HumanResourceManagement.WorkAgreement.Entity.WorkAgreement>>> GetAllByEnvironmentId(int environmentId)
         {
             try
             {
@@ -66,7 +65,7 @@ namespace Workforce.Server.Controllers.Infra.WorkAgreement
         }
 
         [HttpPost]
-        public async Task<ActionResult<Domain.Infra.WorkAgreement.Entity.WorkAgreement>> Insert([FromBody] Domain.Infra.WorkAgreement.Entity.WorkAgreement workAgreement)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.WorkAgreement.Entity.WorkAgreement>> Insert([FromBody] Domain.Core.HumanResourceManagement.WorkAgreement.Entity.WorkAgreement workAgreement)
         {
             try
             {
@@ -90,7 +89,7 @@ namespace Workforce.Server.Controllers.Infra.WorkAgreement
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Domain.Infra.WorkAgreement.Entity.WorkAgreement>> Update(int id, [FromBody] Domain.Infra.WorkAgreement.Entity.WorkAgreement workAgreement)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.WorkAgreement.Entity.WorkAgreement>> Update(int id, [FromBody] Domain.Core.HumanResourceManagement.WorkAgreement.Entity.WorkAgreement workAgreement)
         {
             try
             {

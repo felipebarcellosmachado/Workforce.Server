@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Business.Infra.HumanResource.JobTitle.Repository;
-using Workforce.Domain.Infra.HumanResource.JobTitle.Entity;
+using Workforce.Business.Core.HumanResourceManagement.JobTitle.Repository;
 
-namespace Workforce.Server.Controllers.Infra.HumanResource.JobTitle
+namespace Workforce.Server.Controllers.Core.HumanResourceManagement.JobTitle
 {
     [ApiController]
     [Route("api/infra/humanresource/[controller]")]
@@ -16,7 +15,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource.JobTitle
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Domain.Infra.HumanResource.JobTitle.Entity.JobTitle>> GetById(int id)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.JobTitle.Entity.JobTitle>> GetById(int id)
         {
             try
             {
@@ -34,7 +33,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource.JobTitle
         }
 
         [HttpGet("environment/{environmentId}/{id}")]
-        public async Task<ActionResult<Domain.Infra.HumanResource.JobTitle.Entity.JobTitle>> GetByEnvironmentIdAndId(int environmentId, int id)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.JobTitle.Entity.JobTitle>> GetByEnvironmentIdAndId(int environmentId, int id)
         {
             try
             {
@@ -52,7 +51,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource.JobTitle
         }
 
         [HttpGet("all/environment/{environmentId}")]
-        public async Task<ActionResult<List<Domain.Infra.HumanResource.JobTitle.Entity.JobTitle>>> GetAllByEnvironmentId(int environmentId)
+        public async Task<ActionResult<List<Domain.Core.HumanResourceManagement.JobTitle.Entity.JobTitle>>> GetAllByEnvironmentId(int environmentId)
         {
             try
             {
@@ -66,7 +65,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource.JobTitle
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<List<Domain.Infra.HumanResource.JobTitle.Entity.JobTitle>>> GetAll()
+        public async Task<ActionResult<List<Domain.Core.HumanResourceManagement.JobTitle.Entity.JobTitle>>> GetAll()
         {
             try
             {
@@ -80,7 +79,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource.JobTitle
         }
 
         [HttpPost]
-        public async Task<ActionResult<Domain.Infra.HumanResource.JobTitle.Entity.JobTitle>> Insert([FromBody] Domain.Infra.HumanResource.JobTitle.Entity.JobTitle jobTitle)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.JobTitle.Entity.JobTitle>> Insert([FromBody] Domain.Core.HumanResourceManagement.JobTitle.Entity.JobTitle jobTitle)
         {
             try
             {
@@ -104,7 +103,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource.JobTitle
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Domain.Infra.HumanResource.JobTitle.Entity.JobTitle>> Update(int id, [FromBody] Domain.Infra.HumanResource.JobTitle.Entity.JobTitle jobTitle)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.JobTitle.Entity.JobTitle>> Update(int id, [FromBody] Domain.Core.HumanResourceManagement.JobTitle.Entity.JobTitle jobTitle)
         {
             try
             {

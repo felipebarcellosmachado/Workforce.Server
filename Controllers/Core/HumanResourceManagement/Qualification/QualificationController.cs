@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Business.Infra.HumanResource.Qualification.Repository;
-using Workforce.Domain.Infra.HumanResource.Qualification.Entity;
+using Workforce.Business.Core.HumanResourceManagement.Qualification.Repository;
 
-namespace Workforce.Server.Controllers.Infra.HumanResource.Qualification
+namespace Workforce.Server.Controllers.Core.HumanResourceManagement.Qualification
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -17,7 +16,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource.Qualification
 
         // HttpGet para GetById
         [HttpGet("{id}")]
-        public async Task<ActionResult<Domain.Infra.HumanResource.Qualification.Entity.Qualification>> GetById(int id)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.Qualification.Entity.Qualification>> GetById(int id)
         {
             try
             {
@@ -36,7 +35,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource.Qualification
 
         // HttpGet("environment/{id}/{id}") para GetByEnvironmentIdAndId 
         [HttpGet("environment/{environmentId}/{id}")]
-        public async Task<ActionResult<Domain.Infra.HumanResource.Qualification.Entity.Qualification>> GetByEnvironmentIdAndId(int environmentId, int id)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.Qualification.Entity.Qualification>> GetByEnvironmentIdAndId(int environmentId, int id)
         {
             try
             {
@@ -55,7 +54,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource.Qualification
 
         // HttpGet("all/environment/{id}") para GetAllByEnvironmentId
         [HttpGet("all/environment/{environmentId}")]
-        public async Task<ActionResult<IList<Domain.Infra.HumanResource.Qualification.Entity.Qualification>>> GetAllByEnvironmentId(int environmentId)
+        public async Task<ActionResult<IList<Domain.Core.HumanResourceManagement.Qualification.Entity.Qualification>>> GetAllByEnvironmentId(int environmentId)
         {
             try
             {
@@ -70,7 +69,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource.Qualification
 
         // HttpGet para GetAll
         [HttpGet("all")]
-        public async Task<ActionResult<IList<Domain.Infra.HumanResource.Qualification.Entity.Qualification>>> GetAll()
+        public async Task<ActionResult<IList<Domain.Core.HumanResourceManagement.Qualification.Entity.Qualification>>> GetAll()
         {
             try
             {
@@ -85,7 +84,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource.Qualification
 
         // HttpPut para Update
         [HttpPut("{id}")]
-        public async Task<ActionResult<Domain.Infra.HumanResource.Qualification.Entity.Qualification>> Update(int id, [FromBody] Domain.Infra.HumanResource.Qualification.Entity.Qualification qualification)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.Qualification.Entity.Qualification>> Update(int id, [FromBody] Domain.Core.HumanResourceManagement.Qualification.Entity.Qualification qualification)
         {
             try
             {
@@ -109,7 +108,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource.Qualification
 
         // HttpPost para Insert
         [HttpPost]
-        public async Task<ActionResult<Domain.Infra.HumanResource.Qualification.Entity.Qualification>> Insert([FromBody] Domain.Infra.HumanResource.Qualification.Entity.Qualification qualification)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.Qualification.Entity.Qualification>> Insert([FromBody] Domain.Core.HumanResourceManagement.Qualification.Entity.Qualification qualification)
         {
             try
             {

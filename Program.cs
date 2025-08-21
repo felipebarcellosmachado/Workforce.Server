@@ -2,20 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Radzen;
 using Workforce.Business.Admin.Culture.Repository;
 using Workforce.Business.Admin.Session.Repository;
-using Workforce.Business.Core.WorkdaySchedule.BaseWorkdaySchedule.Repository;
-using Workforce.Business.Core.DemandPlanning.Repository;
 using Workforce.Business.Infra.Environment.Repository;
-using Workforce.Business.Infra.HumanResource.Behaviour.Repository;
-using Workforce.Business.Infra.HumanResource.CompetenceLevel.Repository;
-using Workforce.Business.Infra.HumanResource.JobTitle.Repository;
-using Workforce.Business.Infra.HumanResource.Knowledge.Repository;
-using Workforce.Business.Infra.HumanResource.Repository;
-using Workforce.Business.Infra.HumanResource.Technique.Repository;
 using Workforce.Business.Infra.PartyRole.Repository;
-using Workforce.Business.Infra.Role.Repository;
-using Workforce.Business.Infra.WorkAgreement.Repository;
-using Workforce.Business.Infra.WorkingHour;
-using Workforce.Business.Infra.WorkUnit.Repository;
 using Workforce.Db.Db;
 using Workforce.Server.Components;
 
@@ -26,8 +14,7 @@ using Workforce.Services.Infra.Party;
 using Workforce.Services.Infra.Profile;
 using Workforce.Client.State;
 using Workforce.Services.Infra.Role.User;
-using Workforce.Services.Infra.WorkUnit;
-using WorkUnitService = Workforce.Services.Infra.WorkUnit.WorkUnitService;
+using WorkUnitService = Workforce.Services.Core.FacilityManagement.WorkUnit.WorkUnitService;
 using Workforce.Business.Infra.Party.Organization;
 using Workforce.Business.Infra.Party.Person;
 
@@ -35,8 +22,17 @@ using Workforce.Business.Infra.Party.Person;
 using Microsoft.Extensions.Localization;
 using Workforce.Client.Resources;
 using Workforce.Client.Services;
-using Workforce.Business.Infra.HumanResource.Skill.Repository;
-using Workforce.Business.Infra.HumanResource.Qualification.Repository;
+using Workforce.Business.Core.HumanResourceManagement.Behaviour.Repository;
+using Workforce.Business.Core.HumanResourceManagement.CompetenceLevel.Repository;
+using Workforce.Business.Core.HumanResourceManagement.JobTitle.Repository;
+using Workforce.Business.Core.HumanResourceManagement.Qualification.Repository;
+using Workforce.Business.Core.HumanResourceManagement.Skill.Repository;
+using Workforce.Business.Core.HumanResourceManagement.HumanResource.Repository;
+using Workforce.Business.Core.FacilityManagement.Facility.Repository;
+using Workforce.Business.Core.HumanResourceManagement.WorkAgreement.Repository;
+using Workforce.Business.Core.HumanResourceManagement.WorkingHour;
+using Workforce.Business.Core.FacilityManagement.WorkUnit.Repository;
+using Workforce.Services.Core.FacilityManagement.WorkUnit;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -115,10 +111,6 @@ builder.Services.AddScoped<IAppState, AppState>();
 builder.Services.AddScoped<SessionRepository>();
 builder.Services.AddScoped<CultureRepository>();
 
-// Core
-builder.Services.AddScoped<BaseWorkdayScheduleRepository>();
-builder.Services.AddScoped<DemandPlanningRepository>();
-
 // Infra - Environment
 builder.Services.AddScoped<EnvironmentRepository>();
 
@@ -137,8 +129,6 @@ builder.Services.AddScoped<HumanResourceRepository>();
 builder.Services.AddScoped<BehaviourRepository>();
 builder.Services.AddScoped<CompetenceLevelRepository>();
 builder.Services.AddScoped<JobTitleRepository>();
-builder.Services.AddScoped<KnowledgeRepository>();
-builder.Services.AddScoped<TechniqueRepository>();
 builder.Services.AddScoped<SkillRepository>();
 builder.Services.AddScoped<QualificationRepository>();
 

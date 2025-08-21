@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Business.Infra.HumanResource.CompetenceLevel.Repository;
-using Workforce.Domain.Infra.HumanResource.CompetenceLevel.Entity;
+using Workforce.Business.Core.HumanResourceManagement.CompetenceLevel.Repository;
 
-namespace Workforce.Server.Controllers.Infra.HumanResource.CompetenceLevel
+namespace Workforce.Server.Controllers.Core.HumanResourceManagement.CompetenceLevel
 {
     [ApiController]
     [Route("api/infra/humanresource/[controller]")]
@@ -16,7 +15,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource.CompetenceLevel
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Domain.Infra.HumanResource.CompetenceLevel.Entity.CompetenceLevel>> GetById(int id)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.CompetenceLevel.Entity.CompetenceLevel>> GetById(int id)
         {
             try
             {
@@ -34,7 +33,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource.CompetenceLevel
         }
 
         [HttpGet("environment/{environmentId}/{id}")]
-        public async Task<ActionResult<Domain.Infra.HumanResource.CompetenceLevel.Entity.CompetenceLevel>> GetByEnvironmentIdAndId(int environmentId, int id)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.CompetenceLevel.Entity.CompetenceLevel>> GetByEnvironmentIdAndId(int environmentId, int id)
         {
             try
             {
@@ -52,7 +51,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource.CompetenceLevel
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<List<Domain.Infra.HumanResource.CompetenceLevel.Entity.CompetenceLevel>>> GetAll()
+        public async Task<ActionResult<List<Domain.Core.HumanResourceManagement.CompetenceLevel.Entity.CompetenceLevel>>> GetAll()
         {
             try
             {
@@ -66,7 +65,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource.CompetenceLevel
         }
 
         [HttpGet("all/environment/{environmentId}")]
-        public async Task<ActionResult<IList<Domain.Infra.HumanResource.CompetenceLevel.Entity.CompetenceLevel>>> GetAllByEnvironmentId(int environmentId)
+        public async Task<ActionResult<IList<Domain.Core.HumanResourceManagement.CompetenceLevel.Entity.CompetenceLevel>>> GetAllByEnvironmentId(int environmentId)
         {
             try
             {
@@ -80,7 +79,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource.CompetenceLevel
         }
 
         [HttpPost]
-        public async Task<ActionResult<Domain.Infra.HumanResource.CompetenceLevel.Entity.CompetenceLevel>> Insert([FromBody] Domain.Infra.HumanResource.CompetenceLevel.Entity.CompetenceLevel competenceLevel)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.CompetenceLevel.Entity.CompetenceLevel>> Insert([FromBody] Domain.Core.HumanResourceManagement.CompetenceLevel.Entity.CompetenceLevel competenceLevel)
         {
             try
             {
@@ -104,7 +103,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource.CompetenceLevel
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Domain.Infra.HumanResource.CompetenceLevel.Entity.CompetenceLevel>> Update(int id, [FromBody] Domain.Infra.HumanResource.CompetenceLevel.Entity.CompetenceLevel competenceLevel)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.CompetenceLevel.Entity.CompetenceLevel>> Update(int id, [FromBody] Domain.Core.HumanResourceManagement.CompetenceLevel.Entity.CompetenceLevel competenceLevel)
         {
             try
             {

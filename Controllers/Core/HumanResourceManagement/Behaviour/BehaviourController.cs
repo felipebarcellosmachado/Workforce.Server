@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Business.Infra.HumanResource.Behaviour.Repository;
-using Workforce.Domain.Infra.HumanResource.Behaviour.Entity;
+using Workforce.Business.Core.HumanResourceManagement.Behaviour.Repository;
 
-namespace Workforce.Server.Controllers.Infra.HumanResource.Behaviour
+namespace Workforce.Server.Controllers.Core.HumanResourceManagement.Behaviour
 {
     [ApiController]
     [Route("api/infra/humanresource/[controller]")]
@@ -16,7 +15,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource.Behaviour
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Domain.Infra.HumanResource.Behaviour.Entity.Behaviour>> GetById(int id)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.Behaviour.Entity.Behaviour>> GetById(int id)
         {
             try
             {
@@ -34,7 +33,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource.Behaviour
         }
 
         [HttpGet("environment/{environmentId}/{id}")]
-        public async Task<ActionResult<Domain.Infra.HumanResource.Behaviour.Entity.Behaviour>> GetByEnvironmentIdAndId(int environmentId, int id)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.Behaviour.Entity.Behaviour>> GetByEnvironmentIdAndId(int environmentId, int id)
         {
             try
             {
@@ -52,7 +51,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource.Behaviour
         }
 
         [HttpGet("all/environment/{environmentId}")]
-        public async Task<ActionResult<IList<Domain.Infra.HumanResource.Behaviour.Entity.Behaviour>>> GetAllByEnvironmentId(int environmentId)
+        public async Task<ActionResult<IList<Domain.Core.HumanResourceManagement.Behaviour.Entity.Behaviour>>> GetAllByEnvironmentId(int environmentId)
         {
             try
             {
@@ -66,7 +65,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource.Behaviour
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<List<Domain.Infra.HumanResource.Behaviour.Entity.Behaviour>>> GetAll()
+        public async Task<ActionResult<List<Domain.Core.HumanResourceManagement.Behaviour.Entity.Behaviour>>> GetAll()
         {
             try
             {
@@ -80,7 +79,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource.Behaviour
         }
 
         [HttpPost]
-        public async Task<ActionResult<Domain.Infra.HumanResource.Behaviour.Entity.Behaviour>> Insert([FromBody] Domain.Infra.HumanResource.Behaviour.Entity.Behaviour behaviour)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.Behaviour.Entity.Behaviour>> Insert([FromBody] Domain.Core.HumanResourceManagement.Behaviour.Entity.Behaviour behaviour)
         {
             try
             {
@@ -104,7 +103,7 @@ namespace Workforce.Server.Controllers.Infra.HumanResource.Behaviour
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Domain.Infra.HumanResource.Behaviour.Entity.Behaviour>> Update(int id, [FromBody] Domain.Infra.HumanResource.Behaviour.Entity.Behaviour behaviour)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.Behaviour.Entity.Behaviour>> Update(int id, [FromBody] Domain.Core.HumanResourceManagement.Behaviour.Entity.Behaviour behaviour)
         {
             try
             {

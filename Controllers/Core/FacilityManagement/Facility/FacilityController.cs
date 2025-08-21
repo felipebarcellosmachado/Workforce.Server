@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Business.Infra.Role.Repository;
-using Workforce.Domain.Infra.Role.Facility.Entity;
+using Workforce.Business.Core.FacilityManagement.Facility.Repository;
+using FacilityEntity = Workforce.Domain.Core.FacilityManagement.Facility.Entity.Facility;
 
-namespace Workforce.Server.Controllers.Infra.Role
+namespace Workforce.Server.Controllers.Core.FacilityManagement.Facility
 {
     [ApiController]
     [Route("api/infra/role/[controller]")]
@@ -18,7 +18,7 @@ namespace Workforce.Server.Controllers.Infra.Role
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Facility>> GetById(int id)
+        public async Task<ActionResult<FacilityEntity>> GetById(int id)
         {
             try
             {
@@ -40,7 +40,7 @@ namespace Workforce.Server.Controllers.Infra.Role
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<List<Facility>>> GetAll()
+        public async Task<ActionResult<List<FacilityEntity>>> GetAll()
         {
             try
             {
@@ -55,8 +55,9 @@ namespace Workforce.Server.Controllers.Infra.Role
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
         [HttpGet("environment/{environmentId}")]
-        public async Task<ActionResult<List<Facility>>> GetAllByEnvironmentId(int environmentId)
+        public async Task<ActionResult<List<FacilityEntity>>> GetAllByEnvironmentId(int environmentId)
         {
             try
             {
@@ -67,13 +68,13 @@ namespace Workforce.Server.Controllers.Infra.Role
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error getting all facilities");
+                _logger.LogError(ex, "Error getting all facilities for environment ID: {EnvironmentId}", environmentId);
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 
         [HttpPost]
-        public async Task<ActionResult<Facility>> Insert([FromBody] Facility facility)
+        public async Task<ActionResult<FacilityEntity>> Insert([FromBody] FacilityEntity facility)
         {
             try
             {
@@ -103,7 +104,7 @@ namespace Workforce.Server.Controllers.Infra.Role
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Facility>> Update(int id, [FromBody] Facility facility)
+        public async Task<ActionResult<FacilityEntity>> Update(int id, [FromBody] FacilityEntity facility)
         {
             try
             {

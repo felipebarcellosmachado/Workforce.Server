@@ -1,8 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Business.Infra.WorkingHour;
-using Workforce.Domain.Infra.WorkingHour.Entity;
+using Workforce.Business.Core.HumanResourceManagement.WorkingHour;
 
-namespace Workforce.Server.Controllers.Infra.WorkingHour
+namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkingHour
 {
     [ApiController]
     [Route("api/infra/workinghour")]
@@ -16,7 +15,7 @@ namespace Workforce.Server.Controllers.Infra.WorkingHour
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Domain.Infra.WorkingHour.Entity.WorkingHour>> GetById(int id)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.WorkingHour.Entity.WorkingHour>> GetById(int id)
         {
             try
             {
@@ -34,7 +33,7 @@ namespace Workforce.Server.Controllers.Infra.WorkingHour
         }
 
         [HttpGet("environment/{environmentId}/{id}")]
-        public async Task<ActionResult<Domain.Infra.WorkingHour.Entity.WorkingHour>> GetByEnvironmentIdAndId(int environmentId, int id)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.WorkingHour.Entity.WorkingHour>> GetByEnvironmentIdAndId(int environmentId, int id)
         {
             try
             {
@@ -52,7 +51,7 @@ namespace Workforce.Server.Controllers.Infra.WorkingHour
         }
 
         [HttpGet("all/environment/{environmentId}")]
-        public async Task<ActionResult<IList<Domain.Infra.WorkingHour.Entity.WorkingHour>>> GetAllByEnvironmentId(int environmentId)
+        public async Task<ActionResult<IList<Domain.Core.HumanResourceManagement.WorkingHour.Entity.WorkingHour>>> GetAllByEnvironmentId(int environmentId)
         {
             try
             {
@@ -66,7 +65,7 @@ namespace Workforce.Server.Controllers.Infra.WorkingHour
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<IList<Domain.Infra.WorkingHour.Entity.WorkingHour>>> GetAll()
+        public async Task<ActionResult<IList<Domain.Core.HumanResourceManagement.WorkingHour.Entity.WorkingHour>>> GetAll()
         {
             try
             {
@@ -80,7 +79,7 @@ namespace Workforce.Server.Controllers.Infra.WorkingHour
         }
 
         [HttpPost]
-        public async Task<ActionResult<Domain.Infra.WorkingHour.Entity.WorkingHour>> Insert([FromBody] Domain.Infra.WorkingHour.Entity.WorkingHour workingHour)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.WorkingHour.Entity.WorkingHour>> Insert([FromBody] Domain.Core.HumanResourceManagement.WorkingHour.Entity.WorkingHour workingHour)
         {
             try
             {
@@ -98,7 +97,7 @@ namespace Workforce.Server.Controllers.Infra.WorkingHour
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Domain.Infra.WorkingHour.Entity.WorkingHour>> Update(int id, [FromBody] Domain.Infra.WorkingHour.Entity.WorkingHour workingHour)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.WorkingHour.Entity.WorkingHour>> Update(int id, [FromBody] Domain.Core.HumanResourceManagement.WorkingHour.Entity.WorkingHour workingHour)
         {
             try
             {
