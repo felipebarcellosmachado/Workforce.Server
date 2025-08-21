@@ -139,6 +139,7 @@ builder.Services.AddScoped<DemandEstimativeRepository>();
 // Core - LeaveManagement
 builder.Services.AddScoped<Workforce.Business.Core.LeaveManagement.LeaveType.Repository.LeaveTypeRepository>();
 builder.Services.AddScoped<Workforce.Business.Core.LeaveManagement.LeaveRequest.LeaveRequestRepository>();
+builder.Services.AddScoped<Workforce.Business.Core.LeaveManagement.LeaveTake.LeaveTakeRepository>();
 
 // Infra - WorkAgreement
 builder.Services.AddScoped<WorkAgreementRepository>();
