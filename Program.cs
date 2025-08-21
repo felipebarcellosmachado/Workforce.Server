@@ -33,6 +33,7 @@ using Workforce.Business.Core.HumanResourceManagement.WorkAgreement.Repository;
 using Workforce.Business.Core.HumanResourceManagement.WorkingHour;
 using Workforce.Business.Core.FacilityManagement.WorkUnit.Repository;
 using Workforce.Services.Core.FacilityManagement.WorkUnit;
+using Workforce.Business.Core.DemandManagement.DemandEstimative.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -131,6 +132,9 @@ builder.Services.AddScoped<CompetenceLevelRepository>();
 builder.Services.AddScoped<JobTitleRepository>();
 builder.Services.AddScoped<SkillRepository>();
 builder.Services.AddScoped<QualificationRepository>();
+
+// Core - DemandManagement
+builder.Services.AddScoped<DemandEstimativeRepository>();
 
 // Infra - WorkAgreement
 builder.Services.AddScoped<WorkAgreementRepository>();
