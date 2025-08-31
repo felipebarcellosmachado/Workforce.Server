@@ -35,6 +35,7 @@ using Workforce.Business.Core.FacilityManagement.WorkUnit.Repository;
 using Workforce.Services.Core.FacilityManagement.WorkUnit;
 using Workforce.Business.Core.DemandManagement.DemandEstimative.Repository;
 using Workforce.Business.Core.DemandManagement.BaseDemandEstimative.Repository;
+using Workforce.Business.Core.WorkScheduleManagement.BaseWorkSchedule.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -137,6 +138,9 @@ builder.Services.AddScoped<QualificationRepository>();
 // Core - DemandManagement
 builder.Services.AddScoped<DemandEstimativeRepository>();
 builder.Services.AddScoped<BaseDemandEstimativeRepository>();
+
+// Core - WorkScheduleManagement
+builder.Services.AddScoped<BaseWorkScheduleRepository>();
 
 // Core - LeaveManagement
 builder.Services.AddScoped<Workforce.Business.Core.LeaveManagement.LeaveType.Repository.LeaveTypeRepository>();
