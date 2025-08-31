@@ -4,7 +4,7 @@ using Workforce.Business.Core.FacilityManagement.WorkUnit.Repository;
 namespace Workforce.Server.Controllers.Core.FacilityManagement.WorkUnit
 {
     [ApiController]
-    [Route("api/infra/[controller]")]
+    [Route("api/core/workunit")]
     public class WorkUnitController : ControllerBase
     {
         private readonly WorkUnitRepository _workUnitRepository;
@@ -15,14 +15,14 @@ namespace Workforce.Server.Controllers.Core.FacilityManagement.WorkUnit
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Domain.Core.FacilityManagement.WorkUnit.Entity.WorkUnit>> GetById(int id)
+        public async Task<ActionResult<Domain.Core.FacilityManagement.WorkUnit.Entity.WorkUnit>> GetByIdAsync(int id)
         {
             try
             {
-                var workUnit = await _workUnitRepository.GetById(id);
+                var workUnit = await _workUnitRepository.GetByIdAsync(id);
                 if (workUnit == null)
                 {
-                    return NotFound();
+                    return NotFound($"WorkUnit with ID {id} not found");
                 }
                 return Ok(workUnit);
             }
@@ -33,11 +33,11 @@ namespace Workforce.Server.Controllers.Core.FacilityManagement.WorkUnit
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<IList<Domain.Core.FacilityManagement.WorkUnit.Entity.WorkUnit>>> GetAll()
+        public async Task<ActionResult<IList<Domain.Core.FacilityManagement.WorkUnit.Entity.WorkUnit>>> GetAllAsync()
         {
             try
             {
-                var workUnits = await _workUnitRepository.GetAll();
+                var workUnits = await _workUnitRepository.GetAllAsync();
                 return Ok(workUnits);
             }
             catch (Exception ex)
@@ -47,7 +47,7 @@ namespace Workforce.Server.Controllers.Core.FacilityManagement.WorkUnit
         }
 
         [HttpPost]
-        public async Task<ActionResult<Domain.Core.FacilityManagement.WorkUnit.Entity.WorkUnit>> Insert([FromBody] Domain.Core.FacilityManagement.WorkUnit.Entity.WorkUnit workUnit)
+        public async Task<ActionResult<Domain.Core.FacilityManagement.WorkUnit.Entity.WorkUnit>> InsertAsync([FromBody] Domain.Core.FacilityManagement.WorkUnit.Entity.WorkUnit workUnit)
         {
             try
             {
@@ -56,8 +56,17 @@ namespace Workforce.Server.Controllers.Core.FacilityManagement.WorkUnit
                     return BadRequest("WorkUnit data is required");
                 }
 
-                var result = await _workUnitRepository.Insert(workUnit);
-                return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+                var result = await _workUnitRepository.InsertAsync(workUnit);
+                if (result == null)
+                {
+                    return BadRequest("Failed to create WorkUnit");
+                }
+
+                return CreatedAtAction(nameof(GetByIdAsync), new { id = result.Id }, result);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
@@ -66,7 +75,7 @@ namespace Workforce.Server.Controllers.Core.FacilityManagement.WorkUnit
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Domain.Core.FacilityManagement.WorkUnit.Entity.WorkUnit>> Update(int id, [FromBody] Domain.Core.FacilityManagement.WorkUnit.Entity.WorkUnit workUnit)
+        public async Task<ActionResult<Domain.Core.FacilityManagement.WorkUnit.Entity.WorkUnit>> UpdateAsync(int id, [FromBody] Domain.Core.FacilityManagement.WorkUnit.Entity.WorkUnit workUnit)
         {
             try
             {
@@ -80,12 +89,17 @@ namespace Workforce.Server.Controllers.Core.FacilityManagement.WorkUnit
                     return BadRequest("ID mismatch");
                 }
 
-                var result = await _workUnitRepository.Update(workUnit);
+                var result = await _workUnitRepository.UpdateAsync(workUnit);
+                if (result == null)
+                {
+                    return NotFound($"WorkUnit with ID {id} not found or update failed");
+                }
+
                 return Ok(result);
             }
             catch (InvalidOperationException ex)
             {
-                return NotFound(ex.Message);
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
@@ -94,16 +108,16 @@ namespace Workforce.Server.Controllers.Core.FacilityManagement.WorkUnit
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteById(int id)
+        public async Task<ActionResult> DeleteByIdAsync(int id)
         {
             try
             {
-                await _workUnitRepository.DeleteById(id);
+                var deleted = await _workUnitRepository.DeleteByIdAsync(id);
+                if (!deleted)
+                {
+                    return NotFound($"WorkUnit with ID {id} not found");
+                }
                 return NoContent();
-            }
-            catch (InvalidOperationException ex)
-            {
-                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {

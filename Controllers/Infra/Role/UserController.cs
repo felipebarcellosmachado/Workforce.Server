@@ -39,6 +39,64 @@ namespace Workforce.Server.Controllers.Infra.Role
             }
         }
 
+        [HttpGet("login/{login}")]
+        public async Task<ActionResult<User>> GetByLogin(string login)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(login))
+                {
+                    return BadRequest("User login is required");
+                }
+
+                _logger.LogInformation("Getting user by login: {Login}", login);
+                var user = await _userRepository.GetByLogin(login);
+                if (user == null)
+                {
+                    _logger.LogWarning("User not found for login: {Login}", login);
+                    return NotFound($"User with login '{login}' not found");
+                }
+                _logger.LogInformation("Successfully retrieved user with login: {Login}", login);
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting user by login: {Login}", login);
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("environment/{environmentId}/login/{login}")]
+        public async Task<ActionResult<User>> GetByEnvironmentIdAndLogin(int environmentId, string login)
+        {
+            try
+            {
+                if (environmentId <= 0)
+                {
+                    return BadRequest("Environment ID must be greater than zero");
+                }
+                if (string.IsNullOrWhiteSpace(login))
+                {
+                    return BadRequest("User login is required");
+                }
+
+                _logger.LogInformation("Getting user by environment ID: {EnvironmentId} and login: {Login}", environmentId, login);
+                var user = await _userRepository.GetByEnvironmentIdAndLogin(environmentId, login);
+                if (user == null)
+                {
+                    _logger.LogWarning("User not found for environment ID: {EnvironmentId} and login: {Login}", environmentId, login);
+                    return NotFound($"User with login '{login}' in environment '{environmentId}' not found");
+                }
+                _logger.LogInformation("Successfully retrieved user with environment ID: {EnvironmentId} and login: {Login}", environmentId, login);
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error getting user by environment ID: {EnvironmentId} and login: {Login}", environmentId, login);
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
         [HttpGet]
         public async Task<ActionResult<List<User>>> GetAll()
         {

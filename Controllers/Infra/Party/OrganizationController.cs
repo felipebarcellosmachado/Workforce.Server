@@ -33,6 +33,56 @@ namespace Workforce.Server.Controllers.Infra.Party
             }
         }
 
+        [HttpGet("name/{name}")]
+        public async Task<ActionResult<Organization>> GetByName(string name)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    return BadRequest("Organization name is required");
+                }
+
+                var organization = await _organizationRepository.GetByName(name);
+                if (organization == null)
+                {
+                    return NotFound($"Organization with name '{name}' not found");
+                }
+                return Ok(organization);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("environment/{environmentId}/name/{name}")]
+        public async Task<ActionResult<Organization>> GetByEnvironmentIdAndName(int environmentId, string name)
+        {
+            try
+            {
+                if (environmentId <= 0)
+                {
+                    return BadRequest("Environment ID must be greater than zero");
+                }
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    return BadRequest("Organization name is required");
+                }
+
+                var organization = await _organizationRepository.GetByEnvironmentIdAndName(environmentId, name);
+                if (organization == null)
+                {
+                    return NotFound($"Organization with name '{name}' in environment '{environmentId}' not found");
+                }
+                return Ok(organization);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
         [HttpGet("all")]
         public async Task<ActionResult<List<Organization>>> GetAll()
         {

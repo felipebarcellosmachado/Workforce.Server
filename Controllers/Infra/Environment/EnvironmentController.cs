@@ -33,8 +33,31 @@ namespace Workforce.Server.Controllers.Infra.Environment
             }
         }
 
-        [HttpGet]
-        public async Task<ActionResult<List<Workforce.Domain.Infra.Environment.Entity.Environment>>> GetAll()
+        [HttpGet("name/{name}")]
+        public async Task<ActionResult<Workforce.Domain.Infra.Environment.Entity.Environment>> GetByName(string name)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    return BadRequest("Environment name is required");
+                }
+
+                var environment = await _environmentRepository.GetByName(name);
+                if (environment == null)
+                {
+                    return NotFound($"Environment with name '{name}' not found");
+                }
+                return Ok(environment);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("all")]
+        public async Task<ActionResult<IList<Workforce.Domain.Infra.Environment.Entity.Environment>>> GetAll()
         {
             try
             {
