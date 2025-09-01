@@ -4,7 +4,7 @@ using Workforce.Business.Core.HumanResourceManagement.HumanResource.Repository;
 namespace Workforce.Server.Controllers.Core.HumanResourceManagement.HumanResource
 {
     [ApiController]
-    [Route("api/infra/[controller]")]
+    [Route("api/core/human_resource/[controller]")]
     public class HumanResourceController : ControllerBase
     {
         private readonly HumanResourceRepository _humanResourceRepository;

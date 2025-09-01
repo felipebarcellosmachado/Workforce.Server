@@ -4,7 +4,7 @@ using Workforce.Business.Core.HumanResourceManagement.JobTitle.Repository;
 namespace Workforce.Server.Controllers.Core.HumanResourceManagement.JobTitle
 {
     [ApiController]
-    [Route("api/infra/humanresource/[controller]")]
+    [Route("api/core/human_resource/[controller]")]
     public class JobTitleController : ControllerBase
     {
         private readonly JobTitleRepository _jobTitleRepository;

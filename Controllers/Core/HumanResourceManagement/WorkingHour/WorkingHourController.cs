@@ -4,7 +4,7 @@ using Workforce.Business.Core.HumanResourceManagement.WorkingHour;
 namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkingHour
 {
     [ApiController]
-    [Route("api/infra/workinghour")]
+    [Route("api/core/human_resource/[controller]")]
     public class WorkingHourController : ControllerBase
     {
         private readonly WorkingHourRepository _workingHourRepository;

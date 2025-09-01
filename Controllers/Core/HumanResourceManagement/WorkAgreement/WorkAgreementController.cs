@@ -4,7 +4,7 @@ using Workforce.Business.Core.HumanResourceManagement.WorkAgreement.Repository;
 namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkAgreement
 {
     [ApiController]
-    [Route("api/infra/[controller]")]
+    [Route("api/core/human_resource/[controller]")]
     public class WorkAgreementController : ControllerBase
     {
         private readonly WorkAgreementRepository _workAgreementRepository;

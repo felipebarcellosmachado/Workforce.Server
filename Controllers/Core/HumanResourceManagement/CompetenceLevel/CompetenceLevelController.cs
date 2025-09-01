@@ -4,7 +4,7 @@ using Workforce.Business.Core.HumanResourceManagement.CompetenceLevel.Repository
 namespace Workforce.Server.Controllers.Core.HumanResourceManagement.CompetenceLevel
 {
     [ApiController]
-    [Route("api/infra/humanresource/[controller]")]
+    [Route("api/core/human_resource/[controller]")]
     public class CompetenceLevelController : ControllerBase
     {
         private readonly CompetenceLevelRepository _competenceLevelRepository;

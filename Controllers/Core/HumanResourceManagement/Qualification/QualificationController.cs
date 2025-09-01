@@ -4,7 +4,7 @@ using Workforce.Business.Core.HumanResourceManagement.Qualification.Repository;
 namespace Workforce.Server.Controllers.Core.HumanResourceManagement.Qualification
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/core/human_resource/[controller]")]
     public class QualificationController : ControllerBase
     {
         private readonly QualificationRepository _qualificationRepository;
@@ -127,12 +127,12 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.Qualificatio
         {
             try
             {
-                await _qualificationRepository.DeleteById(id);
+                var deleted = await _qualificationRepository.DeleteById(id);
+                if (!deleted)
+                {
+                    return NotFound($"Qualification com ID {id} não encontrado");
+                }
                 return NoContent();
-            }
-            catch (InvalidOperationException ex)
-            {
-                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {

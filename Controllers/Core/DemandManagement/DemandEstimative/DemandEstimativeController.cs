@@ -4,7 +4,7 @@ using Workforce.Business.Core.DemandManagement.DemandEstimative.Repository;
 namespace Workforce.Server.Controllers.Core.DemandManagement.DemandEstimative
 {
     [ApiController]
-    [Route("api/demand-management/demand-estimatives")]
+    [Route("api/core/demand-management/demand-estimatives")]
     public class DemandEstimativeController : ControllerBase
     {
         private readonly DemandEstimativeRepository demandEstimativeRepository;

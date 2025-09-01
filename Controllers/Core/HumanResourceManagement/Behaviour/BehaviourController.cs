@@ -4,7 +4,7 @@ using Workforce.Business.Core.HumanResourceManagement.Behaviour.Repository;
 namespace Workforce.Server.Controllers.Core.HumanResourceManagement.Behaviour
 {
     [ApiController]
-    [Route("api/infra/humanresource/[controller]")]
+    [Route("api/core/human_resource/[controller]")]
     public class BehaviourController : ControllerBase
     {
         private readonly BehaviourRepository _behaviourRepository;
