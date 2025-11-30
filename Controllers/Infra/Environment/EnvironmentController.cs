@@ -70,6 +70,24 @@ namespace Workforce.Server.Controllers.Infra.Environment
             }
         }
 
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<IList<Workforce.Domain.Infra.Environment.Entity.Environment>>> GetAllByUserId(int userId)
+        {
+            try
+            {
+                var environments = await _environmentRepository.GetAllByUserId(userId);
+                if (environments == null)
+                {
+                    return NotFound($"No environments found for user with ID {userId}");
+                }
+                return Ok(environments);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
         [HttpPost]
         public async Task<ActionResult<Workforce.Domain.Infra.Environment.Entity.Environment>> Insert([FromBody] Workforce.Domain.Infra.Environment.Entity.Environment environment)
         {
