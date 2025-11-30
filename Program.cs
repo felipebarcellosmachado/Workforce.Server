@@ -36,6 +36,7 @@ using Workforce.Services.Core.FacilityManagement.WorkUnit;
 using Workforce.Business.Core.DemandManagement.DemandEstimative.Repository;
 using Workforce.Business.Core.DemandManagement.BaseDemandEstimative.Repository;
 using Workforce.Business.Core.WorkScheduleManagement.BaseWorkSchedule.Repository;
+using Workforce.Business.Core.HumanResourceManagement.PairingManagement.PairingType.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -156,6 +157,9 @@ builder.Services.AddScoped<JourRepository>();
 
 // Infra - WorkUnit
 builder.Services.AddScoped<WorkUnitRepository>();
+
+// Core - PairingManagement
+builder.Services.AddScoped<PairingTypeRepository>();
 
 builder.Services.AddRadzenCookieThemeService(options =>
 {
