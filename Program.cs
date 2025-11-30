@@ -150,7 +150,7 @@ builder.Services.AddScoped<Workforce.Business.Core.LeaveManagement.LeaveTake.Lea
 // Infra - WorkAgreement
 builder.Services.AddScoped<WorkAgreementRepository>();
 
-// Infra - WorkingHour
+// Infra - WorkingTime
 builder.Services.AddScoped<WorkingHourRepository>();
 builder.Services.AddScoped<JourRepository>();
 
