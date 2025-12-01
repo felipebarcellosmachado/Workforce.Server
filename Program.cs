@@ -141,6 +141,7 @@ builder.Services.AddScoped<QualificationRepository>();
 // Core - DemandManagement
 builder.Services.AddScoped<DemandEstimativeRepository>();
 builder.Services.AddScoped<BaseDemandEstimativeRepository>();
+builder.Services.AddScoped<Workforce.Business.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandRepository>();
 
 // Core - WorkScheduleManagement
 builder.Services.AddScoped<BaseWorkScheduleRepository>();
