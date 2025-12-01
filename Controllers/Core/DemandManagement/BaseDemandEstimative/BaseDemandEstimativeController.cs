@@ -7,19 +7,19 @@ namespace Workforce.Server.Controllers.Core.Demand.Management.BaseDemandEstimati
     [Route("api/core/demand-management/base-demand-estimatives")]
     public class BaseDemandEstimativeController : ControllerBase
     {
-        private readonly BaseDemandEstimativeRepository baseDemandEstimativeRepository;
+        private readonly BaseDemandEstimativeRepository repository;
 
-        public BaseDemandEstimativeController(BaseDemandEstimativeRepository baseDemandEstimativeRepository)
+        public BaseDemandEstimativeController(BaseDemandEstimativeRepository repository)
         {
-            this.baseDemandEstimativeRepository = baseDemandEstimativeRepository;
+            this.repository = repository;
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<Domain.Core.DemandManagement.BaseDemandEstimative.Entity.BaseDemandEstimative>> GetByIdAsync(int id)
+        [HttpGet("{id:int}", Name = "GetBaseDemandEstimativeById")]
+        public async Task<ActionResult<Domain.Core.DemandManagement.BaseDemandEstimative.Entity.BaseDemandEstimative>> GetByIdAsync(int id, CancellationToken ct = default)
         {
             try
             {
-                var baseDemandEstimative = await baseDemandEstimativeRepository.GetByIdAsync(id);
+                var baseDemandEstimative = await repository.GetByIdAsync(id, ct);
                 if (baseDemandEstimative == null)
                 {
                     return NotFound($"BaseDemandEstimative com ID {id} não encontrado");
@@ -33,11 +33,11 @@ namespace Workforce.Server.Controllers.Core.Demand.Management.BaseDemandEstimati
         }
 
         [HttpGet("environment/{environmentId:int}/{id:int}")]
-        public async Task<ActionResult<Domain.Core.DemandManagement.BaseDemandEstimative.Entity.BaseDemandEstimative>> GetByEnvironmentIdAndIdAsync(int environmentId, int id)
+        public async Task<ActionResult<Domain.Core.DemandManagement.BaseDemandEstimative.Entity.BaseDemandEstimative>> GetByEnvironmentIdAndIdAsync(int environmentId, int id, CancellationToken ct = default)
         {
             try
             {
-                var baseDemandEstimative = await baseDemandEstimativeRepository.GetByIdAsync(id);
+                var baseDemandEstimative = await repository.GetByIdAsync(id, ct);
                 if (baseDemandEstimative == null || baseDemandEstimative.EnvironmentId != environmentId)
                 {
                     return NotFound($"BaseDemandEstimative com ID {id} não encontrado para o Environment {environmentId}");
@@ -51,11 +51,11 @@ namespace Workforce.Server.Controllers.Core.Demand.Management.BaseDemandEstimati
         }
 
         [HttpGet("all/environment/{environmentId:int}")]
-        public async Task<ActionResult<IList<Domain.Core.DemandManagement.BaseDemandEstimative.Entity.BaseDemandEstimative>>> GetAllByEnvironmentIdAsync(int environmentId)
+        public async Task<ActionResult<IList<Domain.Core.DemandManagement.BaseDemandEstimative.Entity.BaseDemandEstimative>>> GetAllByEnvironmentIdAsync(int environmentId, CancellationToken ct = default)
         {
             try
             {
-                var baseDemandEstimatives = await baseDemandEstimativeRepository.GetAllByEnvironmentIdAsync(environmentId);
+                var baseDemandEstimatives = await repository.GetAllByEnvironmentIdAsync(environmentId, ct);
                 return Ok(baseDemandEstimatives);
             }
             catch (Exception ex)
@@ -65,11 +65,11 @@ namespace Workforce.Server.Controllers.Core.Demand.Management.BaseDemandEstimati
         }
 
         [HttpGet]
-        public async Task<ActionResult<IList<Domain.Core.DemandManagement.BaseDemandEstimative.Entity.BaseDemandEstimative>>> GetAllAsync()
+        public async Task<ActionResult<IList<Domain.Core.DemandManagement.BaseDemandEstimative.Entity.BaseDemandEstimative>>> GetAllAsync(CancellationToken ct = default)
         {
             try
             {
-                var baseDemandEstimatives = await baseDemandEstimativeRepository.GetAllAsync();
+                var baseDemandEstimatives = await repository.GetAllAsync(ct);
                 return Ok(baseDemandEstimatives);
             }
             catch (Exception ex)
@@ -79,12 +79,12 @@ namespace Workforce.Server.Controllers.Core.Demand.Management.BaseDemandEstimati
         }
 
         [HttpPost]
-        public async Task<ActionResult<Domain.Core.DemandManagement.BaseDemandEstimative.Entity.BaseDemandEstimative>> InsertAsync([FromBody] Domain.Core.DemandManagement.BaseDemandEstimative.Entity.BaseDemandEstimative entity)
+        public async Task<ActionResult<Domain.Core.DemandManagement.BaseDemandEstimative.Entity.BaseDemandEstimative>> InsertAsync([FromBody] Domain.Core.DemandManagement.BaseDemandEstimative.Entity.BaseDemandEstimative entity, CancellationToken ct = default)
         {
             try
             {
-                var insertedEntity = await baseDemandEstimativeRepository.InsertAsync(entity);
-                return CreatedAtAction(nameof(GetByIdAsync), new { id = insertedEntity.Id }, insertedEntity);
+                var insertedEntity = await repository.InsertAsync(entity, ct);
+                return Created($"/api/core/demand-management/base-demand-estimatives/{insertedEntity.Id}", insertedEntity);
             }
             catch (InvalidOperationException ex)
             {
@@ -97,7 +97,7 @@ namespace Workforce.Server.Controllers.Core.Demand.Management.BaseDemandEstimati
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<Domain.Core.DemandManagement.BaseDemandEstimative.Entity.BaseDemandEstimative>> UpdateAsync(int id, [FromBody] Domain.Core.DemandManagement.BaseDemandEstimative.Entity.BaseDemandEstimative entity)
+        public async Task<ActionResult<Domain.Core.DemandManagement.BaseDemandEstimative.Entity.BaseDemandEstimative>> UpdateAsync(int id, [FromBody] Domain.Core.DemandManagement.BaseDemandEstimative.Entity.BaseDemandEstimative entity, CancellationToken ct = default)
         {
             try
             {
@@ -106,7 +106,7 @@ namespace Workforce.Server.Controllers.Core.Demand.Management.BaseDemandEstimati
                     return BadRequest("ID da URL não corresponde ao ID do objeto");
                 }
 
-                var updatedEntity = await baseDemandEstimativeRepository.UpdateAsync(entity);
+                var updatedEntity = await repository.UpdateAsync(entity, ct);
                 if (updatedEntity == null)
                 {
                     return NotFound($"BaseDemandEstimative com ID {id} não encontrado");
@@ -124,11 +124,11 @@ namespace Workforce.Server.Controllers.Core.Demand.Management.BaseDemandEstimati
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> DeleteByIdAsync(int id)
+        public async Task<ActionResult> DeleteByIdAsync(int id, CancellationToken ct = default)
         {
             try
             {
-                var deleted = await baseDemandEstimativeRepository.DeleteByIdAsync(id);
+                var deleted = await repository.DeleteByIdAsync(id, ct);
                 if (!deleted)
                 {
                     return NotFound($"BaseDemandEstimative com ID {id} não encontrado");
