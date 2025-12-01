@@ -147,7 +147,7 @@ builder.Services.AddScoped<BaseWorkScheduleRepository>();
 
 // Core - LeaveManagement
 builder.Services.AddScoped<Workforce.Business.Core.LeaveManagement.LeaveType.Repository.LeaveTypeRepository>();
-builder.Services.AddScoped<Workforce.Business.Core.LeaveManagement.LeaveRequest.LeaveRequestRepository>();
+builder.Services.AddScoped<Workforce.Business.Core.LeaveManagement.LeaveRequest.Repository.LeaveRequestRepository>();
 builder.Services.AddScoped<Workforce.Business.Core.LeaveManagement.LeaveTake.LeaveTakeRepository>();
 
 // Infra - WorkAgreement
