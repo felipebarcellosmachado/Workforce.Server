@@ -142,6 +142,8 @@ builder.Services.AddScoped<QualificationRepository>();
 builder.Services.AddScoped<DemandEstimativeRepository>();
 builder.Services.AddScoped<BaseDemandEstimativeRepository>();
 builder.Services.AddScoped<Workforce.Business.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandRepository>();
+builder.Services.AddScoped<Workforce.Business.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandDayRepository>();
+builder.Services.AddScoped<Workforce.Business.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandPeriodRepository>();
 
 // Core - WorkScheduleManagement
 builder.Services.AddScoped<BaseWorkScheduleRepository>();
