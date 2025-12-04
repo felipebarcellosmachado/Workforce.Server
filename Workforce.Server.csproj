@@ -32,4 +32,8 @@
     <ProjectReference Include="..\Workforce.Db\Workforce.Db\Workforce.Db.csproj" />
     <ProjectReference Include="..\Workforce.Domain\Workforce.Domain.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\Core\DemandManagement\" />
+  </ItemGroup>
 </Project>

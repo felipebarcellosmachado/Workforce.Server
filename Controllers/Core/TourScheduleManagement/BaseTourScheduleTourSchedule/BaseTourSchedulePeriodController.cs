@@ -3,24 +3,24 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Workforce.Business.Core.DemandManagement.BaseDemandEstimative.Repository;
-using Workforce.Domain.Core.DemandManagement.BaseDemandEstimative.Entity;
+using Workforce.Business.Core.TourScheduleManagement.BaseTourSchedule.Repository;
+using Workforce.Domain.Core.TourScheduleManagement.BaseTourSchedule.Entity;
 
-namespace Workforce.Server.Controllers.Core.DemandManagement.BaseDemandEstimative
+namespace Workforce.Server.Controllers.Core.TourScheduleManagement.BaseTourScheduleTourSchedule
 {
     [ApiController]
-    [Route("api/core/demand-management/basedemandperiod")]
-    public class BaseDemandPeriodController : ControllerBase
+    [Route("api/core/tour-schedule-management/basetourscheduleperiod")]
+    public class BaseTourSchedulePeriodController : ControllerBase
     {
-        private readonly BaseDemandPeriodRepository repository;
+        private readonly BaseTourSchedulePeriodRepository repository;
 
-        public BaseDemandPeriodController(BaseDemandPeriodRepository repository)
+        public BaseTourSchedulePeriodController(BaseTourSchedulePeriodRepository repository)
         {
             this.repository = repository;
         }
 
-        [HttpGet("{id:int}", Name = "GetBaseDemandPeriodById")]
-        public async Task<ActionResult<BaseDemandPeriod>> GetByIdAsync(int id, CancellationToken ct = default)
+        [HttpGet("{id:int}", Name = "GetBaseTourSchedulePeriodById")]
+        public async Task<ActionResult<BaseTourSchedulePeriod>> GetByIdAsync(int id, CancellationToken ct = default)
         {
             try
             {
@@ -28,19 +28,19 @@ namespace Workforce.Server.Controllers.Core.DemandManagement.BaseDemandEstimativ
                 
                 if (entity == null)
                 {
-                    return NotFound($"BaseDemandPeriod com ID {id} não encontrado");
+                    return NotFound($"BaseTourSchedulePeriod com ID {id} não encontrado");
                 }
 
                 return Ok(entity);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Erro ao obter BaseDemandPeriod: {ex.Message}");
+                return StatusCode(500, $"Erro ao obter BaseTourSchedulePeriod: {ex.Message}");
             }
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<IList<BaseDemandPeriod>>> GetAllAsync(CancellationToken ct = default)
+        public async Task<ActionResult<IList<BaseTourSchedulePeriod>>> GetAllAsync(CancellationToken ct = default)
         {
             try
             {
@@ -49,26 +49,26 @@ namespace Workforce.Server.Controllers.Core.DemandManagement.BaseDemandEstimativ
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Erro ao obter BaseDemandPeriods: {ex.Message}");
+                return StatusCode(500, $"Erro ao obter BaseTourSchedulePeriods: {ex.Message}");
             }
         }
 
-        [HttpGet("basedemandday/{baseDemandDayId:int}")]
-        public async Task<ActionResult<IList<BaseDemandPeriod>>> GetAllByBaseDemandDayIdAsync(int baseDemandDayId, CancellationToken ct = default)
+        [HttpGet("basetourscheduleday/{baseTourScheduleDayId:int}")]
+        public async Task<ActionResult<IList<BaseTourSchedulePeriod>>> GetAllByBaseTourScheduleDayIdAsync(int baseTourScheduleDayId, CancellationToken ct = default)
         {
             try
             {
-                var entities = await repository.GetAllByBaseDemandDayIdAsync(baseDemandDayId, ct);
+                var entities = await repository.GetAllByBaseTourScheduleDayIdAsync(baseTourScheduleDayId, ct);
                 return Ok(entities);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Erro ao obter BaseDemandPeriods por BaseDemandDayId: {ex.Message}");
+                return StatusCode(500, $"Erro ao obter BaseTourSchedulePeriods por BaseTourScheduleDayId: {ex.Message}");
             }
         }
 
         [HttpPost]
-        public async Task<ActionResult<BaseDemandPeriod>> InsertAsync([FromBody] BaseDemandPeriod entity, CancellationToken ct = default)
+        public async Task<ActionResult<BaseTourSchedulePeriod>> InsertAsync([FromBody] BaseTourSchedulePeriod entity, CancellationToken ct = default)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace Workforce.Server.Controllers.Core.DemandManagement.BaseDemandEstimativ
 
                 var insertedEntity = await repository.InsertAsync(entity, ct);
                 
-                return Created($"/api/core/demand-management/basedemandperiod/{insertedEntity.Id}", insertedEntity);
+                return Created($"/api/core/tour-schedule-management/basetourscheduleperiod/{insertedEntity.Id}", insertedEntity);
             }
             catch (InvalidOperationException ex)
             {
@@ -87,12 +87,12 @@ namespace Workforce.Server.Controllers.Core.DemandManagement.BaseDemandEstimativ
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Erro interno ao inserir BaseDemandPeriod: {ex.Message}");
+                return StatusCode(500, $"Erro interno ao inserir BaseTourSchedulePeriod: {ex.Message}");
             }
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<BaseDemandPeriod>> UpdateAsync(int id, [FromBody] BaseDemandPeriod entity, CancellationToken ct = default)
+        public async Task<ActionResult<BaseTourSchedulePeriod>> UpdateAsync(int id, [FromBody] BaseTourSchedulePeriod entity, CancellationToken ct = default)
         {
             try
             {
@@ -110,7 +110,7 @@ namespace Workforce.Server.Controllers.Core.DemandManagement.BaseDemandEstimativ
                 
                 if (updatedEntity == null)
                 {
-                    return NotFound($"BaseDemandPeriod com ID {id} não encontrado");
+                    return NotFound($"BaseTourSchedulePeriod com ID {id} não encontrado");
                 }
 
                 return Ok(updatedEntity);
@@ -121,7 +121,7 @@ namespace Workforce.Server.Controllers.Core.DemandManagement.BaseDemandEstimativ
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Erro interno ao atualizar BaseDemandPeriod: {ex.Message}");
+                return StatusCode(500, $"Erro interno ao atualizar BaseTourSchedulePeriod: {ex.Message}");
             }
         }
 
@@ -134,14 +134,14 @@ namespace Workforce.Server.Controllers.Core.DemandManagement.BaseDemandEstimativ
                 
                 if (!result)
                 {
-                    return NotFound($"BaseDemandPeriod com ID {id} não encontrado");
+                    return NotFound($"BaseTourSchedulePeriod com ID {id} não encontrado");
                 }
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Erro ao excluir BaseDemandPeriod: {ex.Message}");
+                return StatusCode(500, $"Erro ao excluir BaseTourSchedulePeriod: {ex.Message}");
             }
         }
     }

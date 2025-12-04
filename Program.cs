@@ -33,9 +33,9 @@ using Workforce.Business.Core.HumanResourceManagement.WorkAgreement.Repository;
 using Workforce.Business.Core.HumanResourceManagement.WorkingHour;
 using Workforce.Business.Core.FacilityManagement.WorkUnit.Repository;
 using Workforce.Services.Core.FacilityManagement.WorkUnit;
-using Workforce.Business.Core.DemandManagement.DemandEstimative.Repository;
-using Workforce.Business.Core.DemandManagement.BaseDemandEstimative.Repository;
-using Workforce.Business.Core.WorkScheduleManagement.BaseWorkSchedule.Repository;
+// using Workforce.Business.Core.DemandManagement.DemandEstimative.Repository; // Comentado: namespace não existe
+// using Workforce.Business.Core.DemandManagement.BaseDemandEstimative.Repository; // Comentado: namespace não existe
+// using Workforce.Business.Core.WorkScheduleManagement.BaseWorkSchedule.Repository; // Comentado: namespace não existe
 using Workforce.Business.Core.HumanResourceManagement.PairingManagement.PairingType.Repository;
 using Workforce.Business.Core.HumanResourceManagement.PairingManagement.Pairing.Repository;
 using Workforce.Business.Core.HumanResourceManagement.RiskFactor;
@@ -138,15 +138,15 @@ builder.Services.AddScoped<JobTitleRepository>();
 builder.Services.AddScoped<SkillRepository>();
 builder.Services.AddScoped<QualificationRepository>();
 
-// Core - DemandManagement
-builder.Services.AddScoped<DemandEstimativeRepository>();
-builder.Services.AddScoped<BaseDemandEstimativeRepository>();
-builder.Services.AddScoped<Workforce.Business.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandRepository>();
-builder.Services.AddScoped<Workforce.Business.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandDayRepository>();
-builder.Services.AddScoped<Workforce.Business.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandPeriodRepository>();
+// Core - DemandManagement - Comentado: namespaces não existem
+// builder.Services.AddScoped<DemandEstimativeRepository>();
+// builder.Services.AddScoped<BaseDemandEstimativeRepository>();
+// builder.Services.AddScoped<Workforce.Business.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandRepository>();
+// builder.Services.AddScoped<Workforce.Business.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandDayRepository>();
+// builder.Services.AddScoped<Workforce.Business.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandPeriodRepository>();
 
-// Core - WorkScheduleManagement
-builder.Services.AddScoped<BaseWorkScheduleRepository>();
+// Core - WorkScheduleManagement - Comentado: namespace não existe
+// builder.Services.AddScoped<BaseWorkScheduleRepository>();
 
 // Core - LeaveManagement
 builder.Services.AddScoped<Workforce.Business.Core.LeaveManagement.LeaveType.Repository.LeaveTypeRepository>();
