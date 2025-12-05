@@ -62,7 +62,7 @@ namespace Workforce.Server.Controllers.Core.FacilityManagement.WorkUnit
                     return BadRequest("Failed to create WorkUnit");
                 }
 
-                return CreatedAtAction(nameof(GetByIdAsync), new { id = result.Id }, result);
+                return Created($"/api/core/workunit/{result.Id}", result);
             }
             catch (InvalidOperationException ex)
             {

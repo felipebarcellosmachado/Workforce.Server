@@ -39,6 +39,7 @@ using Workforce.Services.Core.FacilityManagement.WorkUnit;
 using Workforce.Business.Core.HumanResourceManagement.PairingManagement.PairingType.Repository;
 using Workforce.Business.Core.HumanResourceManagement.PairingManagement.Pairing.Repository;
 using Workforce.Business.Core.HumanResourceManagement.RiskFactor;
+using Workforce.Business.Core.TourScheduleManagement.BaseTourSchedule.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -169,6 +170,9 @@ builder.Services.AddScoped<PairingRepository>();
 
 // Core - RiskFactor
 builder.Services.AddScoped<RiskFactorRepository>();
+
+// Core - TourScheduleManagement
+builder.Services.AddScoped<BaseTourScheduleEstimativeRepository>();
 
 builder.Services.AddRadzenCookieThemeService(options =>
 {
