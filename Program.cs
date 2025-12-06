@@ -47,7 +47,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
       .AddInteractiveWebAssemblyComponents();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+    });
 builder.Services.AddRadzenComponents();
 
 // Configure Database Context
@@ -172,7 +177,8 @@ builder.Services.AddScoped<PairingRepository>();
 builder.Services.AddScoped<RiskFactorRepository>();
 
 // Core - TourScheduleManagement
-builder.Services.AddScoped<BaseTourScheduleEstimativeRepository>();
+builder.Services.AddScoped<BaseTourScheduleRepository>();
+builder.Services.AddScoped<BaseTourScheduleDemandRepository>();
 
 builder.Services.AddRadzenCookieThemeService(options =>
 {

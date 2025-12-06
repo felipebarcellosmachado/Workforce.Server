@@ -8,15 +8,15 @@ namespace Workforce.Server.Controllers.Core.TourSchedule.Management.BaseTourSche
     [Route("api/core/tour-schedule-management/base-tour-schedule-tour-schedules")]
     public class BaseTourScheduleTourScheduleController : ControllerBase
     {
-        private readonly BaseTourScheduleRepository repository;
+        private readonly BaseTourScheduleDemandRepository repository;
 
-        public BaseTourScheduleTourScheduleController(BaseTourScheduleRepository repository)
+        public BaseTourScheduleTourScheduleController(BaseTourScheduleDemandRepository repository)
         {
             this.repository = repository;
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<BaseTourSchedule>> GetByIdAsync(int id, CancellationToken ct = default)
+        public async Task<ActionResult<BaseTourScheduleDemand>> GetByIdAsync(int id, CancellationToken ct = default)
         {
             try
             {
@@ -34,7 +34,7 @@ namespace Workforce.Server.Controllers.Core.TourSchedule.Management.BaseTourSche
         }
 
         [HttpGet]
-        public async Task<ActionResult<IList<BaseTourSchedule>>> GetAllAsync(CancellationToken ct = default)
+        public async Task<ActionResult<IList<BaseTourScheduleDemand>>> GetAllAsync(CancellationToken ct = default)
         {
             try
             {
@@ -47,12 +47,12 @@ namespace Workforce.Server.Controllers.Core.TourSchedule.Management.BaseTourSche
             }
         }
 
-        [HttpGet("basetourscheduleestimative/{baseTourScheduleEstimativeId:int}")]
-        public async Task<ActionResult<IList<BaseTourSchedule>>> GetAllByBaseTourScheduleEstimativeIdAsync(int baseTourScheduleEstimativeId, CancellationToken ct = default)
+        [HttpGet("basetourschedule/{baseTourScheduleId:int}")]
+        public async Task<ActionResult<IList<BaseTourScheduleDemand>>> GetAllByBaseTourScheduleIdAsync(int baseTourScheduleId, CancellationToken ct = default)
         {
             try
             {
-                var baseTourSchedules = await repository.GetAllByBaseTourScheduleEstimativeIdAsync(baseTourScheduleEstimativeId, ct);
+                var baseTourSchedules = await repository.GetAllByBaseTourScheduleIdAsync(baseTourScheduleId, ct);
                 return Ok(baseTourSchedules);
             }
             catch (Exception ex)
@@ -62,7 +62,7 @@ namespace Workforce.Server.Controllers.Core.TourSchedule.Management.BaseTourSche
         }
 
         [HttpPost]
-        public async Task<ActionResult<BaseTourSchedule>> InsertAsync([FromBody] BaseTourSchedule entity, CancellationToken ct = default)
+        public async Task<ActionResult<BaseTourScheduleDemand>> InsertAsync([FromBody] BaseTourScheduleDemand entity, CancellationToken ct = default)
         {
             try
             {
@@ -80,7 +80,7 @@ namespace Workforce.Server.Controllers.Core.TourSchedule.Management.BaseTourSche
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<BaseTourSchedule>> UpdateAsync(int id, [FromBody] BaseTourSchedule entity, CancellationToken ct = default)
+        public async Task<ActionResult<BaseTourScheduleDemand>> UpdateAsync(int id, [FromBody] BaseTourScheduleDemand entity, CancellationToken ct = default)
         {
             try
             {

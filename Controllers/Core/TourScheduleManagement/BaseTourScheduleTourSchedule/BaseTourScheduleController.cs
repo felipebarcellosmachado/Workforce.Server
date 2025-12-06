@@ -9,18 +9,18 @@ using Workforce.Domain.Core.TourScheduleManagement.BaseTourSchedule.Entity;
 namespace Workforce.Server.Controllers.Core.TourScheduleManagement.BaseTourScheduleTourSchedule
 {
     [ApiController]
-    [Route("api/core/tour-schedule-management/basetourschedule")]
-    public class BaseTourScheduleController : ControllerBase
+    [Route("api/core/tour-schedule-management/basetourscheduledemand")]
+    public class BaseTourScheduleDemandController : ControllerBase
     {
-        private readonly BaseTourScheduleRepository repository;
+        private readonly BaseTourScheduleDemandRepository repository;
 
-        public BaseTourScheduleController(BaseTourScheduleRepository repository)
+        public BaseTourScheduleDemandController(BaseTourScheduleDemandRepository repository)
         {
             this.repository = repository;
         }
 
-        [HttpGet("{id:int}", Name = "GetBaseTourScheduleById")]
-        public async Task<ActionResult<BaseTourSchedule>> GetByIdAsync(int id, CancellationToken ct = default)
+        [HttpGet("{id:int}", Name = "GetBaseTourScheduleDemandById")]
+        public async Task<ActionResult<BaseTourScheduleDemand>> GetByIdAsync(int id, CancellationToken ct = default)
         {
             try
             {
@@ -28,19 +28,19 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.BaseTourSched
                 
                 if (entity == null)
                 {
-                    return NotFound($"BaseTourSchedule com ID {id} não encontrado");
+                    return NotFound($"BaseTourScheduleDemand com ID {id} não encontrado");
                 }
 
                 return Ok(entity);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Erro ao obter BaseTourSchedule: {ex.Message}");
+                return StatusCode(500, $"Erro ao obter BaseTourScheduleDemand: {ex.Message}");
             }
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<IList<BaseTourSchedule>>> GetAllAsync(CancellationToken ct = default)
+        public async Task<ActionResult<IList<BaseTourScheduleDemand>>> GetAllAsync(CancellationToken ct = default)
         {
             try
             {
@@ -49,26 +49,26 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.BaseTourSched
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Erro ao obter BaseTourSchedules: {ex.Message}");
+                return StatusCode(500, $"Erro ao obter BaseTourScheduleDemands: {ex.Message}");
             }
         }
 
-        [HttpGet("basetourscheduleestimative/{baseTourScheduleEstimativeId:int}")]
-        public async Task<ActionResult<IList<BaseTourSchedule>>> GetAllByBaseTourScheduleEstimativeIdAsync(int baseTourScheduleEstimativeId, CancellationToken ct = default)
+        [HttpGet("basetourschedule/{baseTourScheduleId:int}")]
+        public async Task<ActionResult<IList<BaseTourScheduleDemand>>> GetAllByBaseTourScheduleIdAsync(int baseTourScheduleId, CancellationToken ct = default)
         {
             try
             {
-                var entities = await repository.GetAllByBaseTourScheduleEstimativeIdAsync(baseTourScheduleEstimativeId, ct);
+                var entities = await repository.GetAllByBaseTourScheduleIdAsync(baseTourScheduleId, ct);
                 return Ok(entities);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Erro ao obter BaseTourSchedules por BaseTourScheduleEstimativeId: {ex.Message}");
+                return StatusCode(500, $"Erro ao obter BaseTourScheduleDemands por BaseTourScheduleId: {ex.Message}");
             }
         }
 
         [HttpGet("basetourscheduleperiod/{baseTourSchedulePeriodId:int}")]
-        public async Task<ActionResult<IList<BaseTourSchedule>>> GetAllByBaseTourSchedulePeriodIdAsync(int baseTourSchedulePeriodId, CancellationToken ct = default)
+        public async Task<ActionResult<IList<BaseTourScheduleDemand>>> GetAllByBaseTourSchedulePeriodIdAsync(int baseTourSchedulePeriodId, CancellationToken ct = default)
         {
             try
             {
@@ -77,12 +77,12 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.BaseTourSched
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Erro ao obter BaseTourSchedules por BaseTourSchedulePeriodId: {ex.Message}");
+                return StatusCode(500, $"Erro ao obter BaseTourScheduleDemands por BaseTourSchedulePeriodId: {ex.Message}");
             }
         }
 
         [HttpPost]
-        public async Task<ActionResult<BaseTourSchedule>> InsertAsync([FromBody] BaseTourSchedule entity, CancellationToken ct = default)
+        public async Task<ActionResult<BaseTourScheduleDemand>> InsertAsync([FromBody] BaseTourScheduleDemand entity, CancellationToken ct = default)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.BaseTourSched
 
                 var insertedEntity = await repository.InsertAsync(entity, ct);
                 
-                return Created($"/api/core/tour-schedule-management/basetourschedule/{insertedEntity.Id}", insertedEntity);
+                return Created($"/api/core/tour-schedule-management/basetourscheduledemand/{insertedEntity.Id}", insertedEntity);
             }
             catch (InvalidOperationException ex)
             {
@@ -101,12 +101,12 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.BaseTourSched
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Erro interno ao inserir BaseTourSchedule: {ex.Message}");
+                return StatusCode(500, $"Erro interno ao inserir BaseTourScheduleDemand: {ex.Message}");
             }
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<BaseTourSchedule>> UpdateAsync(int id, [FromBody] BaseTourSchedule entity, CancellationToken ct = default)
+        public async Task<ActionResult<BaseTourScheduleDemand>> UpdateAsync(int id, [FromBody] BaseTourScheduleDemand entity, CancellationToken ct = default)
         {
             try
             {
@@ -124,7 +124,7 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.BaseTourSched
                 
                 if (updatedEntity == null)
                 {
-                    return NotFound($"BaseTourSchedule com ID {id} não encontrado");
+                    return NotFound($"BaseTourScheduleDemand com ID {id} não encontrado");
                 }
 
                 return Ok(updatedEntity);
@@ -135,7 +135,7 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.BaseTourSched
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Erro interno ao atualizar BaseTourSchedule: {ex.Message}");
+                return StatusCode(500, $"Erro interno ao atualizar BaseTourScheduleDemand: {ex.Message}");
             }
         }
 
@@ -148,14 +148,14 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.BaseTourSched
                 
                 if (!result)
                 {
-                    return NotFound($"BaseTourSchedule com ID {id} não encontrado");
+                    return NotFound($"BaseTourScheduleDemand com ID {id} não encontrado");
                 }
 
                 return NoContent();
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Erro ao excluir BaseTourSchedule: {ex.Message}");
+                return StatusCode(500, $"Erro ao excluir BaseTourScheduleDemand: {ex.Message}");
             }
         }
     }

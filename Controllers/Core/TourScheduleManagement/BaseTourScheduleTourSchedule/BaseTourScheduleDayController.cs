@@ -53,17 +53,17 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.BaseTourSched
             }
         }
 
-        [HttpGet("basetourscheduleestimative/{baseTourScheduleEstimativeId:int}")]
-        public async Task<ActionResult<IList<BaseTourScheduleDay>>> GetAllByBaseTourScheduleEstimativeIdAsync(int baseTourScheduleEstimativeId, CancellationToken ct = default)
+        [HttpGet("basetourschedule/{baseTourScheduleId:int}")]
+        public async Task<ActionResult<IList<BaseTourScheduleDay>>> GetAllByBaseTourScheduleIdAsync(int baseTourScheduleId, CancellationToken ct = default)
         {
             try
             {
-                var entities = await repository.GetAllByBaseTourScheduleEstimativeIdAsync(baseTourScheduleEstimativeId, ct);
+                var entities = await repository.GetAllByBaseTourScheduleIdAsync(baseTourScheduleId, ct);
                 return Ok(entities);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Erro ao obter BaseTourScheduleDays por BaseTourScheduleEstimativeId: {ex.Message}");
+                return StatusCode(500, $"Erro ao obter BaseTourScheduleDays por BaseTourScheduleId: {ex.Message}");
             }
         }
 
