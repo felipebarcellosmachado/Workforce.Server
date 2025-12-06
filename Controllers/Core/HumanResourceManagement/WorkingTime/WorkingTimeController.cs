@@ -1,17 +1,17 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Business.Core.HumanResourceManagement.WorkingHour;
+using Workforce.Business.Core.HumanResourceManagement.WorkingTime;
 
-namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkingHour
+namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkingTime
 {
     [ApiController]
     [Route("api/core/human_resource/[controller]")]
-    public class WorkingHourController : ControllerBase
+    public class WorkingTimeController : ControllerBase
     {
-        private readonly WorkingHourRepository _workingHourRepository;
+        private readonly WorkingTimeRepository _workingTimeRepository;
 
-        public WorkingHourController(WorkingHourRepository workingHourRepository)
+        public WorkingTimeController(WorkingTimeRepository workingTimeRepository)
         {
-            _workingHourRepository = workingHourRepository;
+            _workingTimeRepository = workingTimeRepository;
         }
 
         [HttpGet("{id}")]
@@ -19,12 +19,12 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkingHour
         {
             try
             {
-                var workingHour = await _workingHourRepository.GetById(id);
-                if (workingHour == null)
+                var workingTime = await _workingTimeRepository.GetById(id);
+                if (workingTime == null)
                 {
                     return NotFound();
                 }
-                return Ok(workingHour);
+                return Ok(workingTime);
             }
             catch (Exception ex)
             {
@@ -37,12 +37,12 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkingHour
         {
             try
             {
-                var workingHour = await _workingHourRepository.GetById(id);
-                if (workingHour == null || workingHour.EnvironmentId != environmentId)
+                var workingTime = await _workingTimeRepository.GetById(id);
+                if (workingTime == null || workingTime.EnvironmentId != environmentId)
                 {
                     return NotFound();
                 }
-                return Ok(workingHour);
+                return Ok(workingTime);
             }
             catch (Exception ex)
             {
@@ -55,8 +55,8 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkingHour
         {
             try
             {
-                var workingHours = await _workingHourRepository.GetAllByEnvironmentId(environmentId);
-                return Ok(workingHours);
+                var workingTimes = await _workingTimeRepository.GetAllByEnvironmentId(environmentId);
+                return Ok(workingTimes);
             }
             catch (Exception ex)
             {
@@ -69,8 +69,8 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkingHour
         {
             try
             {
-                var workingHours = await _workingHourRepository.GetAll();
-                return Ok(workingHours);
+                var workingTimes = await _workingTimeRepository.GetAll();
+                return Ok(workingTimes);
             }
             catch (Exception ex)
             {
@@ -79,16 +79,16 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkingHour
         }
 
         [HttpPost]
-        public async Task<ActionResult<Domain.Core.HumanResourceManagement.WorkingHour.Entity.WorkingTime>> Insert([FromBody] Domain.Core.HumanResourceManagement.WorkingHour.Entity.WorkingTime workingHour)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.WorkingHour.Entity.WorkingTime>> Insert([FromBody] Domain.Core.HumanResourceManagement.WorkingHour.Entity.WorkingTime workingTime)
         {
             try
             {
-                var insertedWorkingHour = await _workingHourRepository.Insert(workingHour);
-                if (insertedWorkingHour == null)
+                var insertedWorkingTime = await _workingTimeRepository.Insert(workingTime);
+                if (insertedWorkingTime == null)
                 {
-                    return BadRequest("Failed to insert working hour");
+                    return BadRequest("Failed to insert working time");
                 }
-                return CreatedAtAction(nameof(GetById), new { id = insertedWorkingHour.Id }, insertedWorkingHour);
+                return CreatedAtAction(nameof(GetById), new { id = insertedWorkingTime.Id }, insertedWorkingTime);
             }
             catch (Exception ex)
             {
@@ -97,21 +97,21 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkingHour
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Domain.Core.HumanResourceManagement.WorkingHour.Entity.WorkingTime>> Update(int id, [FromBody] Domain.Core.HumanResourceManagement.WorkingHour.Entity.WorkingTime workingHour)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.WorkingHour.Entity.WorkingTime>> Update(int id, [FromBody] Domain.Core.HumanResourceManagement.WorkingHour.Entity.WorkingTime workingTime)
         {
             try
             {
-                if (id != workingHour.Id)
+                if (id != workingTime.Id)
                 {
                     return BadRequest("ID mismatch");
                 }
 
-                var updatedWorkingHour = await _workingHourRepository.Update(workingHour);
-                if (updatedWorkingHour == null)
+                var updatedWorkingTime = await _workingTimeRepository.Update(workingTime);
+                if (updatedWorkingTime == null)
                 {
                     return NotFound();
                 }
-                return Ok(updatedWorkingHour);
+                return Ok(updatedWorkingTime);
             }
             catch (Exception ex)
             {
@@ -124,7 +124,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkingHour
         {
             try
             {
-                var result = await _workingHourRepository.DeleteById(id);
+                var result = await _workingTimeRepository.DeleteById(id);
                 if (!result)
                 {
                     return NotFound();

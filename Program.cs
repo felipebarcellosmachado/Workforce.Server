@@ -30,7 +30,7 @@ using Workforce.Business.Core.HumanResourceManagement.Skill.Repository;
 using Workforce.Business.Core.HumanResourceManagement.HumanResource.Repository;
 using Workforce.Business.Core.FacilityManagement.Facility.Repository;
 using Workforce.Business.Core.HumanResourceManagement.WorkAgreement.Repository;
-using Workforce.Business.Core.HumanResourceManagement.WorkingHour;
+using Workforce.Business.Core.HumanResourceManagement.WorkingTime;
 using Workforce.Business.Core.FacilityManagement.WorkUnit.Repository;
 using Workforce.Services.Core.FacilityManagement.WorkUnit;
 // using Workforce.Business.Core.DemandManagement.DemandEstimative.Repository; // Comentado: namespace não existe
@@ -163,7 +163,7 @@ builder.Services.AddScoped<Workforce.Business.Core.LeaveManagement.LeaveTake.Lea
 builder.Services.AddScoped<WorkAgreementRepository>();
 
 // Infra - WorkingTime
-builder.Services.AddScoped<WorkingHourRepository>();
+builder.Services.AddScoped<WorkingTimeRepository>();
 builder.Services.AddScoped<JourRepository>();
 
 // Infra - WorkUnit

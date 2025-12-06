@@ -35,5 +35,6 @@
 
   <ItemGroup>
     <Folder Include="Controllers\Core\DemandManagement\" />
+    <Folder Include="Controllers\Core\HumanResourceManagement\WorkingHour\" />
   </ItemGroup>
 </Project>

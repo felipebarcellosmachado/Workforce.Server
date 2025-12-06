@@ -60,7 +60,9 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.HumanResourc
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Erro interno: {ex.Message}");
+                var innerMessage = ex.InnerException?.Message ?? "No inner exception";
+                Console.WriteLine($"GetAllByEnvironmentId error: {ex.Message}, Inner: {innerMessage}");
+                return StatusCode(500, $"Erro interno: {ex.Message} | Inner: {innerMessage}");
             }
         }
 
