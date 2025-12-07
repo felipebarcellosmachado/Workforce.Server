@@ -49,7 +49,7 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.BaseTourSched
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Erro ao obter BaseTourScheduleDays: {ex.Message}");
+                return StatusCode(500, $"Erro ao obter Days: {ex.Message}");
             }
         }
 
@@ -63,7 +63,7 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.BaseTourSched
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Erro ao obter BaseTourScheduleDays por BaseTourScheduleId: {ex.Message}");
+                return StatusCode(500, $"Erro ao obter Days por BaseTourScheduleId: {ex.Message}");
             }
         }
 
