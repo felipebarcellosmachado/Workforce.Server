@@ -64,9 +64,8 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.BaseTourSched
                 Console.WriteLine($"GetAllByEnvironmentIdAsync: Found {entities.Count} schedules for environment {environmentId}");
                 foreach (var schedule in entities)
                 {
-                    var daysCount = schedule.Days?.Count ?? 0;
-                    var periodsCount = schedule.Days?.SelectMany(d => d.BaseTourSchedulePeriods ?? new List<BaseTourSchedulePeriod>()).Count() ?? 0;
-                    Console.WriteLine($"  Schedule {schedule.Id} ({schedule.Name}): {daysCount} days, {periodsCount} periods");
+                    var periodsCount = schedule.Periods?.Count ?? 0;
+                    Console.WriteLine($"  Schedule {schedule.Id} ({schedule.Name}): {periodsCount} periods");
                 }
                 
                 return Ok(entities);

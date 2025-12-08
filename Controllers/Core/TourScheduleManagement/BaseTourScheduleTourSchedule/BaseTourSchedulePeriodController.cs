@@ -49,21 +49,21 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.BaseTourSched
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Erro ao obter BaseTourSchedulePeriods: {ex.Message}");
+                return StatusCode(500, $"Erro ao obter Periods: {ex.Message}");
             }
         }
 
-        [HttpGet("basetourscheduleday/{baseTourScheduleDayId:int}")]
-        public async Task<ActionResult<IList<BaseTourSchedulePeriod>>> GetAllByBaseTourScheduleDayIdAsync(int baseTourScheduleDayId, CancellationToken ct = default)
+        [HttpGet("basetourschedule/{baseTourScheduleId:int}")]
+        public async Task<ActionResult<IList<BaseTourSchedulePeriod>>> GetAllByBaseTourScheduleIdAsync(int baseTourScheduleId, CancellationToken ct = default)
         {
             try
             {
-                var entities = await repository.GetAllByBaseTourScheduleDayIdAsync(baseTourScheduleDayId, ct);
+                var entities = await repository.GetAllByBaseTourScheduleIdAsync(baseTourScheduleId, ct);
                 return Ok(entities);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Erro ao obter BaseTourSchedulePeriods por BaseTourScheduleDayId: {ex.Message}");
+                return StatusCode(500, $"Erro ao obter Periods por BaseTourScheduleId: {ex.Message}");
             }
         }
 
