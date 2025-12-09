@@ -51,7 +51,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.JobTitle
         }
 
         [HttpGet("all/environment/{environmentId}")]
-        public async Task<ActionResult<List<Domain.Core.HumanResourceManagement.JobTitle.Entity.JobTitle>>> GetAllByEnvironmentId(int environmentId)
+        public async Task<ActionResult<IList<Domain.Core.HumanResourceManagement.JobTitle.Entity.JobTitle>>> GetAllByEnvironmentId(int environmentId)
         {
             try
             {
