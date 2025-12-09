@@ -41,6 +41,9 @@ using Workforce.Business.Core.HumanResourceManagement.PairingManagement.Pairing.
 using Workforce.Business.Core.HumanResourceManagement.RiskFactor;
 using Workforce.Business.Core.TourScheduleManagement.BaseTourSchedule.Repository;
 using Workforce.Business.Core.TourScheduleManagement.TourSchedule.Repository;
+using Workforce.Services.Core.HumanResourceManagement.WorkAgreement;
+using Workforce.Services.Core.HumanResourceManagement.JobTitle;
+using Workforce.Services.Core.HumanResourceManagement.WorkingTime;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -69,8 +72,18 @@ builder.Services.AddSingleton<Microsoft.Extensions.Localization.IStringLocalizer
 });
 builder.Services.AddScoped<Workforce.Client.Services.ICultureService, Workforce.Client.Services.CultureService>();
 
-// Register HttpClient for server-side services
-builder.Services.AddHttpClient();
+// Register HttpClient for server-side services with proper base address for prerendering
+// Use configuration to get base URL, fallback to localhost for development
+var baseUrl = builder.Configuration["BaseUrl"] ?? "https://localhost:6001/";
+builder.Services.AddHttpClient("ServerHttpClient", client =>
+{
+    client.BaseAddress = new Uri(baseUrl);
+});
+builder.Services.AddScoped(sp =>
+{
+    var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
+    return httpClientFactory.CreateClient("ServerHttpClient");
+});
 // Register Server-side dummy services for static rendering (will be replaced by WebAssembly)
 // These are only used during the initial server-side render, not for actual functionality
 builder.Services.AddScoped<ISessionService>(sp => 
@@ -113,6 +126,24 @@ builder.Services.AddScoped<IWorkUnitService>(sp =>
 {
     var httpClient = sp.GetRequiredService<HttpClient>();
     return new WorkUnitService(httpClient);
+});
+
+builder.Services.AddScoped<IWorkAgreementService>(sp => 
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new WorkAgreementService(httpClient);
+});
+
+builder.Services.AddScoped<IJobTitleService>(sp => 
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new JobTitleService(httpClient);
+});
+
+builder.Services.AddScoped<IWorkingTimeService>(sp => 
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new WorkingTimeService(httpClient);
 });
 
 // State Management (for server-side compatibility)

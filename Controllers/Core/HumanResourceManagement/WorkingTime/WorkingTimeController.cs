@@ -15,7 +15,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkingTime
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Domain.Core.HumanResourceManagement.WorkingHour.Entity.WorkingTime>> GetById(int id)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.WorkingTime.Entity.WorkingTime>> GetById(int id)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkingTime
         }
 
         [HttpGet("environment/{environmentId}/{id}")]
-        public async Task<ActionResult<Domain.Core.HumanResourceManagement.WorkingHour.Entity.WorkingTime>> GetByEnvironmentIdAndId(int environmentId, int id)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.WorkingTime.Entity.WorkingTime>> GetByEnvironmentIdAndId(int environmentId, int id)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkingTime
         }
 
         [HttpGet("all/environment/{environmentId}")]
-        public async Task<ActionResult<IList<Domain.Core.HumanResourceManagement.WorkingHour.Entity.WorkingTime>>> GetAllByEnvironmentId(int environmentId)
+        public async Task<ActionResult<IList<Domain.Core.HumanResourceManagement.WorkingTime.Entity.WorkingTime>>> GetAllByEnvironmentId(int environmentId)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkingTime
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<IList<Domain.Core.HumanResourceManagement.WorkingHour.Entity.WorkingTime>>> GetAll()
+        public async Task<ActionResult<IList<Domain.Core.HumanResourceManagement.WorkingTime.Entity.WorkingTime>>> GetAll()
         {
             try
             {
@@ -79,7 +79,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkingTime
         }
 
         [HttpPost]
-        public async Task<ActionResult<Domain.Core.HumanResourceManagement.WorkingHour.Entity.WorkingTime>> Insert([FromBody] Domain.Core.HumanResourceManagement.WorkingHour.Entity.WorkingTime workingTime)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.WorkingTime.Entity.WorkingTime>> Insert([FromBody] Domain.Core.HumanResourceManagement.WorkingTime.Entity.WorkingTime workingTime)
         {
             try
             {
@@ -97,7 +97,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkingTime
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Domain.Core.HumanResourceManagement.WorkingHour.Entity.WorkingTime>> Update(int id, [FromBody] Domain.Core.HumanResourceManagement.WorkingHour.Entity.WorkingTime workingTime)
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.WorkingTime.Entity.WorkingTime>> Update(int id, [FromBody] Domain.Core.HumanResourceManagement.WorkingTime.Entity.WorkingTime workingTime)
         {
             try
             {
