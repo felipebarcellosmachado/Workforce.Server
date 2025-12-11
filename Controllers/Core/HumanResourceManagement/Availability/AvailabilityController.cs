@@ -33,6 +33,13 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.Availability
             return Ok(list);
         }
 
+        [HttpGet("humanresource/{humanResourceId:int}")]
+        public async Task<ActionResult<IList<Domain.Core.HumanResourceManagement.Availability.Entity.Availability>>> GetByHumanResourceIdAsync(int humanResourceId, CancellationToken ct)
+        {
+            var list = await _repository.GetByHumanResourceIdAsync(humanResourceId, ct);
+            return Ok(list);
+        }
+
         [HttpPost]
         public async Task<ActionResult<Domain.Core.HumanResourceManagement.Availability.Entity.Availability>> InsertAsync(Domain.Core.HumanResourceManagement.Availability.Entity.Availability entity, CancellationToken ct)
         {
