@@ -39,6 +39,7 @@ using Workforce.Services.Core.FacilityManagement.WorkUnit;
 using Workforce.Business.Core.HumanResourceManagement.PairingManagement.PairingType.Repository;
 using Workforce.Business.Core.HumanResourceManagement.PairingManagement.Pairing.Repository;
 using Workforce.Business.Core.HumanResourceManagement.RiskFactor;
+using Workforce.Business.Core.HumanResourceManagement.Availability.Repository;
 using Workforce.Business.Core.TourScheduleManagement.BaseTourSchedule.Repository;
 using Workforce.Business.Core.TourScheduleManagement.TourSchedule.Repository;
 using Workforce.Services.Core.HumanResourceManagement.WorkAgreement;
@@ -249,6 +250,9 @@ builder.Services.AddScoped<PairingRepository>();
 
 // Core - RiskFactor
 builder.Services.AddScoped<RiskFactorRepository>();
+
+// Core - Availability
+builder.Services.AddScoped<AvailabilityRepository>();
 
 // Core - TourScheduleManagement
 builder.Services.AddScoped<BaseTourScheduleRepository>();
