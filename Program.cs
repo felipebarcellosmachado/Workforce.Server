@@ -44,6 +44,12 @@ using Workforce.Business.Core.TourScheduleManagement.TourSchedule.Repository;
 using Workforce.Services.Core.HumanResourceManagement.WorkAgreement;
 using Workforce.Services.Core.HumanResourceManagement.JobTitle;
 using Workforce.Services.Core.HumanResourceManagement.WorkingTime;
+using Workforce.Services.Core.HumanResourceManagement.HumanResource;
+using Workforce.Services.Core.HumanResourceManagement.Behaviour;
+using Workforce.Services.Core.HumanResourceManagement.Qualification;
+using Workforce.Services.Infra.HumanResource.Skill;
+using Workforce.Services.Infra.HumanResource.CompetenceLevel;
+using Workforce.Services.Core.HumanResourceManagement.RiskFactor;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -144,6 +150,42 @@ builder.Services.AddScoped<IWorkingTimeService>(sp =>
 {
     var httpClient = sp.GetRequiredService<HttpClient>();
     return new WorkingTimeService(httpClient);
+});
+
+builder.Services.AddScoped<IHumanResourceService>(sp => 
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new HumanResourceService(httpClient);
+});
+
+builder.Services.AddScoped<IBehaviourService>(sp => 
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new BehaviourService(httpClient);
+});
+
+builder.Services.AddScoped<IQualificationService>(sp => 
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new QualificationService(httpClient);
+});
+
+builder.Services.AddScoped<ISkillService>(sp => 
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new SkillService(httpClient);
+});
+
+builder.Services.AddScoped<ICompetenceLevelService>(sp => 
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new CompetenceLevelService(httpClient);
+});
+
+builder.Services.AddScoped<IRiskFactorService>(sp => 
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new RiskFactorService(httpClient);
 });
 
 // State Management (for server-side compatibility)
