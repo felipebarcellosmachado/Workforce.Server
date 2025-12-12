@@ -15,12 +15,12 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveType
         }
 
         // HttpGet para GetById
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<Domain.Core.LeaveManagement.LeaveType.Entity.LeaveType>> GetByIdAsync(int id)
+        [HttpGet("{id:int}", Name = "GetLeaveTypeById")]
+        public async Task<ActionResult<Domain.Core.LeaveManagement.LeaveType.Entity.LeaveType>> GetByIdAsync(int id, CancellationToken ct = default)
         {
             try
             {
-                var leaveType = await repository.GetByIdAsync(id);
+                var leaveType = await repository.GetByIdAsync(id, ct);
                 if (leaveType == null)
                 {
                     return NotFound($"LeaveType com ID {id} não encontrado");
@@ -35,11 +35,11 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveType
 
         // HttpGet("environment/{environmentId}/leaveType/{id}") para GetByEnvironmentIdAndId
         [HttpGet("environment/{environmentId:int}/{id:int}")]
-        public async Task<ActionResult<Domain.Core.LeaveManagement.LeaveType.Entity.LeaveType>> GetByEnvironmentIdAndIdAsync(int environmentId, int id)
+        public async Task<ActionResult<Domain.Core.LeaveManagement.LeaveType.Entity.LeaveType>> GetByEnvironmentIdAndIdAsync(int environmentId, int id, CancellationToken ct = default)
         {
             try
             {
-                var leaveType = await repository.GetByIdAsync(id);
+                var leaveType = await repository.GetByIdAsync(id, ct);
                 if (leaveType == null || leaveType.EnvironmentId != environmentId)
                 {
                     return NotFound($"LeaveType com ID {id} não encontrado para o Environment {environmentId}");
@@ -54,11 +54,11 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveType
 
         // HttpGet("all/environment/{environmentId}") para GetAllByEnvironmentId
         [HttpGet("all/environment/{environmentId:int}")]
-        public async Task<ActionResult<IList<Domain.Core.LeaveManagement.LeaveType.Entity.LeaveType>>> GetAllByEnvironmentIdAsync(int environmentId)
+        public async Task<ActionResult<IList<Domain.Core.LeaveManagement.LeaveType.Entity.LeaveType>>> GetAllByEnvironmentIdAsync(int environmentId, CancellationToken ct = default)
         {
             try
             {
-                var leaveTypes = await repository.GetAllByEnvironmentIdAsync(environmentId);
+                var leaveTypes = await repository.GetAllByEnvironmentIdAsync(environmentId, ct);
                 return Ok(leaveTypes);
             }
             catch (Exception ex)
@@ -69,11 +69,11 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveType
 
         // HttpGet("all") para GetAll
         [HttpGet("all")]
-        public async Task<ActionResult<IList<Domain.Core.LeaveManagement.LeaveType.Entity.LeaveType>>> GetAllAsync()
+        public async Task<ActionResult<IList<Domain.Core.LeaveManagement.LeaveType.Entity.LeaveType>>> GetAllAsync(CancellationToken ct = default)
         {
             try
             {
-                var leaveTypes = await repository.GetAllAsync();
+                var leaveTypes = await repository.GetAllAsync(ct);
                 return Ok(leaveTypes);
             }
             catch (Exception ex)
@@ -84,12 +84,17 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveType
 
         // HttpPost para Insert
         [HttpPost]
-        public async Task<ActionResult<Domain.Core.LeaveManagement.LeaveType.Entity.LeaveType>> InsertAsync([FromBody] Domain.Core.LeaveManagement.LeaveType.Entity.LeaveType leaveType)
+        public async Task<ActionResult<Domain.Core.LeaveManagement.LeaveType.Entity.LeaveType>> InsertAsync([FromBody] Domain.Core.LeaveManagement.LeaveType.Entity.LeaveType leaveType, CancellationToken ct = default)
         {
             try
             {
-                var insertedLeaveType = await repository.InsertAsync(leaveType);
-                return CreatedAtAction(nameof(GetByIdAsync), new { id = insertedLeaveType.Id }, insertedLeaveType);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var insertedLeaveType = await repository.InsertAsync(leaveType, ct);
+                return Created($"{Request.Path}/{insertedLeaveType.Id}", insertedLeaveType);
             }
             catch (InvalidOperationException ex)
             {
@@ -103,7 +108,7 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveType
 
         // HttpPut para Update
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<Domain.Core.LeaveManagement.LeaveType.Entity.LeaveType>> UpdateAsync(int id, [FromBody] Domain.Core.LeaveManagement.LeaveType.Entity.LeaveType leaveType)
+        public async Task<ActionResult<Domain.Core.LeaveManagement.LeaveType.Entity.LeaveType>> UpdateAsync(int id, [FromBody] Domain.Core.LeaveManagement.LeaveType.Entity.LeaveType leaveType, CancellationToken ct = default)
         {
             try
             {
@@ -112,7 +117,12 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveType
                     return BadRequest("ID da URL não corresponde ao ID do objeto");
                 }
 
-                var updatedLeaveType = await repository.UpdateAsync(leaveType);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                var updatedLeaveType = await repository.UpdateAsync(leaveType, ct);
                 if (updatedLeaveType == null)
                 {
                     return NotFound($"LeaveType com ID {id} não encontrado");
@@ -131,11 +141,11 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveType
 
         // HttpDelete para DeleteById
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> DeleteByIdAsync(int id)
+        public async Task<ActionResult> DeleteByIdAsync(int id, CancellationToken ct = default)
         {
             try
             {
-                var deleted = await repository.DeleteByIdAsync(id);
+                var deleted = await repository.DeleteByIdAsync(id, ct);
                 if (!deleted)
                 {
                     return NotFound($"LeaveType com ID {id} não encontrado");
