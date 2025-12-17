@@ -84,8 +84,7 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveTake
             try
             {
                 var insertedLeaveTake = await repository.InsertAsync(leaveTake);
-                // Use Created() instead of CreatedAtAction() to avoid "No route matches" error
-                return Created($"/api/leave-takes/{insertedLeaveTake.Id}", insertedLeaveTake);
+                return CreatedAtAction(nameof(GetByEnvironmentIdAndIdAsync), new { environmentId = insertedLeaveTake.EnvironmentId, id = insertedLeaveTake.Id }, insertedLeaveTake);
             }
             catch (InvalidOperationException ex)
             {
