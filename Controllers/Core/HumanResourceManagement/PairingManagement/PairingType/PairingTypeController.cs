@@ -88,7 +88,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.PairingManag
             try
             {
                 // Debug log
-                Console.WriteLine($"PairingTypeController.InsertAsync: Received - Id={entity.Id}, EnvironmentId={entity.EnvironmentId}, Name={entity.Name}, Satisfability={entity.Satisfability}");
+                Console.WriteLine($"PairingTypeController.InsertAsync: Received - Id={entity.Id}, EnvironmentId={entity.EnvironmentId}, Name={entity.Name}");
 
                 // Validate model
                 if (entity.EnvironmentId <= 0)
