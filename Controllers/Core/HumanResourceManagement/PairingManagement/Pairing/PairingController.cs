@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Workforce.Business.Core.HumanResourceManagement.PairingManagement.Pairing.Repository;
+using Workforce.Domain.Core.HumanResourceManagement.PairingManagement.Pairing.Dto;
 
 namespace Workforce.Server.Controllers.Core.HumanResourceManagement.PairingManagement.Pairing
 {
@@ -70,6 +71,34 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.PairingManag
             try
             {
                 var pairings = await pairingRepository.GetAllAsync(ct);
+                return Ok(pairings);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
+            }
+        }
+
+        [HttpGet("list/all/environment/{environmentId:int}")]
+        public async Task<ActionResult<IList<PairingListDto>>> GetAllListDtoByEnvironmentIdAsync(int environmentId, CancellationToken ct = default)
+        {
+            try
+            {
+                var pairings = await pairingRepository.GetAllListDtoByEnvironmentIdAsync(environmentId, ct);
+                return Ok(pairings);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro interno do servidor: {ex.Message}");
+            }
+        }
+
+        [HttpGet("list/all")]
+        public async Task<ActionResult<IList<PairingListDto>>> GetAllListDtoAsync(CancellationToken ct = default)
+        {
+            try
+            {
+                var pairings = await pairingRepository.GetAllListDtoAsync(ct);
                 return Ok(pairings);
             }
             catch (Exception ex)
