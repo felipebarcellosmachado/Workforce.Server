@@ -25,11 +25,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0" />
-    <PackageReference Include="Radzen.Blazor" Version="8.4.0" />
+    <PackageReference Include="Radzen.Blazor" Version="8.4.2" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.1" />
     <ProjectReference Include="..\Client\Workforce.Client.csproj" />
-    <ProjectReference Include="..\Workforce.Business\Workforce.Business.csproj" />
-    <ProjectReference Include="..\Workforce.Db\Workforce.Db\Workforce.Db.csproj" />
+    <ProjectReference Include="..\Workforce.Business\Workforce.Realization.csproj" />
     <ProjectReference Include="..\Workforce.Domain\Workforce.Domain.csproj" />
   </ItemGroup>
 

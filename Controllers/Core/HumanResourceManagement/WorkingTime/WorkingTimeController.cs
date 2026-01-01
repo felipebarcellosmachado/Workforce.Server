@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Business.Core.HumanResourceManagement.WorkingTime;
+using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.WorkingTime;
 
 namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkingTime
 {

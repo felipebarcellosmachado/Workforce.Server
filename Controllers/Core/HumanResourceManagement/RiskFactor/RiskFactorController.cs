@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Business.Core.HumanResourceManagement.RiskFactor;
 using Workforce.Domain.Core.HumanResourceManagement.RiskFactor.Entity;
+using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.RiskFactor;
 
 namespace Workforce.Server.Controllers.Core.HumanResourceManagement.RiskFactor
 {

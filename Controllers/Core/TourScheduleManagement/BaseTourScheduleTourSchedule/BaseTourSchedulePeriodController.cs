@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Workforce.Business.Core.TourScheduleManagement.BaseTourSchedule.Repository;
 using Workforce.Domain.Core.TourScheduleManagement.BaseTourSchedule.Entity;
+using Workforce.Realization.Infrastructure.Persistence.Core.TourScheduleManagement.BaseTourSchedule.Repository;
 
 namespace Workforce.Server.Controllers.Core.TourScheduleManagement.BaseTourScheduleTourSchedule
 {

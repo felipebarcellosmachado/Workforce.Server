@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Workforce.Business.Core.HumanResourceManagement.Availability.Repository;
 using Workforce.Domain.Core.HumanResourceManagement.Availability.Entity;
+using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.Availability.Repository;
 
 namespace Workforce.Server.Controllers.Core.HumanResourceManagement.Availability
 {

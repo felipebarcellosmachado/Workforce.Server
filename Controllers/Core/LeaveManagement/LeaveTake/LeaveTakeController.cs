@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Business.Core.LeaveManagement.LeaveTake;
+using Workforce.Realization.Infrastructure.Persistence.Core.LeaveManagement.LeaveTake;
 
 namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveTake
 {

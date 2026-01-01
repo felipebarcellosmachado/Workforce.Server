@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Business.Core.FacilityManagement.Facility.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.FacilityManagement.Facility.Repository;
 using FacilityEntity = Workforce.Domain.Core.FacilityManagement.Facility.Entity.Facility;
 
 namespace Workforce.Server.Controllers.Core.FacilityManagement.Facility

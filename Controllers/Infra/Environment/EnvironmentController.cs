@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Business.Infra.Environment.Repository;
 using Workforce.Domain.Infra.Environment.Entity;
+using Workforce.Realization.Infrastructure.Persistence.Infra.Environment.Repository;
 
 namespace Workforce.Server.Controllers.Infra.Environment
 {

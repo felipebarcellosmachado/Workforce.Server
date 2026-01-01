@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Business.Infra.Party.Organization;
 using Workforce.Domain.Infra.Party.Entity;
+using Workforce.Realization.Infrastructure.Persistence.Infra.Party.Organization;
 
 namespace Workforce.Server.Controllers.Infra.Party
 {

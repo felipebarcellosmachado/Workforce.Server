@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Business.Core.HumanResourceManagement.WorkAgreement.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.WorkAgreement.Repository;
 
 namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkAgreement
 {

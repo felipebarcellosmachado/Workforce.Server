@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Workforce.Business.Core.HumanResourceManagement.PairingManagement.PairingType.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.PairingManagement.PairingType.Repository;
 
 namespace Workforce.Server.Controllers.Core.HumanResourceManagement.PairingManagement.PairingType
 {

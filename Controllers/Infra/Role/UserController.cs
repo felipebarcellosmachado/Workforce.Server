@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Business.Infra.PartyRole.Repository;
 using Workforce.Domain.Infra.Role.User.Entity;
+using Workforce.Realization.Infrastructure.Persistence.Infra.PartyRole.Repository;
 
 namespace Workforce.Server.Controllers.Infra.Role
 {

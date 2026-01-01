@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Business.Core.HumanResourceManagement.CompetenceLevel.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.CompetenceLevel.Repository;
 
 namespace Workforce.Server.Controllers.Core.HumanResourceManagement.CompetenceLevel
 {

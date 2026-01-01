@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Business.Core.HumanResourceManagement.Behaviour.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.Behaviour.Repository;
 
 namespace Workforce.Server.Controllers.Core.HumanResourceManagement.Behaviour
 {

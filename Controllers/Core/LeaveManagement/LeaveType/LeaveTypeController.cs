@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Business.Core.LeaveManagement.LeaveType.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.LeaveManagement.LeaveType.Repository;
 
 namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveType
 {

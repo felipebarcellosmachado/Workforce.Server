@@ -1,10 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
+using Workforce.Realization.Infrastructure.External.Db;
 using Radzen;
-using Workforce.Business.Admin.Culture.Repository;
-using Workforce.Business.Admin.Session.Repository;
-using Workforce.Business.Infra.Environment.Repository;
-using Workforce.Business.Infra.PartyRole.Repository;
-using Workforce.Db.Db;
 using Workforce.Server.Components;
 
 // Import services namespaces for server-side registration
@@ -15,33 +12,15 @@ using Workforce.Services.Infra.Profile;
 using Workforce.Client.State;
 using Workforce.Services.Infra.Role.User;
 using WorkUnitService = Workforce.Services.Core.FacilityManagement.WorkUnit.WorkUnitService;
-using Workforce.Business.Infra.Party.Organization;
-using Workforce.Business.Infra.Party.Person;
 
 // Import localization
 using Microsoft.Extensions.Localization;
 using Workforce.Client.Resources;
 using Workforce.Client.Services;
-using Workforce.Business.Core.HumanResourceManagement.Behaviour.Repository;
-using Workforce.Business.Core.HumanResourceManagement.CompetenceLevel.Repository;
-using Workforce.Business.Core.HumanResourceManagement.JobTitle.Repository;
-using Workforce.Business.Core.HumanResourceManagement.Qualification.Repository;
-using Workforce.Business.Core.HumanResourceManagement.Skill.Repository;
-using Workforce.Business.Core.HumanResourceManagement.HumanResource.Repository;
-using Workforce.Business.Core.FacilityManagement.Facility.Repository;
-using Workforce.Business.Core.HumanResourceManagement.WorkAgreement.Repository;
-using Workforce.Business.Core.HumanResourceManagement.WorkingTime;
-using Workforce.Business.Core.FacilityManagement.WorkUnit.Repository;
 using Workforce.Services.Core.FacilityManagement.WorkUnit;
-// using Workforce.Business.Core.DemandManagement.DemandEstimative.Repository; // Comentado: namespace não existe
-// using Workforce.Business.Core.DemandManagement.BaseDemandEstimative.Repository; // Comentado: namespace não existe
-// using Workforce.Business.Core.WorkScheduleManagement.BaseWorkSchedule.Repository; // Comentado: namespace não existe
-using Workforce.Business.Core.HumanResourceManagement.PairingManagement.PairingType.Repository;
-using Workforce.Business.Core.HumanResourceManagement.PairingManagement.Pairing.Repository;
-using Workforce.Business.Core.HumanResourceManagement.RiskFactor;
-using Workforce.Business.Core.HumanResourceManagement.Availability.Repository;
-using Workforce.Business.Core.TourScheduleManagement.BaseTourSchedule.Repository;
-using Workforce.Business.Core.TourScheduleManagement.TourSchedule.Repository;
+// using Workforce.Realization.Core.DemandManagement.DemandEstimative.Repository; // Comentado: namespace não existe
+// using Workforce.Realization.Core.DemandManagement.BaseDemandEstimative.Repository; // Comentado: namespace não existe
+// using Workforce.Realization.Core.WorkScheduleManagement.BaseWorkSchedule.Repository; // Comentado: namespace não existe
 using Workforce.Services.Core.HumanResourceManagement.WorkAgreement;
 using Workforce.Services.Core.HumanResourceManagement.JobTitle;
 using Workforce.Services.Core.HumanResourceManagement.WorkingTime;
@@ -51,6 +30,31 @@ using Workforce.Services.Core.HumanResourceManagement.Qualification;
 using Workforce.Services.Infra.HumanResource.Skill;
 using Workforce.Services.Infra.HumanResource.CompetenceLevel;
 using Workforce.Services.Core.HumanResourceManagement.RiskFactor;
+using Workforce.Realization.Infrastructure.Persistence.Admin.Culture.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Admin.Session.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.RiskFactor;
+using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.WorkingTime;
+using Workforce.Realization.Infrastructure.Persistence.Core.LeaveManagement.LeaveTake;
+using Workforce.Realization.Infrastructure.Persistence.Core.FacilityManagement.Facility.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.FacilityManagement.WorkUnit.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.Availability.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.Behaviour.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.CompetenceLevel.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.HumanResource.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.JobTitle.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.Qualification.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.Skill.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.WorkAgreement.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.LeaveManagement.LeaveRequest.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.LeaveManagement.LeaveType.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.TourScheduleManagement.BaseTourSchedule.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.TourScheduleManagement.TourSchedule.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.PairingManagement.Pairing.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.PairingManagement.PairingType.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Infra.Environment.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Infra.Party.Organization;
+using Workforce.Realization.Infrastructure.Persistence.Infra.Party.Person;
+using Workforce.Realization.Infrastructure.Persistence.Infra.PartyRole.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -192,7 +196,7 @@ builder.Services.AddScoped<IRiskFactorService>(sp =>
 // State Management (for server-side compatibility)
 builder.Services.AddScoped<IAppState, AppState>();
 
-// Register Repositories from Workforce.Business
+// Register Repositories from Workforce.Realization
 
 // Admin
 builder.Services.AddScoped<SessionRepository>();
@@ -222,17 +226,17 @@ builder.Services.AddScoped<QualificationRepository>();
 // Core - DemandManagement - Comentado: namespaces não existem
 // builder.Services.AddScoped<DemandEstimativeRepository>();
 // builder.Services.AddScoped<BaseDemandEstimativeRepository>();
-// builder.Services.AddScoped<Workforce.Business.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandRepository>();
-// builder.Services.AddScoped<Workforce.Business.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandDayRepository>();
-// builder.Services.AddScoped<Workforce.Business.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandPeriodRepository>();
+// builder.Services.AddScoped<Workforce.Realization.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandRepository>();
+// builder.Services.AddScoped<Workforce.Realization.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandDayRepository>();
+// builder.Services.AddScoped<Workforce.Realization.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandPeriodRepository>();
 
 // Core - WorkScheduleManagement - Comentado: namespace não existe
 // builder.Services.AddScoped<BaseWorkScheduleRepository>();
 
 // Core - LeaveManagement
-builder.Services.AddScoped<Workforce.Business.Core.LeaveManagement.LeaveType.Repository.LeaveTypeRepository>();
-builder.Services.AddScoped<Workforce.Business.Core.LeaveManagement.LeaveRequest.Repository.LeaveRequestRepository>();
-builder.Services.AddScoped<Workforce.Business.Core.LeaveManagement.LeaveTake.LeaveTakeRepository>();
+builder.Services.AddScoped<LeaveTypeRepository>();
+builder.Services.AddScoped<LeaveRequestRepository>();
+builder.Services.AddScoped<LeaveTakeRepository>();
 
 // Infra - WorkAgreement
 builder.Services.AddScoped<WorkAgreementRepository>();
