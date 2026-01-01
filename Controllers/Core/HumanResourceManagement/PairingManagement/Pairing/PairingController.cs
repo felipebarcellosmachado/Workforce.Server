@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Workforce.Domain.Core.HumanResourceManagement.PairingManagement.Pairing.Dto;
-using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.PairingManagement.Pairing.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.PairingManagement.Pairing;
 
 namespace Workforce.Server.Controllers.Core.HumanResourceManagement.PairingManagement.Pairing
 {

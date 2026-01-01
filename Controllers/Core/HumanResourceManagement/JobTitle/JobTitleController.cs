@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.JobTitle.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.JobTitle;
 
 namespace Workforce.Server.Controllers.Core.HumanResourceManagement.JobTitle
 {

@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Realization.Infrastructure.Persistence.Core.LeaveManagement.LeaveRequest.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.LeaveManagement.LeaveRequest;
 
 namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveRequest
 {
@@ -19,7 +19,7 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveRequest
         {
             try
             {
-                var leaveRequest = await leaveRequestRepository.GetByIdAsync(id, ct);
+                var leaveRequest = await leaveRequestRepository.GetByIdAsync(id);
                 
                 if (leaveRequest == null)
                 {
@@ -39,7 +39,7 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveRequest
         {
             try
             {
-                var leaveRequest = await leaveRequestRepository.GetByIdAsync(id, ct);
+                var leaveRequest = await leaveRequestRepository.GetByIdAsync(id);
                 
                 if (leaveRequest == null)
                 {
@@ -103,7 +103,7 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveRequest
                     return BadRequest("Description é obrigatória");
                 }
 
-                var insertedEntity = await leaveRequestRepository.InsertAsync(entity, ct);
+                var insertedEntity = await leaveRequestRepository.InsertAsync(entity);
                 
                 // Usar Created() com URI explícita para evitar erro de rota
                 return Created($"/api/core/leave-management/leave-requests/{insertedEntity.Id}", insertedEntity);
@@ -153,7 +153,7 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveRequest
                     return BadRequest("Description é obrigatória");
                 }
 
-                var updatedEntity = await leaveRequestRepository.UpdateAsync(entity, ct);
+                var updatedEntity = await leaveRequestRepository.UpdateAsync(entity);
                 
                 if (updatedEntity == null)
                 {
@@ -177,7 +177,7 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveRequest
         {
             try
             {
-                var deleted = await leaveRequestRepository.DeleteByIdAsync(id, ct);
+                var deleted = await leaveRequestRepository.DeleteByIdAsync(id);
                 
                 if (!deleted)
                 {

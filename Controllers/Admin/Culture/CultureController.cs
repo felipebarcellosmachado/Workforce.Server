@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Workforce.Domain.Admin.Culture.Entity;
-using Workforce.Realization.Infrastructure.Persistence.Admin.Culture.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Admin.Culture;
 
 namespace Workforce.Server.Controllers.Admin.Culture
 {
