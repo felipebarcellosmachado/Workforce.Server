@@ -1,3 +1,6 @@
+// Additional app initialization (Blazor start is now handled inline in App.razor)
+console.log('app.js loaded successfully');
+
 // Register AppState interop methods
 window.registerAppStateMethods = function (appStateInterop) {
     console.log('AppState methods registered');
@@ -23,5 +26,3 @@ window.getClientIP = async function () {
         return '127.0.0.1';
     }
 };
-
-console.log('app.js loaded successfully');
