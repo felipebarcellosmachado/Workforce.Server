@@ -30,6 +30,10 @@ using Workforce.Services.Core.HumanResourceManagement.Qualification;
 using Workforce.Services.Infra.HumanResource.Skill;
 using Workforce.Services.Infra.HumanResource.CompetenceLevel;
 using Workforce.Services.Core.HumanResourceManagement.RiskFactor;
+using Workforce.Services.Core.TourScheduleManagement.BaseTourSchedule;
+using Workforce.Services.Core.TourScheduleManagement.TourSchedule;
+using Workforce.Services.Core.HumanResourceManagement.PairingManagement.PairingType;
+using Workforce.Services.Core.HumanResourceManagement.PairingManagement.Pairing;
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.RiskFactor;
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.WorkingTime;
 using Workforce.Realization.Infrastructure.Persistence.Core.LeaveManagement.LeaveTake;
@@ -193,8 +197,39 @@ builder.Services.AddScoped<IRiskFactorService>(sp =>
     return new RiskFactorService(httpClient);
 });
 
+builder.Services.AddScoped<IBaseTourScheduleService>(sp => 
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new BaseTourScheduleService(httpClient);
+});
+
+builder.Services.AddScoped<ITourScheduleService>(sp => 
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new TourScheduleService(httpClient);
+});
+
+builder.Services.AddScoped<IPairingTypeService>(sp => 
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new PairingTypeService(httpClient);
+});
+
+builder.Services.AddScoped<IPairingService>(sp => 
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new PairingService(httpClient);
+});
+
 // State Management (for server-side compatibility)
 builder.Services.AddScoped<IAppState, AppState>();
+
+// Register NavigationService for server-side rendering compatibility
+builder.Services.AddScoped<NavigationService>(sp =>
+{
+    var localizer = sp.GetRequiredService<IStringLocalizer<SharedResources>>();
+    return new NavigationService(localizer);
+});
 
 // Register Repositories from Workforce.Realization
 
@@ -226,9 +261,9 @@ builder.Services.AddScoped<QualificationRepository>();
 // Core - DemandManagement - Comentado: namespaces não existem
 // builder.Services.AddScoped<DemandEstimativeRepository>();
 // builder.Services.AddScoped<BaseDemandEstimativeRepository>();
-// builder.Services.AddScoped<Workforce.Realization.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandRepository>();
-// builder.Services.AddScoped<Workforce.Realization.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandDayRepository>();
-// builder.Services.AddScoped<Workforce.Realization.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandPeriodRepository>();
+// builder.Services.AddScoped<Workforce.Realização.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandRepository>();
+// builder.Services.AddScoped<Workforce.Realização.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandDayRepository>();
+// builder.Services.AddScoped<Workforce.Realização.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandPeriodRepository>();
 
 // Core - WorkScheduleManagement - Comentado: namespace não existe
 // builder.Services.AddScoped<BaseWorkScheduleRepository>();
