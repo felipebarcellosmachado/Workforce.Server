@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Workforce.Realization.Infrastructure.External.Scripts;
 using Workforce.Realization.Infrastructure.Persistence.Infra.Party.Person;
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.HumanResource.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.FacilityManagement.WorkUnit;
 
 namespace Workforce.Server.Controllers.Infra.Party
 {
@@ -15,15 +16,18 @@ namespace Workforce.Server.Controllers.Infra.Party
     {
         private readonly PersonRepository _personRepository;
         private readonly HumanResourceRepository _humanResourceRepository;
+        private readonly WorkUnitRepository _workUnitRepository;
         private readonly ILogger<DataScriptsController> _logger;
 
         public DataScriptsController(
             PersonRepository personRepository, 
             HumanResourceRepository humanResourceRepository,
+            WorkUnitRepository workUnitRepository,
             ILogger<DataScriptsController> logger)
         {
             _personRepository = personRepository;
             _humanResourceRepository = humanResourceRepository;
+            _workUnitRepository = workUnitRepository;
             _logger = logger;
         }
 
@@ -143,6 +147,68 @@ namespace Workforce.Server.Controllers.Infra.Party
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Erro ao contar recursos humanos");
+                return StatusCode(500, new
+                {
+                    success = false,
+                    error = ex.Message
+                });
+            }
+        }
+
+        /// <summary>
+        /// Executa o script de inserção de WorkUnits
+        /// POST /api/admin/datascripts/insert-workunits
+        /// </summary>
+        [HttpPost("insert-workunits")]
+        public async Task<IActionResult> InsertWorkUnits()
+        {
+            try
+            {
+                var script = new InsertWorkUnitsScript(_workUnitRepository);
+                var count = await script.ExecuteAsync();
+
+                _logger.LogInformation("Script de inserção de WorkUnits executado com sucesso. {Count} WorkUnits inseridas.", count);
+
+                return Ok(new
+                {
+                    success = true,
+                    message = $"{count} WorkUnits inseridas com sucesso",
+                    count = count
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao executar script de inserção de WorkUnits");
+                return StatusCode(500, new
+                {
+                    success = false,
+                    message = "Erro ao inserir WorkUnits",
+                    error = ex.Message
+                });
+            }
+        }
+
+        /// <summary>
+        /// Verifica quantas WorkUnits existem no banco
+        /// GET /api/admin/datascripts/count-workunits
+        /// </summary>
+        [HttpGet("count-workunits")]
+        public async Task<IActionResult> CountWorkUnits()
+        {
+            try
+            {
+                var workUnits = await _workUnitRepository.GetAllAsync();
+                var count = workUnits.Count;
+
+                return Ok(new
+                {
+                    workUnits = count,
+                    success = true
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erro ao contar WorkUnits");
                 return StatusCode(500, new
                 {
                     success = false,
