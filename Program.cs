@@ -296,6 +296,7 @@ builder.Services.AddScoped<AvailabilityRepository>();
 // Core - TourScheduleManagement
 builder.Services.AddScoped<BaseTourScheduleRepository>();
 builder.Services.AddScoped<BaseTourScheduleDemandRepository>();
+builder.Services.AddScoped<BaseTourSchedulePeriodRepository>();
 builder.Services.AddScoped<TourScheduleRepository>();
 
 builder.Services.AddRadzenCookieThemeService(options =>
