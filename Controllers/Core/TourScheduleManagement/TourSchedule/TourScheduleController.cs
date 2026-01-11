@@ -131,6 +131,20 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourSchedule
                     return BadRequest("ID da rota não corresponde ao ID da entidade");
                 }
 
+                // Log para debug
+                Console.WriteLine($"TourScheduleController.UpdateAsync: Received entity with ID {id}");
+                Console.WriteLine($"TourScheduleController.UpdateAsync: Entity has {entity.Demands?.Count ?? 0} demands");
+                Console.WriteLine($"TourScheduleController.UpdateAsync: Entity has {entity.Periods?.Count ?? 0} periods");
+                
+                if (entity.Demands != null)
+                {
+                    Console.WriteLine($"TourScheduleController.UpdateAsync: Demands details:");
+                    foreach (var demand in entity.Demands)
+                    {
+                        Console.WriteLine($"  - Demand Id: {demand.Id}, Date: {demand.Date}, PeriodId: {demand.TourSchedulePeriodId}");
+                    }
+                }
+
                 var updatedEntity = await repository.UpdateAsync(entity, ct);
 
                 if (updatedEntity == null)
@@ -138,14 +152,19 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourSchedule
                     return NotFound($"TourSchedule com ID {id} não encontrado");
                 }
 
+                Console.WriteLine($"TourScheduleController.UpdateAsync: Updated entity has {updatedEntity.Demands?.Count ?? 0} demands");
+
                 return Ok(updatedEntity);
             }
             catch (InvalidOperationException ex)
             {
+                Console.WriteLine($"TourScheduleController.UpdateAsync: InvalidOperationException - {ex.Message}");
                 return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"TourScheduleController.UpdateAsync: Exception - {ex.Message}");
+                Console.WriteLine($"TourScheduleController.UpdateAsync: StackTrace - {ex.StackTrace}");
                 return StatusCode(500, $"Erro interno ao atualizar TourSchedule: {ex.Message}");
             }
         }
