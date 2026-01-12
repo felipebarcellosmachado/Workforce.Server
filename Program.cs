@@ -52,6 +52,7 @@ using Workforce.Realization.Infrastructure.Persistence.Core.FacilityManagement.W
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.Availability;
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.Behaviour;
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.CompetenceLevel;
+using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.Holiday;
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.JobTitle;
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.PairingManagement.Pairing;
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.Qualification;
@@ -293,6 +294,9 @@ builder.Services.AddScoped<RiskFactorRepository>();
 
 // Core - Availability
 builder.Services.AddScoped<AvailabilityRepository>();
+
+// Core - Holiday
+builder.Services.AddScoped<HolidayRepository>();
 
 // Core - TourScheduleManagement
 builder.Services.AddScoped<BaseTourScheduleRepository>();
