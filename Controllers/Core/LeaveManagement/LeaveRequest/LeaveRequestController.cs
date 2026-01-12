@@ -7,189 +7,98 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveRequest
     [Route("api/core/leave-management/leave-requests")]
     public class LeaveRequestController : ControllerBase
     {
-        private readonly LeaveRequestRepository leaveRequestRepository;
+        private readonly LeaveRequestRepository repository;
 
-        public LeaveRequestController(LeaveRequestRepository leaveRequestRepository)
+        public LeaveRequestController(LeaveRequestRepository repository)
         {
-            this.leaveRequestRepository = leaveRequestRepository ?? throw new ArgumentNullException(nameof(leaveRequestRepository));
+            this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
         [HttpGet("{id:int}", Name = "GetLeaveRequestById")]
         public async Task<ActionResult<Domain.Core.LeaveManagement.LeaveRequest.Entity.LeaveRequest>> GetByIdAsync(int id, CancellationToken ct = default)
         {
-            try
+            var leaveRequest = await repository.GetByIdAsync(id, ct);
+            
+            if (leaveRequest == null)
             {
-                var leaveRequest = await leaveRequestRepository.GetByIdAsync(id);
-                
-                if (leaveRequest == null)
-                {
-                    return NotFound($"LeaveRequest com ID {id} não encontrado");
-                }
+                return NotFound();
+            }
 
-                return Ok(leaveRequest);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Erro interno ao obter LeaveRequest: {ex.Message}");
-            }
+            return Ok(leaveRequest);
         }
 
         [HttpGet("environment/{environmentId:int}/{id:int}")]
         public async Task<ActionResult<Domain.Core.LeaveManagement.LeaveRequest.Entity.LeaveRequest>> GetByEnvironmentIdAndIdAsync(int environmentId, int id, CancellationToken ct = default)
         {
-            try
+            var leaveRequest = await repository.GetByIdAsync(id, ct);
+            
+            if (leaveRequest == null)
             {
-                var leaveRequest = await leaveRequestRepository.GetByIdAsync(id);
-                
-                if (leaveRequest == null)
-                {
-                    return NotFound($"LeaveRequest com ID {id} não encontrado");
-                }
-
-                if (leaveRequest.EnvironmentId != environmentId)
-                {
-                    return BadRequest($"LeaveRequest com ID {id} não pertence ao Environment {environmentId}");
-                }
-
-                return Ok(leaveRequest);
+                return NotFound();
             }
-            catch (Exception ex)
+
+            if (leaveRequest.EnvironmentId != environmentId)
             {
-                return StatusCode(500, $"Erro interno ao obter LeaveRequest: {ex.Message}");
+                return BadRequest();
             }
+
+            return Ok(leaveRequest);
         }
 
         [HttpGet("all/environment/{environmentId:int}")]
         public async Task<ActionResult<IList<Domain.Core.LeaveManagement.LeaveRequest.Entity.LeaveRequest>>> GetAllByEnvironmentIdAsync(int environmentId, CancellationToken ct = default)
         {
-            try
-            {
-                var leaveRequests = await leaveRequestRepository.GetAllByEnvironmentIdAsync(environmentId, ct);
-                return Ok(leaveRequests);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Erro interno ao obter LeaveRequests: {ex.Message}");
-            }
+            var leaveRequests = await repository.GetAllByEnvironmentIdAsync(environmentId, ct);
+            return Ok(leaveRequests);
         }
 
         [HttpPost]
         public async Task<ActionResult<Domain.Core.LeaveManagement.LeaveRequest.Entity.LeaveRequest>> InsertAsync([FromBody] Domain.Core.LeaveManagement.LeaveRequest.Entity.LeaveRequest entity, CancellationToken ct = default)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (entity == null)
-                {
-                    return BadRequest("Dados do LeaveRequest são obrigatórios");
-                }
-
-                if (entity.EnvironmentId <= 0)
-                {
-                    return BadRequest("EnvironmentId inválido");
-                }
-
-                if (entity.LeaveTypeId <= 0)
-                {
-                    return BadRequest("LeaveTypeId inválido");
-                }
-
-                if (entity.HumanResourceId <= 0)
-                {
-                    return BadRequest("HumanResourceId inválido");
-                }
-
-                if (string.IsNullOrWhiteSpace(entity.Description))
-                {
-                    return BadRequest("Description é obrigatória");
-                }
-
-                var insertedEntity = await leaveRequestRepository.InsertAsync(entity);
-                
-                // Usar Created() com URI explícita para evitar erro de rota
-                return Created($"/api/core/leave-management/leave-requests/{insertedEntity.Id}", insertedEntity);
+                return BadRequest(ModelState);
             }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Erro interno ao inserir LeaveRequest: {ex.Message}");
-            }
+
+            var insertedEntity = await repository.InsertAsync(entity, ct);
+            
+            return Created($"{Request.Path}/{insertedEntity.Id}", insertedEntity);
         }
 
         [HttpPut("{id:int}")]
         public async Task<ActionResult<Domain.Core.LeaveManagement.LeaveRequest.Entity.LeaveRequest>> UpdateAsync(int id, [FromBody] Domain.Core.LeaveManagement.LeaveRequest.Entity.LeaveRequest entity, CancellationToken ct = default)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (entity == null)
-                {
-                    return BadRequest("Dados do LeaveRequest são obrigatórios");
-                }
-
-                if (id != entity.Id)
-                {
-                    return BadRequest("ID da URL não corresponde ao ID do LeaveRequest");
-                }
-
-                if (entity.EnvironmentId <= 0)
-                {
-                    return BadRequest("EnvironmentId inválido");
-                }
-
-                if (entity.LeaveTypeId <= 0)
-                {
-                    return BadRequest("LeaveTypeId inválido");
-                }
-
-                if (entity.HumanResourceId <= 0)
-                {
-                    return BadRequest("HumanResourceId inválido");
-                }
-
-                if (string.IsNullOrWhiteSpace(entity.Description))
-                {
-                    return BadRequest("Description é obrigatória");
-                }
-
-                var updatedEntity = await leaveRequestRepository.UpdateAsync(entity);
-                
-                if (updatedEntity == null)
-                {
-                    return NotFound($"LeaveRequest com ID {id} não encontrado");
-                }
-
-                return Ok(updatedEntity);
+                return BadRequest(ModelState);
             }
-            catch (InvalidOperationException ex)
+
+            if (id != entity.Id)
             {
-                return BadRequest(ex.Message);
+                return BadRequest();
             }
-            catch (Exception ex)
+
+            var updatedEntity = await repository.UpdateAsync(entity, ct);
+            
+            if (updatedEntity == null)
             {
-                return StatusCode(500, $"Erro interno ao atualizar LeaveRequest: {ex.Message}");
+                return NotFound();
             }
+
+            return Ok(updatedEntity);
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> DeleteByIdAsync(int id, CancellationToken ct = default)
+        public async Task<IActionResult> DeleteByIdAsync(int id, CancellationToken ct = default)
         {
-            try
+            var deleted = await repository.DeleteByIdAsync(id, ct);
+            
+            if (!deleted)
             {
-                var deleted = await leaveRequestRepository.DeleteByIdAsync(id);
-                
-                if (!deleted)
-                {
-                    return NotFound($"LeaveRequest com ID {id} não encontrado");
-                }
+                return NotFound();
+            }
 
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Erro interno ao excluir LeaveRequest: {ex.Message}");
-            }
+            return NoContent();
         }
     }
 }
