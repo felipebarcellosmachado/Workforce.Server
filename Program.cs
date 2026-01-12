@@ -41,6 +41,7 @@ using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagem
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.WorkAgreement.Repository;
 using Workforce.Realization.Infrastructure.Persistence.Core.TourScheduleManagement.BaseTourSchedule.Repository;
 using Workforce.Realization.Infrastructure.Persistence.Core.TourScheduleManagement.TourSchedule.Repository;
+using Workforce.Realization.Infrastructure.Persistence.Core.TourScheduleManagement.TourScheduleOptimization;
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.PairingManagement.PairingType.Repository;
 using Workforce.Realization.Infrastructure.Persistence.Infra.Party.Organization;
 using Workforce.Realization.Infrastructure.Persistence.Infra.Party.Person;
@@ -303,6 +304,7 @@ builder.Services.AddScoped<BaseTourScheduleRepository>();
 builder.Services.AddScoped<BaseTourScheduleDemandRepository>();
 builder.Services.AddScoped<BaseTourSchedulePeriodRepository>();
 builder.Services.AddScoped<TourScheduleRepository>();
+builder.Services.AddScoped<TourScheduleOptimizationRepository>();
 
 builder.Services.AddRadzenCookieThemeService(options =>
 {
