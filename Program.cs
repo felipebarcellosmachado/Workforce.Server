@@ -272,6 +272,7 @@ builder.Services.AddScoped<QualificationRepository>();
 builder.Services.AddScoped<LeaveTypeRepository>();
 builder.Services.AddScoped<LeaveRequestRepository>();
 builder.Services.AddScoped<LeaveTakeRepository>();
+builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.LeaveManagement.LeaveBalance.LeaveBalanceRepository>();
 
 // Infra - WorkAgreement
 builder.Services.AddScoped<WorkAgreementRepository>();
