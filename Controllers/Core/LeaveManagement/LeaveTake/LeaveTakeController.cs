@@ -4,7 +4,7 @@ using Workforce.Realization.Infrastructure.Persistence.Core.LeaveManagement.Leav
 namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveTake
 {
     [ApiController]
-    [Route("api/leave-takes")]
+    [Route("api/core/leave-management/leave-takes")]
     public class LeaveTakeController : ControllerBase
     {
         private readonly LeaveTakeRepository repository;
@@ -14,131 +14,91 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveTake
             this.repository = repository ?? throw new ArgumentNullException(nameof(repository));
         }
 
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<Domain.Core.LeaveManagement.LeaveTake.Entity.LeaveTake>> GetByIdAsync(int id)
+        [HttpGet("{id:int}", Name = "GetLeaveTakeById")]
+        public async Task<ActionResult<Domain.Core.LeaveManagement.LeaveTake.Entity.LeaveTake>> GetByIdAsync(int id, CancellationToken ct = default)
         {
-            try
+            var leaveTake = await repository.GetByIdAsync(id, ct);
+            
+            if (leaveTake == null)
             {
-                var leaveTake = await repository.GetByIdAsync(id);
-                if (leaveTake == null)
-                {
-                    return NotFound($"LeaveTake with ID {id} not found");
-                }
-                return Ok(leaveTake);
+                return NotFound();
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+
+            return Ok(leaveTake);
         }
 
         [HttpGet("environment/{environmentId:int}/{id:int}")]
-        public async Task<ActionResult<Domain.Core.LeaveManagement.LeaveTake.Entity.LeaveTake>> GetByEnvironmentIdAndIdAsync(int environmentId, int id)
+        public async Task<ActionResult<Domain.Core.LeaveManagement.LeaveTake.Entity.LeaveTake>> GetByEnvironmentIdAndIdAsync(int environmentId, int id, CancellationToken ct = default)
         {
-            try
+            var leaveTake = await repository.GetByIdAsync(id, ct);
+            
+            if (leaveTake == null)
             {
-                var leaveTake = await repository.GetByIdAsync(id);
-                if (leaveTake == null || leaveTake.EnvironmentId != environmentId)
-                {
-                    return NotFound($"LeaveTake with ID {id} not found in environment {environmentId}");
-                }
-                return Ok(leaveTake);
+                return NotFound();
             }
-            catch (Exception ex)
+
+            if (leaveTake.EnvironmentId != environmentId)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return BadRequest();
             }
+
+            return Ok(leaveTake);
         }
 
         [HttpGet("all/environment/{environmentId:int}")]
-        public async Task<ActionResult<IList<Domain.Core.LeaveManagement.LeaveTake.Entity.LeaveTake>>> GetAllByEnvironmentIdAsync(int environmentId)
+        public async Task<ActionResult<IList<Domain.Core.LeaveManagement.LeaveTake.Entity.LeaveTake>>> GetAllByEnvironmentIdAsync(int environmentId, CancellationToken ct = default)
         {
-            try
-            {
-                var leaveTakes = await repository.GetAllByEnvironmentIdAsync(environmentId);
-                return Ok(leaveTakes);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
-
-        [HttpGet("all")]
-        public async Task<ActionResult<IList<Domain.Core.LeaveManagement.LeaveTake.Entity.LeaveTake>>> GetAllAsync()
-        {
-            try
-            {
-                var leaveTakes = await repository.GetAllAsync();
-                return Ok(leaveTakes);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            var leaveTakes = await repository.GetAllByEnvironmentIdAsync(environmentId, ct);
+            return Ok(leaveTakes);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Domain.Core.LeaveManagement.LeaveTake.Entity.LeaveTake>> InsertAsync([FromBody] Domain.Core.LeaveManagement.LeaveTake.Entity.LeaveTake leaveTake)
+        public async Task<ActionResult<Domain.Core.LeaveManagement.LeaveTake.Entity.LeaveTake>> InsertAsync([FromBody] Domain.Core.LeaveManagement.LeaveTake.Entity.LeaveTake entity, CancellationToken ct = default)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                var insertedLeaveTake = await repository.InsertAsync(leaveTake);
-                return CreatedAtAction(nameof(GetByEnvironmentIdAndIdAsync), new { environmentId = insertedLeaveTake.EnvironmentId, id = insertedLeaveTake.Id }, insertedLeaveTake);
+                return BadRequest(ModelState);
             }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+
+            var insertedEntity = await repository.InsertAsync(entity, ct);
+            
+            return Created($"{Request.Path}/{insertedEntity.Id}", insertedEntity);
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<Domain.Core.LeaveManagement.LeaveTake.Entity.LeaveTake>> UpdateAsync(int id, [FromBody] Domain.Core.LeaveManagement.LeaveTake.Entity.LeaveTake leaveTake)
+        public async Task<ActionResult<Domain.Core.LeaveManagement.LeaveTake.Entity.LeaveTake>> UpdateAsync(int id, [FromBody] Domain.Core.LeaveManagement.LeaveTake.Entity.LeaveTake entity, CancellationToken ct = default)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (id != leaveTake.Id)
-                {
-                    return BadRequest("URL ID does not match object ID");
-                }
+                return BadRequest(ModelState);
+            }
 
-                var updatedLeaveTake = await repository.UpdateAsync(leaveTake);
-                if (updatedLeaveTake == null)
-                {
-                    return NotFound($"LeaveTake with ID {id} not found");
-                }
-                return Ok(updatedLeaveTake);
-            }
-            catch (InvalidOperationException ex)
+            if (id != entity.Id)
             {
-                return BadRequest(ex.Message);
+                return BadRequest();
             }
-            catch (Exception ex)
+
+            var updatedEntity = await repository.UpdateAsync(entity, ct);
+            
+            if (updatedEntity == null)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return NotFound();
             }
+
+            return Ok(updatedEntity);
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<ActionResult> DeleteByIdAsync(int id)
+        public async Task<IActionResult> DeleteByIdAsync(int id, CancellationToken ct = default)
         {
-            try
+            var deleted = await repository.DeleteByIdAsync(id, ct);
+            
+            if (!deleted)
             {
-                var deleted = await repository.DeleteByIdAsync(id);
-                if (!deleted)
-                {
-                    return NotFound($"LeaveTake with ID {id} not found");
-                }
-                return NoContent();
+                return NotFound();
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+
+            return NoContent();
         }
     }
 }
