@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Workforce.Domain.Core.TourScheduleManagement.TourScheduleOptimization.Entity;
+using Workforce.Domain.Core.TourScheduleManagement.TourScheduleOptimization.Dto;
 using Workforce.Realization.Infrastructure.Persistence.Core.TourScheduleManagement.TourScheduleOptimization;
+using Workforce.Realization.Application.Core.TourScheduleManagement.Service;
+using Workforce.Realization.Infrastructure.Persistence.Core.TourScheduleManagement.TourSchedule.Repository;
+using Workforce.Realization.Infrastructure.External.Db;
 
 namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleOptimization
 {
@@ -12,10 +16,17 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
     public class TourScheduleOptimizationController : ControllerBase
     {
         private readonly TourScheduleOptimizationRepository repository;
+        private readonly WorkforceDbContext dbContext;
+        private readonly TourScheduleRepository tourScheduleRepository;
 
-        public TourScheduleOptimizationController(TourScheduleOptimizationRepository repository)
+        public TourScheduleOptimizationController(
+            TourScheduleOptimizationRepository repository,
+            WorkforceDbContext dbContext,
+            TourScheduleRepository tourScheduleRepository)
         {
             this.repository = repository;
+            this.dbContext = dbContext;
+            this.tourScheduleRepository = tourScheduleRepository;
         }
 
         [HttpGet("{id:int}", Name = "GetTourScheduleOptimizationById")]
@@ -62,6 +73,40 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
             var deleted = await repository.DeleteByIdAsync(id, ct);
             if (!deleted) return NotFound();
             return NoContent();
+        }
+
+        [HttpPost("solve")]
+        public async Task<ActionResult<IList<TourScheduleAssignment>>> SolveOptimizationAsync(
+            [FromBody] TourScheduleOptimizationParameters parameters,
+            CancellationToken ct)
+        {
+            try
+            {
+                var solverService = new TourScheduleSolverService(dbContext, repository, tourScheduleRepository);
+                var assignments = await solverService.SolveAsync(parameters, ct);
+                
+                // Atualizar status da otimização
+                var optimization = await repository.GetByIdAsync(parameters.TourScheduleOptimizationId, ct);
+                if (optimization != null)
+                {
+                    optimization.Status = TourScheduleOptimizationStatus.Completed;
+                    await repository.UpdateAsync(optimization, ct);
+                }
+                
+                return Ok(assignments);
+            }
+            catch (System.Exception ex)
+            {
+                // Atualizar status da otimização para Failed
+                var optimization = await repository.GetByIdAsync(parameters.TourScheduleOptimizationId, ct);
+                if (optimization != null)
+                {
+                    optimization.Status = TourScheduleOptimizationStatus.Failed;
+                    await repository.UpdateAsync(optimization, ct);
+                }
+                
+                return BadRequest(new { error = ex.Message });
+            }
         }
     }
 }
