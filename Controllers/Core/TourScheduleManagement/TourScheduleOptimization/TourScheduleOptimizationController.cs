@@ -80,33 +80,47 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
             [FromBody] TourScheduleOptimizationParameters parameters,
             CancellationToken ct)
         {
+            // Buscar a otimização antes de iniciar
+            var optimization = await repository.GetByIdAsync(parameters.TourScheduleOptimizationId, ct);
+            if (optimization == null)
+            {
+                return NotFound(new { error = "Optimization not found" });
+            }
+
+            // Definir status como InProgress
+            optimization.Status = TourScheduleOptimizationStatus.InProgress;
+            await repository.UpdateAsync(optimization, ct);
+
             try
             {
                 var solverService = new TourScheduleSolverService(dbContext, repository, tourScheduleRepository);
                 var assignments = await solverService.SolveAsync(parameters, ct);
                 
-                // Atualizar status da otimização
-                var optimization = await repository.GetByIdAsync(parameters.TourScheduleOptimizationId, ct);
-                if (optimization != null)
-                {
-                    optimization.Status = TourScheduleOptimizationStatus.Completed;
-                    await repository.UpdateAsync(optimization, ct);
-                }
+                // Atualizar status da otimização para Completed
+                optimization.Status = TourScheduleOptimizationStatus.Completed;
+                await repository.UpdateAsync(optimization, ct);
                 
                 return Ok(assignments);
             }
             catch (System.Exception ex)
             {
                 // Atualizar status da otimização para Failed
-                var optimization = await repository.GetByIdAsync(parameters.TourScheduleOptimizationId, ct);
-                if (optimization != null)
-                {
-                    optimization.Status = TourScheduleOptimizationStatus.Failed;
-                    await repository.UpdateAsync(optimization, ct);
-                }
+                optimization.Status = TourScheduleOptimizationStatus.Failed;
+                await repository.UpdateAsync(optimization, ct);
                 
                 return BadRequest(new { error = ex.Message });
             }
+        }
+
+        [HttpPost("{id:int}/reset-status")]
+        public async Task<ActionResult<Domain.Core.TourScheduleManagement.TourScheduleOptimization.Entity.TourScheduleOptimization>> ResetStatusAsync(int id, CancellationToken ct)
+        {
+            var optimization = await repository.GetByIdAsync(id, ct);
+            if (optimization == null) return NotFound();
+            
+            optimization.Status = TourScheduleOptimizationStatus.Pending;
+            var updated = await repository.UpdateAsync(optimization, ct);
+            return Ok(updated);
         }
     }
 }
