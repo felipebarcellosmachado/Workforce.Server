@@ -113,7 +113,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.PairingManag
             try
             {
                 var insertedPairing = await pairingRepository.InsertAsync(pairing, ct);
-                return CreatedAtAction(nameof(GetByEnvironmentIdAndIdAsync), new { environmentId = insertedPairing.EnvironmentId, id = insertedPairing.Id }, insertedPairing);
+                return Created($"{Request.Path}/{insertedPairing.Id}", insertedPairing);
             }
             catch (InvalidOperationException ex)
             {
