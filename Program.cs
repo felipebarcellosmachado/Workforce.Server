@@ -306,6 +306,11 @@ builder.Services.AddScoped<BaseTourSchedulePeriodRepository>();
 builder.Services.AddScoped<TourScheduleRepository>();
 builder.Services.AddScoped<TourScheduleOptimizationRepository>();
 
+// Core - StaffingScheduleManagement
+builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.StaffingScheduleManagement.BaseStaffingSchedule.Repository.BaseStaffingScheduleRepository>();
+builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.StaffingScheduleManagement.BaseStaffingSchedule.Repository.BaseStaffingScheduleDemandRepository>();
+builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.StaffingScheduleManagement.BaseStaffingSchedule.Repository.BaseStaffingSchedulePeriodRepository>();
+
 builder.Services.AddRadzenCookieThemeService(options =>
 {
     options.Name = "WorkforceTheme";
