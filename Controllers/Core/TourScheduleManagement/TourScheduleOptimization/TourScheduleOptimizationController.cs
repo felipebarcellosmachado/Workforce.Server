@@ -80,8 +80,8 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
             [FromBody] TourScheduleOptimizationParameters parameters,
             CancellationToken ct)
         {
-            // Buscar a otimização antes de iniciar
-            var optimization = await repository.GetByIdAsync(parameters.TourScheduleOptimizationId, ct);
+            // Buscar a otimização antes de iniciar (SEM assignments para melhor performance)
+            var optimization = await repository.GetByIdSingleAsync(parameters.TourScheduleOptimizationId, ct);
             if (optimization == null)
             {
                 return NotFound(new { error = "Optimization not found" });
@@ -115,7 +115,8 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
         [HttpPost("{id:int}/reset-status")]
         public async Task<ActionResult<Domain.Core.TourScheduleManagement.TourScheduleOptimization.Entity.TourScheduleOptimization>> ResetStatusAsync(int id, CancellationToken ct)
         {
-            var optimization = await repository.GetByIdAsync(id, ct);
+            // Para reset de status, não precisamos dos assignments
+            var optimization = await repository.GetByIdSingleAsync(id, ct);
             if (optimization == null) return NotFound();
             
             optimization.Status = TourScheduleOptimizationStatus.Pending;
