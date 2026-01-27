@@ -3,6 +3,9 @@ using Microsoft.Extensions.FileProviders;
 using Workforce.Realization.Infrastructure.External.Db;
 using Radzen;
 using Workforce.Server.Components;
+using Hangfire;
+using Hangfire.PostgreSql;
+using Workforce.Server.Services;
 
 // Import services namespaces for server-side registration
 using Workforce.Services.Admin.Session;
@@ -80,6 +83,21 @@ builder.Services.AddRadzenComponents();
 builder.Services.AddDbContext<WorkforceDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") ?? 
                      "Host=localhost;Database=WorkforceDb;Username=postgres;Password=yourpassword"));
+
+// Configure Hangfire
+builder.Services.AddHangfire(configuration => configuration
+    .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+    .UseSimpleAssemblyNameTypeSerializer()
+    .UseRecommendedSerializerSettings()
+    .UsePostgreSqlStorage(options => 
+        options.UseNpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection") ?? 
+                                   "Host=localhost;Database=WorkforceDb;Username=postgres;Password=yourpassword")));
+
+// Adicionar o servidor do Hangfire
+builder.Services.AddHangfireServer();
+
+// Registrar o serviço de background
+builder.Services.AddScoped<TourScheduleOptimizationBackgroundService>();
 
 // Configuração de Localização para Server-side rendering
 builder.Services.AddLocalization();
@@ -317,8 +335,14 @@ builder.Services.AddRadzenCookieThemeService(options =>
     options.Name = "WorkforceTheme";
     options.Duration = TimeSpan.FromDays(365);
 });
+
 var app = builder.Build();
 
+// Configure Hangfire Dashboard
+app.UseHangfireDashboard("/hangfire", new DashboardOptions
+{
+    Authorization = new[] { new HangfireAuthorizationFilter() }
+});
 
 var forwardingOptions = new ForwardedHeadersOptions()
 {

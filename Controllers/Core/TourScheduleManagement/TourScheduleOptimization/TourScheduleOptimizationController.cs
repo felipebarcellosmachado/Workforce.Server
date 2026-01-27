@@ -8,6 +8,8 @@ using Workforce.Realization.Infrastructure.Persistence.Core.TourScheduleManageme
 using Workforce.Realization.Application.Core.TourScheduleManagement.Service;
 using Workforce.Realization.Infrastructure.Persistence.Core.TourScheduleManagement.TourSchedule.Repository;
 using Workforce.Realization.Infrastructure.External.Db;
+using Hangfire;
+using Workforce.Server.Services;
 
 namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleOptimization
 {
@@ -76,40 +78,55 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
         }
 
         [HttpPost("solve")]
-        public async Task<ActionResult<IList<TourScheduleAssignment>>> SolveOptimizationAsync(
+        public async Task<ActionResult<TourScheduleOptimizationJobResponse>> SolveOptimizationAsync(
             [FromBody] TourScheduleOptimizationParameters parameters,
             CancellationToken ct)
         {
-            // Buscar a otimização antes de iniciar (SEM assignments para melhor performance)
+            // Buscar a otimização antes de enfileirar (SEM assignments para melhor performance)
             var optimization = await repository.GetByIdSingleAsync(parameters.TourScheduleOptimizationId, ct);
             if (optimization == null)
             {
                 return NotFound(new { error = "Optimization not found" });
             }
 
-            // Definir status como InProgress
-            optimization.Status = TourScheduleOptimizationStatus.InProgress;
+            // Definir status como Pending (será alterado para InProgress pelo background service)
+            optimization.Status = TourScheduleOptimizationStatus.Pending;
             await repository.UpdateAsync(optimization, ct);
 
-            try
+            // Enfileirar o job no Hangfire
+            var jobId = BackgroundJob.Enqueue<TourScheduleOptimizationBackgroundService>(
+                service => service.ProcessOptimizationAsync(parameters));
+
+            var response = new TourScheduleOptimizationJobResponse
             {
-                var solverService = new TourScheduleSolverService(dbContext, repository, tourScheduleRepository);
-                var assignments = await solverService.SolveAsync(parameters, ct);
-                
-                // Atualizar status da otimização para Completed
-                optimization.Status = TourScheduleOptimizationStatus.Completed;
-                await repository.UpdateAsync(optimization, ct);
-                
-                return Ok(assignments);
-            }
-            catch (System.Exception ex)
+                Message = "Optimization job enqueued successfully",
+                JobId = jobId,
+                OptimizationId = parameters.TourScheduleOptimizationId,
+                Status = TourScheduleOptimizationStatus.Pending.ToString(),
+                DashboardUrl = "/hangfire"
+            };
+
+            return Ok(response);
+        }
+
+        [HttpGet("{id:int}/status", Name = "GetTourScheduleOptimizationStatus")]
+        public async Task<ActionResult<TourScheduleOptimizationStatusResponse>> GetStatusAsync(int id, CancellationToken ct)
+        {
+            var entity = await repository.GetByIdSingleAsync(id, ct);
+            if (entity == null) return NotFound();
+            
+            var response = new TourScheduleOptimizationStatusResponse
             {
-                // Atualizar status da otimização para Failed
-                optimization.Status = TourScheduleOptimizationStatus.Failed;
-                await repository.UpdateAsync(optimization, ct);
-                
-                return BadRequest(new { error = ex.Message });
-            }
+                Id = entity.Id,
+                Status = entity.Status.ToString(),
+                TourScheduleId = entity.TourScheduleId,
+                StartDate = entity.StartDate,
+                EndDate = entity.EndDate,
+                EnvironmentId = entity.EnvironmentId,
+                DashboardUrl = "/hangfire"
+            };
+
+            return Ok(response);
         }
 
         [HttpPost("{id:int}/reset-status")]
