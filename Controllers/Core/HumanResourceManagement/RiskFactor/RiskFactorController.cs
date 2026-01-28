@@ -47,6 +47,38 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.RiskFactor
             }
         }
 
+        [HttpGet("all/environment/{environmentId:int}")]
+        public async Task<ActionResult<IList<Domain.Core.HumanResourceManagement.RiskFactor.Entity.RiskFactor>>> GetAllByEnvironmentIdAsync(int environmentId, CancellationToken ct = default)
+        {
+            try
+            {
+                var riskFactors = await riskFactorRepository.GetAllByEnvironmentIdAsync(environmentId, ct);
+                return Ok(riskFactors);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("environment/{environmentId:int}/{id:int}")]
+        public async Task<ActionResult<Domain.Core.HumanResourceManagement.RiskFactor.Entity.RiskFactor>> GetByEnvironmentIdAndIdAsync(int environmentId, int id, CancellationToken ct = default)
+        {
+            try
+            {
+                var riskFactor = await riskFactorRepository.GetByIdAsync(id, ct);
+                if (riskFactor == null || riskFactor.EnvironmentId != environmentId)
+                {
+                    return NotFound($"RiskFactor with ID {id} not found in environment {environmentId}");
+                }
+                return Ok(riskFactor);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
         [HttpPost]
         public async Task<ActionResult<Domain.Core.HumanResourceManagement.RiskFactor.Entity.RiskFactor>> InsertAsync([FromBody] Domain.Core.HumanResourceManagement.RiskFactor.Entity.RiskFactor entity, CancellationToken ct = default)
         {
