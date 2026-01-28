@@ -33,6 +33,13 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.Availability
             return Ok(list);
         }
 
+        [HttpGet("all/environment/{environmentId:int}")]
+        public async Task<ActionResult<IList<Domain.Core.HumanResourceManagement.Availability.Entity.Availability>>> GetAllByEnvironmentIdAsync(int environmentId, CancellationToken ct)
+        {
+            var list = await _repository.GetAllByEnvironmentIdAsync(environmentId, ct);
+            return Ok(list);
+        }
+
         [HttpGet("humanresource/{humanResourceId:int}")]
         public async Task<ActionResult<IList<Domain.Core.HumanResourceManagement.Availability.Entity.Availability>>> GetByHumanResourceIdAsync(int humanResourceId, CancellationToken ct)
         {
