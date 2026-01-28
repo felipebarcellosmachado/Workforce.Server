@@ -314,6 +314,9 @@ builder.Services.AddScoped<RiskFactorRepository>();
 // Core - Availability
 builder.Services.AddScoped<AvailabilityRepository>();
 
+// Core - Class
+builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.Class.ClassRepository>();
+
 // Core - Holiday
 builder.Services.AddScoped<HolidayRepository>();
 
