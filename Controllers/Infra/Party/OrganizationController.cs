@@ -16,11 +16,11 @@ namespace Workforce.Server.Controllers.Infra.Party
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Organization>> GetById(int id)
+        public async Task<ActionResult<Organization>> GetById(int id, CancellationToken ct = default)
         {
             try
             {
-                var organization = await _organizationRepository.GetById(id);
+                var organization = await _organizationRepository.GetByIdAsync(id, ct);
                 if (organization == null)
                 {
                     return NotFound();
@@ -34,7 +34,7 @@ namespace Workforce.Server.Controllers.Infra.Party
         }
 
         [HttpGet("name/{name}")]
-        public async Task<ActionResult<Organization>> GetByName(string name)
+        public async Task<ActionResult<Organization>> GetByName(string name, CancellationToken ct = default)
         {
             try
             {
@@ -43,7 +43,7 @@ namespace Workforce.Server.Controllers.Infra.Party
                     return BadRequest("Organization name is required");
                 }
 
-                var organization = await _organizationRepository.GetByName(name);
+                var organization = await _organizationRepository.GetByNameAsync(name, ct);
                 if (organization == null)
                 {
                     return NotFound($"Organization with name '{name}' not found");
@@ -57,7 +57,7 @@ namespace Workforce.Server.Controllers.Infra.Party
         }
 
         [HttpGet("environment/{environmentId}/name/{name}")]
-        public async Task<ActionResult<Organization>> GetByEnvironmentIdAndName(int environmentId, string name)
+        public async Task<ActionResult<Organization>> GetByEnvironmentIdAndName(int environmentId, string name, CancellationToken ct = default)
         {
             try
             {
@@ -70,7 +70,7 @@ namespace Workforce.Server.Controllers.Infra.Party
                     return BadRequest("Organization name is required");
                 }
 
-                var organization = await _organizationRepository.GetByEnvironmentIdAndName(environmentId, name);
+                var organization = await _organizationRepository.GetByEnvironmentIdAndNameAsync(environmentId, name, ct);
                 if (organization == null)
                 {
                     return NotFound($"Organization with name '{name}' in environment '{environmentId}' not found");
@@ -84,11 +84,11 @@ namespace Workforce.Server.Controllers.Infra.Party
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<List<Organization>>> GetAll()
+        public async Task<ActionResult<List<Organization>>> GetAll(CancellationToken ct = default)
         {
             try
             {
-                var organizations = await _organizationRepository.GetAll();
+                var organizations = await _organizationRepository.GetAllAsync(ct);
                 return Ok(organizations);
             }
             catch (Exception ex)
@@ -98,11 +98,11 @@ namespace Workforce.Server.Controllers.Infra.Party
         }
 
         [HttpGet("environment/{environmentId}")]
-        public async Task<ActionResult<List<Organization>>> GetAllByEnvironmentId(int environmentId)
+        public async Task<ActionResult<List<Organization>>> GetAllByEnvironmentId(int environmentId, CancellationToken ct = default)
         {
             try
             {
-                var organizations = await _organizationRepository.GetAllByEnvironmentId(environmentId);
+                var organizations = await _organizationRepository.GetAllByEnvironmentIdAsync(environmentId, ct);
                 return Ok(organizations);
             }
             catch (Exception ex)
@@ -112,7 +112,7 @@ namespace Workforce.Server.Controllers.Infra.Party
         }
 
         [HttpPost]
-        public async Task<ActionResult<Organization>> Insert([FromBody] Organization organization)
+        public async Task<ActionResult<Organization>> Insert([FromBody] Organization organization, CancellationToken ct = default)
         {
             try
             {
@@ -121,13 +121,13 @@ namespace Workforce.Server.Controllers.Infra.Party
                     return BadRequest("Organization data is required");
                 }
 
-                var result = await _organizationRepository.Insert(organization);
+                var result = await _organizationRepository.InsertAsync(organization, ct);
                 if (result == null)
                 {
                     return BadRequest("Failed to create organization");
                 }
 
-                return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+                return Created($"api/infra/party/organization/{result.Id}", result);
             }
             catch (Exception ex)
             {
@@ -136,7 +136,7 @@ namespace Workforce.Server.Controllers.Infra.Party
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Organization>> Update(int id, [FromBody] Organization organization)
+        public async Task<ActionResult<Organization>> Update(int id, [FromBody] Organization organization, CancellationToken ct = default)
         {
             try
             {
@@ -150,7 +150,7 @@ namespace Workforce.Server.Controllers.Infra.Party
                     return BadRequest("ID mismatch");
                 }
 
-                var result = await _organizationRepository.Update(organization);
+                var result = await _organizationRepository.UpdateAsync(organization, ct);
                 if (result == null)
                 {
                     return NotFound("Organization not found or update failed");
@@ -165,22 +165,22 @@ namespace Workforce.Server.Controllers.Infra.Party
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteById(int id)
+        public async Task<ActionResult> DeleteById(int id, CancellationToken ct = default)
         {
             try
             {
-                var organization = await _organizationRepository.GetById(id);
+                var organization = await _organizationRepository.GetByIdAsync(id, ct);
                 if (organization == null)
                 {
                     return NotFound();
                 }
 
-                var deleted = await _organizationRepository.DeleteById(id);
+                var deleted = await _organizationRepository.DeleteByIdAsync(id, ct);
                 if (!deleted)
                 {
                     return StatusCode(500, "Failed to delete organization");
                 }
-                
+
                 return NoContent();
             }
             catch (Exception ex)
