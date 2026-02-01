@@ -32,6 +32,7 @@ using Workforce.Services.Core.HumanResourceManagement.Behaviour;
 using Workforce.Services.Core.HumanResourceManagement.Qualification;
 using Workforce.Services.Infra.HumanResource.Skill;
 using Workforce.Services.Infra.HumanResource.CompetenceLevel;
+using Workforce.Services.Core.HumanResourceManagement.Tag;
 using Workforce.Services.Core.HumanResourceManagement.RiskFactor;
 using Workforce.Services.Core.TourScheduleManagement.BaseTourSchedule;
 using Workforce.Services.Core.TourScheduleManagement.TourSchedule;
@@ -205,7 +206,13 @@ builder.Services.AddScoped<ISkillService>(sp =>
     return new SkillService(httpClient);
 });
 
-builder.Services.AddScoped<ICompetenceLevelService>(sp => 
+builder.Services.AddScoped<ITagService>(sp => 
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new TagService(httpClient);
+});
+
+builder.Services.AddScoped<ICompetenceLevelService>(sp =>
 {
     var httpClient = sp.GetRequiredService<HttpClient>();
     return new CompetenceLevelService(httpClient);
@@ -277,6 +284,7 @@ builder.Services.AddScoped<CompetenceLevelRepository>();
 builder.Services.AddScoped<JobTitleRepository>();
 builder.Services.AddScoped<SkillRepository>();
 builder.Services.AddScoped<QualificationRepository>();
+builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.Tag.TagRepository>();
 
 // Core - DemandManagement - Comentado: namespaces não existem
 // builder.Services.AddScoped<DemandEstimativeRepository>();
