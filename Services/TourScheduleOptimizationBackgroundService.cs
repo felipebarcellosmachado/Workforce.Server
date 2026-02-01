@@ -7,6 +7,7 @@ using Workforce.Domain.Core.TourScheduleManagement.TourScheduleOptimization.Dto;
 using Workforce.Domain.Core.TourScheduleManagement.TourScheduleOptimization.Entity;
 using Workforce.Realization.Application.Core.TourScheduleManagement.Service;
 using Workforce.Realization.Infrastructure.External.Db;
+using Workforce.Realization.Infrastructure.Persistence.Core.LeaveManagement.LeaveTake;
 using Workforce.Realization.Infrastructure.Persistence.Core.TourScheduleManagement.TourSchedule.Repository;
 using Workforce.Realization.Infrastructure.Persistence.Core.TourScheduleManagement.TourScheduleOptimization;
 
@@ -44,6 +45,7 @@ namespace Workforce.Server.Services
             var dbContext = scope.ServiceProvider.GetRequiredService<WorkforceDbContext>();
             var repository = scope.ServiceProvider.GetRequiredService<TourScheduleOptimizationRepository>();
             var tourScheduleRepository = scope.ServiceProvider.GetRequiredService<TourScheduleRepository>();
+            var leaveTakeRepository = scope.ServiceProvider.GetRequiredService<LeaveTakeRepository>();
 
             // Buscar a otimização
             var optimization = await repository.GetByIdSingleAsync(
@@ -72,7 +74,8 @@ namespace Workforce.Server.Services
                 var solverService = new TourScheduleSolverService(
                     dbContext,
                     repository,
-                    tourScheduleRepository);
+                    tourScheduleRepository,
+                    leaveTakeRepository);
 
                 var assignments = await solverService.SolveAsync(parameters, CancellationToken.None);
 
