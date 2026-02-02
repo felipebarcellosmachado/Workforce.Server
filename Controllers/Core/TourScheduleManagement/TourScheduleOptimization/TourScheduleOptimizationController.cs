@@ -114,14 +114,12 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
         {
             var entity = await repository.GetByIdSingleAsync(id, ct);
             if (entity == null) return NotFound();
-            
+
             var response = new TourScheduleOptimizationStatusResponse
             {
                 Id = entity.Id,
                 Status = entity.Status.ToString(),
                 TourScheduleId = entity.TourScheduleId,
-                StartDate = entity.StartDate,
-                EndDate = entity.EndDate,
                 EnvironmentId = entity.EnvironmentId,
                 DashboardUrl = "/hangfire"
             };
