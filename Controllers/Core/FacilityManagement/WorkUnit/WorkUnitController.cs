@@ -46,6 +46,20 @@ namespace Workforce.Server.Controllers.Core.FacilityManagement.WorkUnit
             }
         }
 
+        [HttpGet("environment/{environmentId}")]
+        public async Task<ActionResult<IList<Domain.Core.FacilityManagement.WorkUnit.Entity.WorkUnit>>> GetAllByEnvironmentId(int environmentId)
+        {
+            try
+            {
+                var workUnits = await _workUnitRepository.GetAllByEnvironmentId(environmentId);
+                return Ok(workUnits);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
         [HttpPost]
         public async Task<ActionResult<Domain.Core.FacilityManagement.WorkUnit.Entity.WorkUnit>> InsertAsync([FromBody] Domain.Core.FacilityManagement.WorkUnit.Entity.WorkUnit workUnit)
         {
