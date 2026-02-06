@@ -338,6 +338,9 @@ builder.Services.AddScoped<BaseTourSchedulePeriodRepository>();
 builder.Services.AddScoped<TourScheduleRepository>();
 builder.Services.AddScoped<TourScheduleOptimizationRepository>();
 
+// Tour Schedule Services
+builder.Services.AddScoped<Workforce.Realization.Application.Core.TourScheduleManagement.Service.TourScheduleResourceDiagnosticService>();
+
 // Core - StaffingScheduleManagement
 builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.StaffingScheduleManagement.BaseStaffingSchedule.Repository.BaseStaffingScheduleRepository>();
 builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.StaffingScheduleManagement.BaseStaffingSchedule.Repository.BaseStaffingScheduleDemandRepository>();

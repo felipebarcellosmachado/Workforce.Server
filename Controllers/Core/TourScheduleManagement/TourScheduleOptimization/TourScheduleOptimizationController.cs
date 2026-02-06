@@ -21,15 +21,18 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
         private readonly TourScheduleOptimizationRepository repository;
         private readonly WorkforceDbContext dbContext;
         private readonly TourScheduleRepository tourScheduleRepository;
+        private readonly TourScheduleResourceDiagnosticService diagnosticService;
 
         public TourScheduleOptimizationController(
             TourScheduleOptimizationRepository repository,
             WorkforceDbContext dbContext,
-            TourScheduleRepository tourScheduleRepository)
+            TourScheduleRepository tourScheduleRepository,
+            TourScheduleResourceDiagnosticService diagnosticService)
         {
             this.repository = repository;
             this.dbContext = dbContext;
             this.tourScheduleRepository = tourScheduleRepository;
+            this.diagnosticService = diagnosticService;
         }
 
         [HttpGet("{id:int}", Name = "GetTourScheduleOptimizationById")]
@@ -130,6 +133,29 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
                 ViolationAmount = v.ViolationAmount,
                 Message = v.Message
             }).ToList();
+
+            // Buscar score da otimização (primeiro score, se existir)
+            var score = entity.Scores?.FirstOrDefault();
+            TourScheduleScoreResponse? scoreResponse = null;
+            if (score != null)
+            {
+                scoreResponse = new TourScheduleScoreResponse
+                {
+                    HardScore = score.HardScore,
+                    MediumScore = score.MediumScore,
+                    SoftScore = score.SoftScore,
+                    IsFeasible = score.IsFeasible,
+                    TotalScore = score.TotalScore,
+                    TotalCost = score.TotalCost,
+                    SolveTimeSeconds = score.SolveTimeSeconds,
+                    AverageFatigueRiskScore = score.AverageFatigueRiskScore,
+                    HighFatigueRiskCount = score.HighFatigueRiskCount,
+                    HardConstraintViolations = score.HardConstraintViolations,
+                    MediumConstraintViolations = score.MediumConstraintViolations,
+                    SoftConstraintViolations = score.SoftConstraintViolations
+                };
+            }
+
             var shouldShowDashboard = !entity.IsInfeasible && entity.Status == TourScheduleOptimizationStatus.Completed;
             var response = new TourScheduleOptimizationStatusResponse
             {
@@ -143,7 +169,8 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
                 TotalDeficit = entity.TotalDeficit,
                 TotalExcess = entity.TotalExcess,
                 DiagnosticMessage = entity.DiagnosticMessage,
-                Violations = responseViolations
+                Violations = responseViolations,
+                Score = scoreResponse
             };
 
             return Ok(response);
@@ -155,10 +182,58 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
             // Para reset de status, não precisamos dos assignments
             var optimization = await repository.GetByIdSingleAsync(id, ct);
             if (optimization == null) return NotFound();
-            
+
             optimization.Status = TourScheduleOptimizationStatus.Pending;
             var updated = await repository.UpdateAsync(optimization, ct);
             return Ok(updated);
+        }
+
+        [HttpGet("{id:int}/diagnostics/resource-usage", Name = "GetResourceUsageDiagnostics")]
+        public async Task<ActionResult<string>> GetResourceUsageDiagnosticsAsync(int id, CancellationToken ct)
+        {
+            Console.WriteLine($"[GetResourceUsageDiagnostics] Recebida requisição para otimização ID: {id}");
+
+            try
+            {
+                // Validar que a otimização existe
+                Console.WriteLine($"[GetResourceUsageDiagnostics] Validando existência da otimização {id}...");
+                var optimization = await repository.GetByIdSingleAsync(id, ct);
+                if (optimization == null)
+                {
+                    Console.WriteLine($"[GetResourceUsageDiagnostics] ? Otimização {id} NÃO encontrada");
+                    return NotFound(new { error = $"Otimização {id} não encontrada" });
+                }
+
+                Console.WriteLine($"[GetResourceUsageDiagnostics] ? Otimização {id} encontrada. Status: {optimization.Status}");
+                Console.WriteLine($"[GetResourceUsageDiagnostics] Chamando diagnosticService.GenerateDiagnosticReportAsync()...");
+
+                var report = await diagnosticService.GenerateDiagnosticReportAsync(id, ct);
+
+                Console.WriteLine($"[GetResourceUsageDiagnostics] ? Relatório gerado com sucesso. Tamanho: {report.Length} caracteres");
+                return Ok(report);
+            }
+            catch (Exception ex)
+            {
+                // Log do erro no console do servidor
+                Console.WriteLine($"[GetResourceUsageDiagnostics] ? ERRO ao gerar diagnóstico para otimização {id}:");
+                Console.WriteLine($"   Tipo: {ex.GetType().Name}");
+                Console.WriteLine($"   Mensagem: {ex.Message}");
+                Console.WriteLine($"   StackTrace: {ex.StackTrace}");
+
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine($"   InnerException: {ex.InnerException.GetType().Name}");
+                    Console.WriteLine($"   InnerException Message: {ex.InnerException.Message}");
+                }
+
+                return StatusCode(500, new 
+                { 
+                    error = "Erro ao gerar diagnóstico",
+                    message = ex.Message,
+                    type = ex.GetType().Name,
+                    details = "Verifique os logs do servidor para mais detalhes"
+                });
+            }
         }
     }
 }
