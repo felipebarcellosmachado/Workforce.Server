@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Workforce.Domain.Core.TourScheduleManagement.TourScheduleOptimization.Entity;
@@ -114,14 +115,35 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
         {
             var entity = await repository.GetByIdSingleAsync(id, ct);
             if (entity == null) return NotFound();
-
+            var violations = entity.Violations ?? new List<TourScheduleOptimizationViolation>();
+            var responseViolations = violations.Select(v => new TourScheduleOptimizationViolationResponse
+            {
+                ViolationType = v.ViolationType,
+                DemandId = v.DemandId,
+                Date = v.Date,
+                PeriodId = v.PeriodId,
+                PeriodName = v.PeriodName,
+                WorkUnitId = v.WorkUnitId,
+                WorkUnitName = v.WorkUnitName,
+                RequiredValue = v.RequiredValue,
+                ActualValue = v.ActualValue,
+                ViolationAmount = v.ViolationAmount,
+                Message = v.Message
+            }).ToList();
+            var shouldShowDashboard = !entity.IsInfeasible && entity.Status == TourScheduleOptimizationStatus.Completed;
             var response = new TourScheduleOptimizationStatusResponse
             {
                 Id = entity.Id,
                 Status = entity.Status.ToString(),
                 TourScheduleId = entity.TourScheduleId,
                 EnvironmentId = entity.EnvironmentId,
-                DashboardUrl = "/hangfire"
+                DashboardUrl = shouldShowDashboard ? "/hangfire" : string.Empty,
+                IsInfeasible = entity.IsInfeasible,
+                TotalViolations = entity.TotalViolations,
+                TotalDeficit = entity.TotalDeficit,
+                TotalExcess = entity.TotalExcess,
+                DiagnosticMessage = entity.DiagnosticMessage,
+                Violations = responseViolations
             };
 
             return Ok(response);
