@@ -405,6 +405,8 @@ else
 
 app.UseHttpsRedirection();
 app.MapControllers();
+
+app.MapStaticAssets();
 app.UseStaticFiles();
 app.UseAntiforgery();
 
