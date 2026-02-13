@@ -170,7 +170,10 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
                 TotalExcess = entity.TotalExcess,
                 DiagnosticMessage = entity.DiagnosticMessage,
                 Violations = responseViolations,
-                Score = scoreResponse
+                Score = scoreResponse,
+                Mode = entity.Mode.ToString(),
+                BaselineOptimizationId = entity.BaselineOptimizationId,
+                TotalDeviations = entity.TotalDeviations
             };
 
             return Ok(response);
