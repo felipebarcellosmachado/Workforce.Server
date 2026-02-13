@@ -36,8 +36,10 @@ using Workforce.Services.Core.HumanResourceManagement.Tag;
 using Workforce.Services.Core.HumanResourceManagement.RiskFactor;
 using Workforce.Services.Core.TourScheduleManagement.BaseTourSchedule;
 using Workforce.Services.Core.TourScheduleManagement.TourSchedule;
+using Workforce.Services.Core.TourScheduleManagement.TourScheduleOptimization;
 using Workforce.Services.Core.HumanResourceManagement.PairingManagement.PairingType;
 using Workforce.Services.Core.HumanResourceManagement.PairingManagement.Pairing;
+using Workforce.Services.Core.LeaveManagement.LeaveRequest;
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.RiskFactor;
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.WorkingTime;
 using Workforce.Realization.Infrastructure.Persistence.Core.LeaveManagement.LeaveTake;
@@ -99,6 +101,12 @@ builder.Services.AddHangfireServer();
 
 // Registrar o serviço de background
 builder.Services.AddScoped<TourScheduleOptimizationBackgroundService>();
+
+// Register Export Service
+builder.Services.AddScoped<Workforce.Server.Services.IExportService, Workforce.Server.Services.ExportService>();
+
+// Configure QuestPDF license (must be set once at startup)
+QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
 // Configuração de Localização para Server-side rendering
 builder.Services.AddLocalization();
@@ -236,6 +244,12 @@ builder.Services.AddScoped<ITourScheduleService>(sp =>
     return new TourScheduleService(httpClient);
 });
 
+builder.Services.AddScoped<Workforce.Services.Core.TourScheduleManagement.TourScheduleOptimization.ITourScheduleOptimizationService>(sp => 
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new Workforce.Services.Core.TourScheduleManagement.TourScheduleOptimization.TourScheduleOptimizationService(httpClient);
+});
+
 builder.Services.AddScoped<IPairingTypeService>(sp => 
 {
     var httpClient = sp.GetRequiredService<HttpClient>();
@@ -246,6 +260,12 @@ builder.Services.AddScoped<IPairingService>(sp =>
 {
     var httpClient = sp.GetRequiredService<HttpClient>();
     return new PairingService(httpClient);
+});
+
+builder.Services.AddScoped<Workforce.Services.Core.LeaveManagement.LeaveRequest.ILeaveRequestService>(sp => 
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new Workforce.Services.Core.LeaveManagement.LeaveRequest.LeaveRequestService(httpClient);
 });
 
 // State Management (for server-side compatibility)
