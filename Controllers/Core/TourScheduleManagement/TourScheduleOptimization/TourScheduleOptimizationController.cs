@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -156,6 +157,59 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
                 };
             }
 
+            // Mapear desvios da baseline para a resposta
+            var deviations = entity.Deviations ?? new List<TourScheduleOptimizationDeviation>();
+
+            // Carregar nomes dos recursos humanos envolvidos nos desvios
+            var humanResourceIds = deviations.Select(d => d.HumanResourceId).Distinct().ToList();
+            var humanResources = await dbContext.HumanResources
+                .AsNoTracking()
+                .Include(hr => hr.Person)
+                .Where(hr => humanResourceIds.Contains(hr.Id))
+                .ToDictionaryAsync(hr => hr.Id, hr => hr.Person?.Name ?? "Unknown", ct);
+
+            // Carregar nomes dos períodos envolvidos nos desvios
+            var periodIds = deviations
+                .SelectMany(d => new[] { d.BaselinePeriodId, d.NewPeriodId })
+                .Where(id => id.HasValue)
+                .Select(id => id!.Value)
+                .Distinct()
+                .ToList();
+            var periods = await dbContext.Set<Workforce.Domain.Core.TourScheduleManagement.TourSchedule.Entity.TourSchedulePeriod>()
+                .AsNoTracking()
+                .Where(p => periodIds.Contains(p.Id))
+                .ToDictionaryAsync(p => p.Id, p => $"{p.StartTime:HH:mm} - {p.EndTime:HH:mm}", ct);
+
+            // Carregar nomes das unidades envolvidas nos desvios
+            var workUnitIds = deviations
+                .SelectMany(d => new[] { d.BaselineWorkUnitId, d.NewWorkUnitId })
+                .Where(id => id.HasValue)
+                .Select(id => id!.Value)
+                .Distinct()
+                .ToList();
+            var workUnits = await dbContext.Set<Workforce.Domain.Core.FacilityManagement.WorkUnit.Entity.WorkUnit>()
+                .AsNoTracking()
+                .Where(wu => workUnitIds.Contains(wu.Id))
+                .ToDictionaryAsync(wu => wu.Id, wu => wu.Name ?? "Unknown", ct);
+
+            var responseDeviations = deviations.Select(d => new TourScheduleOptimizationDeviationResponse
+            {
+                HumanResourceId = d.HumanResourceId,
+                HumanResourceName = humanResources.TryGetValue(d.HumanResourceId, out var name) ? name : "Unknown",
+                Date = d.Date,
+                BaselinePeriodId = d.BaselinePeriodId,
+                BaselinePeriodName = d.BaselinePeriodId.HasValue && periods.TryGetValue(d.BaselinePeriodId.Value, out var bpn) ? bpn : null,
+                NewPeriodId = d.NewPeriodId,
+                NewPeriodName = d.NewPeriodId.HasValue && periods.TryGetValue(d.NewPeriodId.Value, out var npn) ? npn : null,
+                BaselineWorkUnitId = d.BaselineWorkUnitId,
+                BaselineWorkUnitName = d.BaselineWorkUnitId.HasValue && workUnits.TryGetValue(d.BaselineWorkUnitId.Value, out var bwu) ? bwu : null,
+                NewWorkUnitId = d.NewWorkUnitId,
+                NewWorkUnitName = d.NewWorkUnitId.HasValue && workUnits.TryGetValue(d.NewWorkUnitId.Value, out var nwu) ? nwu : null,
+                DeviationType = d.DeviationType,
+                DeviationCost = d.DeviationCost,
+                Reason = d.Reason
+            }).ToList();
+
             var shouldShowDashboard = !entity.IsInfeasible && entity.Status == TourScheduleOptimizationStatus.Completed;
             var response = new TourScheduleOptimizationStatusResponse
             {
@@ -173,7 +227,8 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
                 Score = scoreResponse,
                 Mode = entity.Mode.ToString(),
                 BaselineOptimizationId = entity.BaselineOptimizationId,
-                TotalDeviations = entity.TotalDeviations
+                TotalDeviations = entity.TotalDeviations,
+                Deviations = responseDeviations
             };
 
             return Ok(response);
