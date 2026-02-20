@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Workforce.Domain.Core.HumanResourceManagement.Class.Entity;
+using Workforce.Domain.Core.WorkManagement.Class.Entity;
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.Class;
 
 namespace Workforce.Server.Controllers.Core.HumanResourceManagement.Class
@@ -19,7 +19,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.Class
         }
 
         [HttpGet("{id:int}", Name = "GetClassById")]
-        public async Task<ActionResult<Domain.Core.HumanResourceManagement.Class.Entity.Class>> GetByIdAsync(int id, CancellationToken ct = default)
+        public async Task<ActionResult<Domain.Core.WorkManagement.Class.Entity.Class>> GetByIdAsync(int id, CancellationToken ct = default)
         {
             var entity = await repository.GetByIdAsync(id, ct);
             if (entity == null) return NotFound();
@@ -27,21 +27,21 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.Class
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<IList<Domain.Core.HumanResourceManagement.Class.Entity.Class>>> GetAllAsync(CancellationToken ct = default)
+        public async Task<ActionResult<IList<Domain.Core.WorkManagement.Class.Entity.Class>>> GetAllAsync(CancellationToken ct = default)
         {
             var list = await repository.GetAllAsync(ct);
             return Ok(list);
         }
 
         [HttpGet("all/environment/{environmentId:int}")]
-        public async Task<ActionResult<IList<Domain.Core.HumanResourceManagement.Class.Entity.Class>>> GetAllByEnvironmentIdAsync(int environmentId, CancellationToken ct = default)
+        public async Task<ActionResult<IList<Domain.Core.WorkManagement.Class.Entity.Class>>> GetAllByEnvironmentIdAsync(int environmentId, CancellationToken ct = default)
         {
             var list = await repository.GetAllByEnvironmentIdAsync(environmentId, ct);
             return Ok(list);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Domain.Core.HumanResourceManagement.Class.Entity.Class>> InsertAsync([FromBody] Domain.Core.HumanResourceManagement.Class.Entity.Class entity, CancellationToken ct = default)
+        public async Task<ActionResult<Domain.Core.WorkManagement.Class.Entity.Class>> InsertAsync([FromBody] Domain.Core.WorkManagement.Class.Entity.Class entity, CancellationToken ct = default)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
             var inserted = await repository.InsertAsync(entity, ct);
@@ -49,7 +49,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.Class
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<Domain.Core.HumanResourceManagement.Class.Entity.Class>> UpdateAsync(int id, [FromBody] Domain.Core.HumanResourceManagement.Class.Entity.Class entity, CancellationToken ct = default)
+        public async Task<ActionResult<Domain.Core.WorkManagement.Class.Entity.Class>> UpdateAsync(int id, [FromBody] Domain.Core.WorkManagement.Class.Entity.Class entity, CancellationToken ct = default)
         {
             if (id != entity.Id) return BadRequest("Id mismatch");
             if (!ModelState.IsValid) return BadRequest(ModelState);

@@ -15,7 +15,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkAgreemen
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Domain.Core.HumanResourceManagement.WorkAgreement.Entity.WorkAgreement>> GetById(int id)
+        public async Task<ActionResult<Domain.Core.WorkManagement.WorkAgreement.Entity.WorkAgreement>> GetById(int id)
         {
             try
             {
@@ -33,7 +33,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkAgreemen
         }
 
         [HttpGet("environment/{environmentId}/{id}")]
-        public async Task<ActionResult<Domain.Core.HumanResourceManagement.WorkAgreement.Entity.WorkAgreement>> GetByEnvironmentIdAndId(int environmentId, int id)
+        public async Task<ActionResult<Domain.Core.WorkManagement.WorkAgreement.Entity.WorkAgreement>> GetByEnvironmentIdAndId(int environmentId, int id)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkAgreemen
         }
 
         [HttpGet("all/environment/{environmentId}")]
-        public async Task<ActionResult<IList<Domain.Core.HumanResourceManagement.WorkAgreement.Entity.WorkAgreement>>> GetAllByEnvironmentId(int environmentId)
+        public async Task<ActionResult<IList<Domain.Core.WorkManagement.WorkAgreement.Entity.WorkAgreement>>> GetAllByEnvironmentId(int environmentId)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkAgreemen
         }
 
         [HttpPost]
-        public async Task<ActionResult<Domain.Core.HumanResourceManagement.WorkAgreement.Entity.WorkAgreement>> Insert([FromBody] Domain.Core.HumanResourceManagement.WorkAgreement.Entity.WorkAgreement workAgreement)
+        public async Task<ActionResult<Domain.Core.WorkManagement.WorkAgreement.Entity.WorkAgreement>> Insert([FromBody] Domain.Core.WorkManagement.WorkAgreement.Entity.WorkAgreement workAgreement)
         {
             try
             {
@@ -89,7 +89,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkAgreemen
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Domain.Core.HumanResourceManagement.WorkAgreement.Entity.WorkAgreement>> Update(int id, [FromBody] Domain.Core.HumanResourceManagement.WorkAgreement.Entity.WorkAgreement workAgreement)
+        public async Task<ActionResult<Domain.Core.WorkManagement.WorkAgreement.Entity.WorkAgreement>> Update(int id, [FromBody] Domain.Core.WorkManagement.WorkAgreement.Entity.WorkAgreement workAgreement)
         {
             try
             {

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Workforce.Domain.Infra.Party.Entity;
 using Workforce.Realization.Infrastructure.Persistence.Infra.Party.Person;
 
