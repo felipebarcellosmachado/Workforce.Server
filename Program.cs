@@ -70,6 +70,8 @@ using Workforce.Realization.Infrastructure.Persistence.Core.LeaveManagement.Leav
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddServiceDefaults();
+
 // Add services to the container.
 builder.Services.AddRazorComponents()
       .AddInteractiveWebAssemblyComponents();
@@ -82,19 +84,17 @@ builder.Services.AddControllers()
     });
 builder.Services.AddRadzenComponents();
 
-// Configure Database Context
+// Configure Database Context - Aspire will provide connection string
 builder.Services.AddDbContext<WorkforceDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") ?? 
-                     "Host=localhost;Database=WorkforceDb;Username=postgres;Password=yourpassword"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Configure Hangfire
+// Configure Hangfire - Use Aspire connection string
 builder.Services.AddHangfire(configuration => configuration
     .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
     .UseSimpleAssemblyNameTypeSerializer()
     .UseRecommendedSerializerSettings()
     .UsePostgreSqlStorage(options => 
-        options.UseNpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection") ?? 
-                                   "Host=localhost;Database=WorkforceDb;Username=postgres;Password=yourpassword")));
+        options.UseNpgsqlConnection(builder.Configuration.GetConnectionString("DefaultConnection"))));
 
 // Adicionar o servidor do Hangfire
 builder.Services.AddHangfireServer();
@@ -376,6 +376,8 @@ builder.Services.AddRadzenCookieThemeService(options =>
 
 var app = builder.Build();
 
+app.MapDefaultEndpoints();
+
 // Configure Hangfire Dashboard
 app.UseHangfireDashboard("/hangfire", new DashboardOptions
 {
@@ -414,5 +416,7 @@ app.UseAntiforgery();
 app.MapRazorComponents<App>()
    .AddInteractiveWebAssemblyRenderMode()
    .AddAdditionalAssemblies(typeof(Workforce.Client._Imports).Assembly);
+
+app.MapDefaultEndpoints();
 
 app.Run();
