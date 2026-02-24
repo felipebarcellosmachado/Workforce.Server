@@ -15,10 +15,16 @@ window.WorkScheduleCalendar = (function () {
             delete _instances[elementId];
         }
 
-        const startDate = options.startDate ? new Date(options.startDate) : new Date();
+        // FIX: date-only strings (e.g. "2024-01-15") are parsed as UTC midnight by JS,
+        // which in UTC-3 becomes Jan 14 local time — shifting the visible week/day range.
+        const startDate = options.startDate
+            ? new Date(options.startDate + 'T00:00:00')
+            : new Date();
 
         const config = {
-            view: options.view || 'resourceTimelineWeek',
+            // Default to month view so the full schedule is visible on first open.
+            // User can switch to Week/Day from the toolbar.
+            view: options.view || 'resourceTimelineMonth',
             date: startDate,
             height: options.height || '620px',
             resources: options.resources || [],
@@ -38,7 +44,8 @@ window.WorkScheduleCalendar = (function () {
                 resourceTimelineMonth: 'Mês'
             },
             noEventsContent: 'Nenhuma escala encontrada',
-            slotWidth: options.slotWidth || 72,
+            // Smaller slot width for better day/week readability
+            slotWidth: options.slotWidth || 32,
             resourceAreaWidth: '220px',
             resourceAreaColumns: [
                 {
@@ -46,8 +53,6 @@ window.WorkScheduleCalendar = (function () {
                     headerContent: 'Horário / Funcionário'
                 }
             ],
-            slotMinTime: '00:00:00',
-            slotMaxTime: '24:00:00',
             eventClick: function (info) {
                 if (!dotNetRef) return;
                 const evt = info.event;
@@ -91,6 +96,19 @@ window.WorkScheduleCalendar = (function () {
         }
     }
 
+    // Forces a full layout recalculation — call after the host container
+    // transitions from hidden to visible (e.g. Radzen tab activated).
+    function refresh(elementId) {
+        const cal = _instances[elementId];
+        if (!cal) return;
+        try {
+            const currentView = cal.getOption('view');
+            cal.setOption('view', currentView);
+        } catch (ex) {
+            console.warn('[WorkScheduleCalendar] refresh error:', ex);
+        }
+    }
+
     function destroy(elementId) {
         if (_instances[elementId]) {
             _instances[elementId].destroy();
@@ -98,5 +116,5 @@ window.WorkScheduleCalendar = (function () {
         }
     }
 
-    return { init: init, setOption: setOption, destroy: destroy };
+    return { init, setOption, refresh, destroy };
 })();
