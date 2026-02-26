@@ -35,13 +35,24 @@ window.WorkScheduleCalendar = (function () {
             headerToolbar: {
                 start: 'prev,next today',
                 center: 'title',
-                end: 'resourceTimelineDay,resourceTimelineWeek,resourceTimelineMonth'
+                end: 'dayGridDay,dayGridWeek,dayGridMonth,listDay,listWeek,listMonth,listYear,resourceTimeGridDay,resourceTimeGridWeek,timeGridDay,timeGridWeek,resourceTimelineDay,resourceTimelineWeek,resourceTimelineMonth'
             },
             buttonText: {
                 today: 'Hoje',
-                resourceTimelineDay: 'Dia',
-                resourceTimelineWeek: 'Semana',
-                resourceTimelineMonth: 'Mês'
+                dayGridDay: 'Grade Dia',
+                dayGridWeek: 'Grade Semana',
+                dayGridMonth: 'Grade Mês',
+                listDay: 'Lista Dia',
+                listWeek: 'Lista Semana',
+                listMonth: 'Lista Mês',
+                listYear: 'Lista Ano',
+                resourceTimeGridDay: 'Recurso Grade Dia',
+                resourceTimeGridWeek: 'Recurso Grade Semana',
+                timeGridDay: 'Grade Dia',
+                timeGridWeek: 'Grade Semana',
+                resourceTimelineDay: 'Recurso Timeline Dia',
+                resourceTimelineWeek: 'Recurso Timeline Semana',
+                resourceTimelineMonth: 'Recurso Timeline Mês'
             },
             noEventsContent: 'Nenhuma escala encontrada',
             // Smaller slot width for better day/week readability
