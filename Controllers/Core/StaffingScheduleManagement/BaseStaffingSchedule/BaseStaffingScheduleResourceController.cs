@@ -193,7 +193,6 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.BaseStaff
                 else
                 {
                     var resource = CreateResourceFromOptions(options, options.NamePrefix);
-                    resource.Quantity = options.Count;
                     resource.MaxQuantity = options.Count;
                     resources.Add(resource);
                 }
@@ -214,17 +213,9 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.BaseStaff
                 BaseStaffingScheduleId = options.BaseStaffingScheduleId,
                 Name = name,
                 WorkingTimeId = options.WorkingTimeId,
-                JobTitleId = options.JobTitleId,
-                FunctionalUnitId = options.FunctionalUnitId,
-                ClassId = options.ClassId,
-                Quantity = 1,
                 MinQuantity = 0,
                 MaxQuantity = 1,
-                CostPerHour = options.CostPerHour,
-                OvertimeCostPerHour = options.OvertimeCostPerHour,
-                FixedMonthlyCost = options.FixedMonthlyCost,
                 AbsenteeismRate = options.AbsenteeismRate,
-                Priority = options.Priority,
                 IsActive = true
             };
 
