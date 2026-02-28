@@ -72,11 +72,6 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.BaseStaff
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(entity.Name))
-                {
-                    return BadRequest("Nome é obrigatório");
-                }
-
                 var insertedEntity = await repository.InsertAsync(entity, ct);
                 return Created($"/api/core/staffing-schedule-management/basestaffingscheduleresource/{insertedEntity.Id}", insertedEntity);
             }
@@ -165,85 +160,6 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.BaseStaff
             {
                 return StatusCode(500, $"Erro ao excluir Resources do BaseStaffingSchedule: {ex.Message}");
             }
-        }
-
-        /// <summary>
-        /// Gera recursos em lote a partir de opções configuráveis.
-        /// </summary>
-        [HttpPost("generate")]
-        public async Task<ActionResult<IList<BaseStaffingScheduleResource>>> GenerateAsync([FromBody] ResourceGenerationOptions options, CancellationToken ct = default)
-        {
-            try
-            {
-                if (options.Count <= 0)
-                {
-                    return BadRequest("Count deve ser maior que zero");
-                }
-
-                var resources = new List<BaseStaffingScheduleResource>();
-
-                if (options.IndividualProfiles)
-                {
-                    for (int i = 1; i <= options.Count; i++)
-                    {
-                        var resource = CreateResourceFromOptions(options, $"{options.NamePrefix} #{i}");
-                        resources.Add(resource);
-                    }
-                }
-                else
-                {
-                    var resource = CreateResourceFromOptions(options, options.NamePrefix);
-                    resource.MaxQuantity = options.Count;
-                    resources.Add(resource);
-                }
-
-                var insertedResources = await repository.InsertBatchAsync(resources, ct);
-                return Ok(insertedResources);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Erro ao gerar Resources em lote: {ex.Message}");
-            }
-        }
-
-        private static BaseStaffingScheduleResource CreateResourceFromOptions(ResourceGenerationOptions options, string name)
-        {
-            var resource = new BaseStaffingScheduleResource
-            {
-                BaseStaffingScheduleId = options.BaseStaffingScheduleId,
-                Name = name,
-                WorkingTimeId = options.WorkingTimeId,
-                MinQuantity = 0,
-                MaxQuantity = 1,
-                AbsenteeismRate = options.AbsenteeismRate,
-                IsActive = true
-            };
-
-            foreach (var skillId in options.SkillIds)
-            {
-                resource.Skills.Add(new BaseStaffingScheduleResourceSkill
-                {
-                    SkillId = skillId
-                });
-            }
-
-            foreach (var qualificationId in options.QualificationIds)
-            {
-                resource.Qualifications.Add(new BaseStaffingScheduleResourceQualification
-                {
-                    QualificationId = qualificationId
-                });
-            }
-
-            foreach (var behaviourId in options.BehaviourIds)
-            {
-                resource.Behaviours.Add(new BaseStaffingScheduleResourceBehaviour
-                {
-                    BehaviourId = behaviourId
-                });
-            }
-
-            return resource;
         }
     }
 }
