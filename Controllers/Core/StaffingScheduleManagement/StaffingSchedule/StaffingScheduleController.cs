@@ -169,5 +169,172 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
                 return StatusCode(500, $"Erro ao excluir StaffingSchedule: {ex.Message}");
             }
         }
+
+        // ─────────────────────────────────────────────────────────────────────
+        // Period
+        // ─────────────────────────────────────────────────────────────────────
+
+        [HttpPost("period")]
+        public async Task<ActionResult<StaffingSchedulePeriod>> InsertPeriodAsync([FromBody] StaffingSchedulePeriod period, CancellationToken ct = default)
+        {
+            try
+            {
+                if (period == null) return BadRequest("Dados do período são obrigatórios");
+                var inserted = await repository.InsertPeriodAsync(period, ct);
+                return Created($"/api/core/staffing-schedule-management/staffingschedule/period/{inserted.Id}", inserted);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao inserir StaffingSchedulePeriod: {ex.Message}");
+            }
+        }
+
+        [HttpPut("period/{id:int}")]
+        public async Task<ActionResult<StaffingSchedulePeriod>> UpdatePeriodAsync(int id, [FromBody] StaffingSchedulePeriod period, CancellationToken ct = default)
+        {
+            try
+            {
+                if (period == null) return BadRequest("Dados do período são obrigatórios");
+                if (id != period.Id) return BadRequest("ID não corresponde");
+                var updated = await repository.UpdatePeriodAsync(period, ct);
+                if (updated == null) return NotFound($"StaffingSchedulePeriod com ID {id} não encontrado");
+                return Ok(updated);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao atualizar StaffingSchedulePeriod: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("period/{id:int}")]
+        public async Task<ActionResult> DeletePeriodAsync(int id, CancellationToken ct = default)
+        {
+            try
+            {
+                var result = await repository.DeletePeriodAsync(id, ct);
+                if (!result) return NotFound($"StaffingSchedulePeriod com ID {id} não encontrado");
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao excluir StaffingSchedulePeriod: {ex.Message}");
+            }
+        }
+
+        // ─────────────────────────────────────────────────────────────────────
+        // Demand
+        // ─────────────────────────────────────────────────────────────────────
+
+        [HttpPost("demand")]
+        public async Task<ActionResult<StaffingScheduleDemand>> InsertDemandAsync([FromBody] StaffingScheduleDemand demand, CancellationToken ct = default)
+        {
+            try
+            {
+                if (demand == null) return BadRequest("Dados da demanda são obrigatórios");
+                var inserted = await repository.InsertDemandAsync(demand, ct);
+                return Created($"/api/core/staffing-schedule-management/staffingschedule/demand/{inserted.Id}", inserted);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao inserir StaffingScheduleDemand: {ex.Message}");
+            }
+        }
+
+        [HttpPut("demand/{id:int}")]
+        public async Task<ActionResult<StaffingScheduleDemand>> UpdateDemandAsync(int id, [FromBody] StaffingScheduleDemand demand, CancellationToken ct = default)
+        {
+            try
+            {
+                if (demand == null) return BadRequest("Dados da demanda são obrigatórios");
+                if (id != demand.Id) return BadRequest("ID não corresponde");
+                var updated = await repository.UpdateDemandAsync(demand, ct);
+                if (updated == null) return NotFound($"StaffingScheduleDemand com ID {id} não encontrado");
+                return Ok(updated);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao atualizar StaffingScheduleDemand: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("demand/{id:int}")]
+        public async Task<ActionResult> DeleteDemandAsync(int id, CancellationToken ct = default)
+        {
+            try
+            {
+                var result = await repository.DeleteDemandAsync(id, ct);
+                if (!result) return NotFound($"StaffingScheduleDemand com ID {id} não encontrado");
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao excluir StaffingScheduleDemand: {ex.Message}");
+            }
+        }
+
+        // ─────────────────────────────────────────────────────────────────────
+        // Resource
+        // ─────────────────────────────────────────────────────────────────────
+
+        [HttpPost("resource")]
+        public async Task<ActionResult<StaffingScheduleResource>> InsertResourceAsync([FromBody] StaffingScheduleResource resource, CancellationToken ct = default)
+        {
+            try
+            {
+                if (resource == null) return BadRequest("Dados do recurso são obrigatórios");
+                var inserted = await repository.InsertResourceAsync(resource, ct);
+                return Created($"/api/core/staffing-schedule-management/staffingschedule/resource/{inserted.Id}", inserted);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao inserir StaffingScheduleResource: {ex.Message}");
+            }
+        }
+
+        [HttpPut("resource/{id:int}")]
+        public async Task<ActionResult<StaffingScheduleResource>> UpdateResourceAsync(int id, [FromBody] StaffingScheduleResource resource, CancellationToken ct = default)
+        {
+            try
+            {
+                if (resource == null) return BadRequest("Dados do recurso são obrigatórios");
+                if (id != resource.Id) return BadRequest("ID não corresponde");
+                var updated = await repository.UpdateResourceAsync(resource, ct);
+                if (updated == null) return NotFound($"StaffingScheduleResource com ID {id} não encontrado");
+                return Ok(updated);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao atualizar StaffingScheduleResource: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("resource/{id:int}")]
+        public async Task<ActionResult> DeleteResourceAsync(int id, CancellationToken ct = default)
+        {
+            try
+            {
+                var result = await repository.DeleteResourceAsync(id, ct);
+                if (!result) return NotFound($"StaffingScheduleResource com ID {id} não encontrado");
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao excluir StaffingScheduleResource: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("{staffingScheduleId:int}/resources")]
+        public async Task<ActionResult> DeleteAllResourcesAsync(int staffingScheduleId, CancellationToken ct = default)
+        {
+            try
+            {
+                await repository.DeleteAllResourcesAsync(staffingScheduleId, ct);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao excluir Resources do StaffingSchedule: {ex.Message}");
+            }
+        }
     }
 }
