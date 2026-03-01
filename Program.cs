@@ -37,6 +37,7 @@ using Workforce.Services.Core.HumanResourceManagement.RiskFactor;
 using Workforce.Services.Core.TourScheduleManagement.BaseTourSchedule;
 using Workforce.Services.Core.TourScheduleManagement.TourSchedule;
 using Workforce.Services.Core.TourScheduleManagement.TourScheduleOptimization;
+using Workforce.Services.Core.StaffingScheduleManagement.StaffingScheduleOptimization;
 using Workforce.Services.Core.HumanResourceManagement.PairingManagement.PairingType;
 using Workforce.Services.Core.HumanResourceManagement.PairingManagement.Pairing;
 using Workforce.Services.Core.LeaveManagement.LeaveRequest;
@@ -48,6 +49,7 @@ using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagem
 using Workforce.Realization.Infrastructure.Persistence.Core.TourScheduleManagement.BaseTourSchedule.Repository;
 using Workforce.Realization.Infrastructure.Persistence.Core.TourScheduleManagement.TourSchedule.Repository;
 using Workforce.Realization.Infrastructure.Persistence.Core.TourScheduleManagement.TourScheduleOptimization;
+using Workforce.Realization.Infrastructure.Persistence.Core.StaffingScheduleManagement.StaffingScheduleOptimization;
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.PairingManagement.PairingType.Repository;
 using Workforce.Realization.Infrastructure.Persistence.Infra.Party.Organization;
 using Workforce.Realization.Infrastructure.Persistence.Infra.Party.Person;
@@ -250,6 +252,12 @@ builder.Services.AddScoped<Workforce.Services.Core.TourScheduleManagement.TourSc
     return new Workforce.Services.Core.TourScheduleManagement.TourScheduleOptimization.TourScheduleOptimizationService(httpClient);
 });
 
+builder.Services.AddScoped<IStaffingScheduleOptimizationService>(sp => 
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new StaffingScheduleOptimizationService(httpClient);
+});
+
 builder.Services.AddScoped<IPairingTypeService>(sp => 
 {
     var httpClient = sp.GetRequiredService<HttpClient>();
@@ -357,6 +365,9 @@ builder.Services.AddScoped<BaseTourScheduleDemandRepository>();
 builder.Services.AddScoped<BaseTourSchedulePeriodRepository>();
 builder.Services.AddScoped<TourScheduleRepository>();
 builder.Services.AddScoped<TourScheduleOptimizationRepository>();
+
+// Core - StaffingScheduleOptimization
+builder.Services.AddScoped<StaffingScheduleOptimizationRepository>();
 
 // Tour Schedule Services
 builder.Services.AddScoped<Workforce.Realization.Application.Core.TourScheduleManagement.Service.TourScheduleResourceDiagnosticService>();
