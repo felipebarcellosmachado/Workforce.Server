@@ -103,6 +103,7 @@ builder.Services.AddHangfireServer();
 
 // Registrar o serviço de background
 builder.Services.AddScoped<TourScheduleOptimizationBackgroundService>();
+builder.Services.AddScoped<StaffingScheduleOptimizationBackgroundService>();
 
 // Register Export Service
 builder.Services.AddScoped<Workforce.Server.Services.IExportService, Workforce.Server.Services.ExportService>();
