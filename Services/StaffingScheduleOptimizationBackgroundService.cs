@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Workforce.Domain.Core.StaffingScheduleManagement.StaffingScheduleOptimization.Dto;
@@ -29,7 +30,10 @@ namespace Workforce.Server.Services
 
         /// <summary>
         /// Executa a otimização de Staffing Schedule em background via Hangfire.
+        /// Attempts=0 evita retentativas automáticas para erros de validação de dados
+        /// (ex: StaffingSchedule sem Resources) que não são falhas transitórias.
         /// </summary>
+        [AutomaticRetry(Attempts = 0)]
         public async Task ProcessOptimizationAsync(StaffingScheduleOptimizationParameters parameters)
         {
             _logger.LogInformation(

@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Hangfire;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Workforce.Domain.Core.TourScheduleManagement.TourScheduleOptimization.Dto;
@@ -32,8 +33,11 @@ namespace Workforce.Server.Services
         /// <summary>
         /// Executa a otimização de Tour Schedule em background.
         /// Este método é invocado pelo Hangfire.
+        /// Attempts=0 evita retentativas automáticas para erros de validação de dados
+        /// que não são falhas transitórias.
         /// </summary>
         /// <param name="parameters">Parâmetros de otimização</param>
+        [AutomaticRetry(Attempts = 0)]
         public async Task ProcessOptimizationAsync(TourScheduleOptimizationParameters parameters)
         {
             _logger.LogInformation(
