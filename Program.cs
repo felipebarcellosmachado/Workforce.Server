@@ -34,6 +34,7 @@ using Workforce.Services.Infra.HumanResource.Skill;
 using Workforce.Services.Infra.HumanResource.CompetenceLevel;
 using Workforce.Services.Core.HumanResourceManagement.Tag;
 using Workforce.Services.Core.HumanResourceManagement.RiskFactor;
+using Workforce.Services.Core.ProjectManagement.Program;
 using Workforce.Services.Core.TourScheduleManagement.BaseTourSchedule;
 using Workforce.Services.Core.TourScheduleManagement.TourSchedule;
 using Workforce.Services.Core.TourScheduleManagement.TourScheduleOptimization;
@@ -235,6 +236,12 @@ builder.Services.AddScoped<IRiskFactorService>(sp =>
     return new RiskFactorService(httpClient);
 });
 
+builder.Services.AddScoped<IProgramService>(sp => 
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new ProgramService(httpClient);
+});
+
 builder.Services.AddScoped<IBaseTourScheduleService>(sp => 
 {
     var httpClient = sp.GetRequiredService<HttpClient>();
@@ -347,6 +354,9 @@ builder.Services.AddScoped<PairingRepository>();
 
 // Core - RiskFactor
 builder.Services.AddScoped<RiskFactorRepository>();
+
+// Core - ProjectManagement
+builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.ProjectManagement.Program.Repository.ProgramRepository>();
 
 // Core - Availability
 builder.Services.AddScoped<AvailabilityRepository>();
