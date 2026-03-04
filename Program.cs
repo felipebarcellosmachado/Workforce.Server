@@ -242,6 +242,12 @@ builder.Services.AddScoped<IProgramService>(sp =>
     return new ProgramService(httpClient);
 });
 
+builder.Services.AddScoped<Workforce.Services.Core.ProjectManagement.Activity.IActivityService>(sp => 
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new Workforce.Services.Core.ProjectManagement.Activity.ActivityService(httpClient);
+});
+
 builder.Services.AddScoped<IBaseTourScheduleService>(sp => 
 {
     var httpClient = sp.GetRequiredService<HttpClient>();
@@ -358,6 +364,7 @@ builder.Services.AddScoped<RiskFactorRepository>();
 // Core - ProjectManagement
 builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.ProjectManagement.Program.Repository.ProgramRepository>();
 builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.ProjectManagement.Project.Repository.ProjectRepository>();
+builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.ProjectManagement.Activity.Repository.ActivityRepository>();
 
 // Core - Availability
 builder.Services.AddScoped<AvailabilityRepository>();
