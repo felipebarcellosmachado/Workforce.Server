@@ -357,6 +357,7 @@ builder.Services.AddScoped<RiskFactorRepository>();
 
 // Core - ProjectManagement
 builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.ProjectManagement.Program.Repository.ProgramRepository>();
+builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.ProjectManagement.Project.Repository.ProjectRepository>();
 
 // Core - Availability
 builder.Services.AddScoped<AvailabilityRepository>();
