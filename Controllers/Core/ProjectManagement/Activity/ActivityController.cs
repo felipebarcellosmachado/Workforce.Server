@@ -133,5 +133,23 @@ namespace Workforce.Server.Controllers.Core.ProjectManagement.Activity
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        [HttpPut("{id:int}/predecessors")]
+        public async Task<ActionResult> UpdatePredecessorsAsync(int id, [FromBody] IList<int> predecessorIds, CancellationToken ct = default)
+        {
+            try
+            {
+                await activityRepository.UpdatePredecessorsAsync(id, predecessorIds, ct);
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
     }
 }

@@ -242,6 +242,12 @@ builder.Services.AddScoped<IProgramService>(sp =>
     return new ProgramService(httpClient);
 });
 
+builder.Services.AddScoped<Workforce.Services.Core.ProjectManagement.Project.IProjectService>(sp => 
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new Workforce.Services.Core.ProjectManagement.Project.ProjectService(httpClient);
+});
+
 builder.Services.AddScoped<Workforce.Services.Core.ProjectManagement.Activity.IActivityService>(sp => 
 {
     var httpClient = sp.GetRequiredService<HttpClient>();
