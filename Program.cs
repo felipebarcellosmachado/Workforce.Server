@@ -51,6 +51,8 @@ using Workforce.Realization.Infrastructure.Persistence.Core.TourScheduleManageme
 using Workforce.Realization.Infrastructure.Persistence.Core.TourScheduleManagement.TourSchedule.Repository;
 using Workforce.Realization.Infrastructure.Persistence.Core.TourScheduleManagement.TourScheduleOptimization;
 using Workforce.Realization.Infrastructure.Persistence.Core.StaffingScheduleManagement.StaffingScheduleOptimization;
+using Workforce.Realization.Infrastructure.Persistence.Core.ProjectScheduleManagement.ProjectScheduleOptimization;
+using Workforce.Services.Core.ProjectScheduleManagement.ProjectScheduleOptimization;
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.PairingManagement.PairingType.Repository;
 using Workforce.Realization.Infrastructure.Persistence.Infra.Party.Organization;
 using Workforce.Realization.Infrastructure.Persistence.Infra.Party.Person;
@@ -278,6 +280,12 @@ builder.Services.AddScoped<IStaffingScheduleOptimizationService>(sp =>
     return new StaffingScheduleOptimizationService(httpClient);
 });
 
+builder.Services.AddScoped<IProjectScheduleOptimizationService>(sp => 
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new ProjectScheduleOptimizationService(httpClient);
+});
+
 builder.Services.AddScoped<IPairingTypeService>(sp => 
 {
     var httpClient = sp.GetRequiredService<HttpClient>();
@@ -393,6 +401,9 @@ builder.Services.AddScoped<TourScheduleOptimizationRepository>();
 
 // Core - StaffingScheduleOptimization
 builder.Services.AddScoped<StaffingScheduleOptimizationRepository>();
+
+// Core - ProjectScheduleOptimization
+builder.Services.AddScoped<ProjectScheduleOptimizationRepository>();
 
 // Tour Schedule Services
 builder.Services.AddScoped<Workforce.Realization.Application.Core.TourScheduleManagement.Service.TourScheduleResourceDiagnosticService>();
