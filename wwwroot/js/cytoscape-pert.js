@@ -43,6 +43,16 @@ window.CytoscapePert = (function () {
             }
         },
         {
+            selector: 'node[?isSpecial]',
+            style: {
+                'background-color': '#78909c',
+                'border-color': '#546e7a',
+                'border-style': 'solid',
+                'font-style': 'italic',
+                'shape': 'ellipse'
+            }
+        },
+        {
             selector: 'edge',
             style: {
                 'width': 2,
