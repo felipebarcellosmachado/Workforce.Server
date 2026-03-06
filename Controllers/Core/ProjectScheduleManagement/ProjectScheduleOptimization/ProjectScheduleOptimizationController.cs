@@ -37,6 +37,13 @@ namespace Workforce.Server.Controllers.Core.ProjectScheduleManagement.ProjectSch
             return Ok(list);
         }
 
+        [HttpGet("all/environment/{environmentId:int}")]
+        public async Task<ActionResult<IList<Domain.Core.ProjectScheduleManagement.ProjectScheduleOptimization.Entity.ProjectScheduleOptimization>>> GetAllByEnvironmentIdAsync(int environmentId, CancellationToken ct = default)
+        {
+            var list = await repository.GetAllByEnvironmentIdAsync(environmentId, ct);
+            return Ok(list);
+        }
+
         [HttpGet("all/project/{projectId:int}")]
         public async Task<ActionResult<IList<Domain.Core.ProjectScheduleManagement.ProjectScheduleOptimization.Entity.ProjectScheduleOptimization>>> GetAllByProjectIdAsync(int projectId, CancellationToken ct = default)
         {
