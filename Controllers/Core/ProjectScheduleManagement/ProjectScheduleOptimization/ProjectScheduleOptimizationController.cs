@@ -172,6 +172,14 @@ namespace Workforce.Server.Controllers.Core.ProjectScheduleManagement.ProjectSch
             var updated = await repository.UpdateAsync(entity, ct);
             return Ok(updated);
         }
+
+        [HttpGet("{id:int}/dashboard", Name = "GetProjectScheduleOptimizationForDashboard")]
+        public async Task<ActionResult<Domain.Core.ProjectScheduleManagement.ProjectScheduleOptimization.Entity.ProjectScheduleOptimization>> GetByIdForDashboardAsync(int id, CancellationToken ct = default)
+        {
+            var entity = await repository.GetByIdWithAllocationsAsync(id, ct);
+            if (entity == null) return NotFound();
+            return Ok(entity);
+        }
     }
 }
 
