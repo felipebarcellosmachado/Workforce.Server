@@ -379,6 +379,7 @@ builder.Services.AddScoped<RiskFactorRepository>();
 builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.ProjectManagement.Program.Repository.ProgramRepository>();
 builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.ProjectManagement.Project.Repository.ProjectRepository>();
 builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.ProjectManagement.Activity.Repository.ActivityRepository>();
+builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.ProjectManagement.Activity.Repository.ActivityModeRepository>();
 
 // Core - Availability
 builder.Services.AddScoped<AvailabilityRepository>();
