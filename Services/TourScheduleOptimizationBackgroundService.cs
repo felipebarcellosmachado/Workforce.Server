@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Hangfire;
@@ -62,6 +63,12 @@ namespace Workforce.Server.Services
                     "Otimização não encontrada. OptimizationId: {OptimizationId}",
                     parameters.TourScheduleOptimizationId);
                 return;
+            }
+
+            // Se as opções não foram enviadas na chamada, restaurar as opções salvas na entidade
+            if (!string.IsNullOrEmpty(optimization.OptionsJson))
+            {
+                parameters.Options = JsonSerializer.Deserialize<TourScheduleOptimizationOptions>(optimization.OptionsJson);
             }
 
             try

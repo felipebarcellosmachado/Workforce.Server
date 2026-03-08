@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Workforce.Domain.Core.TourScheduleManagement.TourScheduleOptimization.Entity;
@@ -244,6 +245,17 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
             optimization.Status = TourScheduleOptimizationStatus.Pending;
             var updated = await repository.UpdateAsync(optimization, ct);
             return Ok(updated);
+        }
+
+        [HttpPut("{id:int}/options")]
+        public async Task<ActionResult> SaveOptionsAsync(int id, [FromBody] TourScheduleOptimizationOptions options, CancellationToken ct)
+        {
+            var optimization = await repository.GetByIdSingleAsync(id, ct);
+            if (optimization == null) return NotFound();
+
+            optimization.OptionsJson = JsonSerializer.Serialize(options);
+            await repository.UpdateAsync(optimization, ct);
+            return NoContent();
         }
 
         [HttpGet("{id:int}/diagnostics/resource-usage", Name = "GetResourceUsageDiagnostics")]
