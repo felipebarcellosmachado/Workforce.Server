@@ -304,6 +304,18 @@ builder.Services.AddScoped<Workforce.Services.Core.LeaveManagement.LeaveRequest.
     return new Workforce.Services.Core.LeaveManagement.LeaveRequest.LeaveRequestService(httpClient);
 });
 
+builder.Services.AddScoped<Workforce.Services.Core.LeaveManagement.LeaveTake.ILeaveTakeService>(sp =>
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new Workforce.Services.Core.LeaveManagement.LeaveTake.LeaveTakeService(httpClient);
+});
+
+builder.Services.AddScoped<Workforce.Services.Core.LeaveManagement.LeaveType.ILeaveTypeService>(sp =>
+{
+    var httpClient = sp.GetRequiredService<HttpClient>();
+    return new Workforce.Services.Core.LeaveManagement.LeaveType.LeaveTypeService(httpClient);
+});
+
 // State Management (for server-side compatibility)
 builder.Services.AddScoped<IAppState, AppState>();
 
