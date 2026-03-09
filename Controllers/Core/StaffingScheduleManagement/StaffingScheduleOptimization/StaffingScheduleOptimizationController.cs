@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Hangfire;
@@ -177,6 +178,17 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
             entity.Status = StaffingScheduleOptimizationStatus.Pending;
             var updated = await repository.UpdateAsync(entity, ct);
             return Ok(updated);
+        }
+
+        [HttpPut("{id:int}/options")]
+        public async Task<ActionResult> SaveOptionsAsync(int id, [FromBody] StaffingScheduleOptimizationOptions options, CancellationToken ct = default)
+        {
+            var entity = await repository.GetByIdSingleAsync(id, ct);
+            if (entity == null) return NotFound();
+
+            entity.OptionsJson = JsonSerializer.Serialize(options);
+            await repository.UpdateAsync(entity, ct);
+            return NoContent();
         }
     }
 }
