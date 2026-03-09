@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Hangfire;
@@ -186,6 +187,17 @@ namespace Workforce.Server.Controllers.Core.ProjectScheduleManagement.ProjectSch
             var entity = await repository.GetByIdWithAllocationsAsync(id, ct);
             if (entity == null) return NotFound();
             return Ok(entity);
+        }
+
+        [HttpPut("{id:int}/options")]
+        public async Task<ActionResult> SaveOptionsAsync(int id, [FromBody] ProjectScheduleOptimizationOptions options, CancellationToken ct = default)
+        {
+            var entity = await repository.GetByIdAsync(id, ct);
+            if (entity == null) return NotFound();
+
+            entity.OptionsJson = JsonSerializer.Serialize(options);
+            await repository.UpdateAsync(entity, ct);
+            return NoContent();
         }
     }
 }
