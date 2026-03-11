@@ -1,9 +1,9 @@
-// JS interop for Frappe Gantt chart
+// JS interop for Frappe Gantt chart – supports multiple named instances
 window.FrappeGantt = (function () {
     'use strict';
 
-    let _gantt = null;
-    let _viewMode = 'Week';
+    // { [elementId]: Gantt }
+    const _instances = {};
 
     function getLanguage() {
         const lang = document.documentElement.lang || navigator.language || 'en';
@@ -16,11 +16,11 @@ window.FrappeGantt = (function () {
 
     function showEmpty(el, message) {
         el.innerHTML = '<div style="display:flex;justify-content:center;align-items:center;height:100%;color:var(--rz-text-disabled-color,#9e9e9e);font-size:0.95rem;">' + message + '</div>';
-        _gantt = null;
+        delete _instances[el.id];
     }
 
     function init(elementId, tasks, viewMode) {
-        _viewMode = viewMode || 'Week';
+        const vMode = viewMode || 'Week';
         const el = document.getElementById(elementId);
         if (!el) {
             console.warn('[FrappeGantt] Container not found: #' + elementId);
@@ -28,7 +28,7 @@ window.FrappeGantt = (function () {
         }
 
         el.innerHTML = '';
-        _gantt = null;
+        delete _instances[elementId];
 
         if (!tasks || tasks.length === 0) {
             showEmpty(el, '–');
@@ -36,8 +36,8 @@ window.FrappeGantt = (function () {
         }
 
         try {
-            _gantt = new Gantt(el, tasks, {
-                view_mode: _viewMode,
+            _instances[elementId] = new Gantt(el, tasks, {
+                view_mode: vMode,
                 date_format: 'YYYY-MM-DD',
                 readonly: true,
                 language: getLanguage(),
@@ -51,21 +51,22 @@ window.FrappeGantt = (function () {
         }
     }
 
-    function update(tasks) {
-        if (!_gantt) return;
+    function update(elementId, tasks) {
+        const gantt = _instances[elementId];
+        if (!gantt) return;
         if (!tasks || tasks.length === 0) return;
         try {
-            _gantt.refresh(tasks);
+            gantt.refresh(tasks);
         } catch (err) {
             console.error('[FrappeGantt] update error:', err);
         }
     }
 
-    function setViewMode(mode) {
-        _viewMode = mode;
-        if (!_gantt) return;
+    function setViewMode(elementId, mode) {
+        const gantt = _instances[elementId];
+        if (!gantt) return;
         try {
-            _gantt.change_view_mode(mode);
+            gantt.change_view_mode(mode);
         } catch (err) {
             console.error('[FrappeGantt] setViewMode error:', err);
         }
