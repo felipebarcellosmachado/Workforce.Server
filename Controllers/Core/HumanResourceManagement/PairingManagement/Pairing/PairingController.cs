@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Domain.Core.HumanResourceManagement.PairingManagement.Pairing.Dto;
+using Workforce.Domain.Core.PairingManagement.Pairing.Dto;
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.PairingManagement.Pairing;
 
 namespace Workforce.Server.Controllers.Core.HumanResourceManagement.PairingManagement.Pairing
@@ -16,7 +16,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.PairingManag
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<Domain.Core.HumanResourceManagement.Pairing.Pairing.Entity.Pairing>> GetByIdAsync(int id, CancellationToken ct = default)
+        public async Task<ActionResult<Domain.Core.PairingManagement.Pairing.Entity.Pairing>> GetByIdAsync(int id, CancellationToken ct = default)
         {
             try
             {
@@ -34,7 +34,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.PairingManag
         }
 
         [HttpGet("environment/{environmentId:int}/{id:int}")]
-        public async Task<ActionResult<Domain.Core.HumanResourceManagement.Pairing.Pairing.Entity.Pairing>> GetByEnvironmentIdAndIdAsync(int environmentId, int id, CancellationToken ct = default)
+        public async Task<ActionResult<Domain.Core.PairingManagement.Pairing.Entity.Pairing>> GetByEnvironmentIdAndIdAsync(int environmentId, int id, CancellationToken ct = default)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.PairingManag
         }
 
         [HttpGet("all/environment/{environmentId:int}")]
-        public async Task<ActionResult<IList<Domain.Core.HumanResourceManagement.Pairing.Pairing.Entity.Pairing>>> GetAllByEnvironmentIdAsync(int environmentId, CancellationToken ct = default)
+        public async Task<ActionResult<IList<Domain.Core.PairingManagement.Pairing.Entity.Pairing>>> GetAllByEnvironmentIdAsync(int environmentId, CancellationToken ct = default)
         {
             try
             {
@@ -66,7 +66,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.PairingManag
         }
 
         [HttpGet("all")]
-        public async Task<ActionResult<IList<Domain.Core.HumanResourceManagement.Pairing.Pairing.Entity.Pairing>>> GetAllAsync(CancellationToken ct = default)
+        public async Task<ActionResult<IList<Domain.Core.PairingManagement.Pairing.Entity.Pairing>>> GetAllAsync(CancellationToken ct = default)
         {
             try
             {
@@ -108,7 +108,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.PairingManag
         }
 
         [HttpPost]
-        public async Task<ActionResult<Domain.Core.HumanResourceManagement.Pairing.Pairing.Entity.Pairing>> InsertAsync([FromBody] Domain.Core.HumanResourceManagement.Pairing.Pairing.Entity.Pairing pairing, CancellationToken ct = default)
+        public async Task<ActionResult<Domain.Core.PairingManagement.Pairing.Entity.Pairing>> InsertAsync([FromBody] Domain.Core.PairingManagement.Pairing.Entity.Pairing pairing, CancellationToken ct = default)
         {
             try
             {
@@ -126,7 +126,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.PairingManag
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<Domain.Core.HumanResourceManagement.Pairing.Pairing.Entity.Pairing>> UpdateAsync(int id, [FromBody] Domain.Core.HumanResourceManagement.Pairing.Pairing.Entity.Pairing pairing, CancellationToken ct = default)
+        public async Task<ActionResult<Domain.Core.PairingManagement.Pairing.Entity.Pairing>> UpdateAsync(int id, [FromBody] Domain.Core.PairingManagement.Pairing.Entity.Pairing pairing, CancellationToken ct = default)
         {
             try
             {
