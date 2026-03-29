@@ -36,6 +36,7 @@
     <ProjectReference Include="..\Workforce.Domain\Workforce.Domain.csproj" />
     <ProjectReference Include="..\Workforce.Realization\Workforce.Realization.csproj" />
     <ProjectReference Include="..\Workforce.ServiceDefaults\Workforce.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\Workforce.Services\Workforce.Services.csproj" />
   </ItemGroup>
 
   <ItemGroup>
