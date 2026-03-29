@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Workforce.Realization.Infrastructure.Persistence.Core.FacilityManagement.WorkUnit;
 
 namespace Workforce.Server.Controllers.Core.FacilityManagement.WorkUnit
 {
