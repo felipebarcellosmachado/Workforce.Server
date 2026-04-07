@@ -151,5 +151,25 @@ namespace Workforce.Server.Controllers.Core.ProjectManagement.Activity
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
+
+        [HttpPut("{id:int}/dates")]
+        public async Task<ActionResult> UpdateDatesAsync(int id, [FromBody] ActivityDatesDto dto, CancellationToken ct = default)
+        {
+            try
+            {
+                await activityRepository.UpdateDatesAsync(id, dto.StartDate, dto.EndDate, ct);
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        public record ActivityDatesDto(DateTime? StartDate, DateTime? EndDate);
     }
 }
