@@ -118,7 +118,9 @@ QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 builder.Services.AddLocalization();
 builder.Services.AddSingleton<Microsoft.Extensions.Localization.IStringLocalizer<Workforce.Client.Resources.SharedResources>>(provider =>
 {
-    return new Workforce.Client.Resources.LocalizedStrings();
+    var environment = provider.GetRequiredService<IWebHostEnvironment>();
+    var localizationPath = Path.Combine(environment.WebRootPath, "localization");
+    return new Workforce.Client.Resources.ServerJsonStringLocalizer(localizationPath);
 });
 builder.Services.AddScoped<Workforce.Client.Services.ICultureService, Workforce.Client.Services.CultureService>();
 
@@ -323,7 +325,8 @@ builder.Services.AddScoped<IAppState, AppState>();
 builder.Services.AddScoped<NavigationService>(sp =>
 {
     var localizer = sp.GetRequiredService<IStringLocalizer<SharedResources>>();
-    return new NavigationService(localizer);
+    var cultureService = sp.GetRequiredService<ICultureService>();
+    return new NavigationService(localizer, cultureService);
 });
 
 // Register Repositories from Workforce.Realization
