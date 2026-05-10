@@ -13,10 +13,10 @@ namespace Workforce.Server.Services
         byte[] ExportToExcel<T>(IEnumerable<T> data, Func<T, object[]> rowMapper, string[] headers, string sheetName);
         byte[] ExportToPdf<T>(IEnumerable<T> data, Func<T, object[]> rowMapper, string[] headers, string title, string subtitle = "");
 
-        /// <summary>Generates an Excel workbook with a schedule grid (Resources × Dates) similar to the HeatMap view.</summary>
+        /// <summary>Generates an Excel workbook with a schedule grid (Resources Ã— Dates) similar to the HeatMap view.</summary>
         byte[] ExportScheduleGridToExcel(List<ScheduleAppointmentDto> appointments, string title, string subtitle);
 
-        /// <summary>Generates a PDF document with a schedule grid (Resources × Dates) similar to the HeatMap view.</summary>
+        /// <summary>Generates a PDF document with a schedule grid (Resources Ã— Dates) similar to the HeatMap view.</summary>
         byte[] ExportScheduleGridToPdf(List<ScheduleAppointmentDto> appointments, string title, string subtitle);
     }
 
@@ -148,7 +148,7 @@ namespace Workforce.Server.Services
                     
                     page.Footer().AlignCenter().Text(text =>
                     {
-                        text.Span("Página ");
+                        text.Span("PÃ¡gina ");
                         text.CurrentPageNumber();
                         text.Span(" de ");
                         text.TotalPages();
@@ -186,7 +186,7 @@ namespace Workforce.Server.Services
             return value.ToString() ?? "";
         }
 
-        // ── Schedule-grid helpers ───────────────────────────────────────
+        // â”€â”€ Schedule-grid helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         private record GridCell(double Hours, int Count, string Period, string WorkUnit);
 
@@ -210,9 +210,9 @@ namespace Workforce.Server.Services
             return (resources, dates, cells);
         }
 
-        private static readonly string[] DayNames = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+        private static readonly string[] DayNames = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "SÃ¡b"];
 
-        // ── Excel grid export ───────────────────────────────────────────
+        // â”€â”€ Excel grid export â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         public byte[] ExportScheduleGridToExcel(List<ScheduleAppointmentDto> appointments, string title, string subtitle)
         {
@@ -280,10 +280,10 @@ namespace Workforce.Server.Services
 
                         if (!string.IsNullOrEmpty(grid.Period))
                         {
-                            dataCell.GetComment().AddText($"Período: {grid.Period}");
+                            dataCell.GetComment().AddText($"PerÃ­odo: {grid.Period}");
                             if (!string.IsNullOrEmpty(grid.WorkUnit))
                                 dataCell.GetComment().AddNewLine().AddText($"Unidade: {grid.WorkUnit}");
-                            dataCell.GetComment().AddNewLine().AddText($"Alocações: {grid.Count}");
+                            dataCell.GetComment().AddNewLine().AddText($"AlocaÃ§Ãµes: {grid.Count}");
                         }
 
                         // Intensity color (blue gradient based on hours)
@@ -337,7 +337,7 @@ namespace Workforce.Server.Services
             return stream.ToArray();
         }
 
-        // ── PDF grid export ─────────────────────────────────────────────
+        // â”€â”€ PDF grid export â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         public byte[] ExportScheduleGridToPdf(List<ScheduleAppointmentDto> appointments, string title, string subtitle)
         {
@@ -460,7 +460,7 @@ namespace Workforce.Server.Services
 
                     page.Footer().AlignCenter().Text(text =>
                     {
-                        text.Span("Página ").FontSize(8);
+                        text.Span("PÃ¡gina ").FontSize(8);
                         text.CurrentPageNumber().FontSize(8);
                         text.Span(" de ").FontSize(8);
                         text.TotalPages().FontSize(8);

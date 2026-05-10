@@ -28,7 +28,7 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.BaseStaff
 
                 if (entity == null)
                 {
-                    return NotFound($"BaseStaffingScheduleResource com ID {id} não encontrado");
+                    return NotFound($"BaseStaffingScheduleResource com ID {id} nÃ£o encontrado");
                 }
 
                 return Ok(entity);
@@ -92,7 +92,7 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.BaseStaff
             {
                 if (entities == null || entities.Count == 0)
                 {
-                    return BadRequest("Lista de recursos não pode estar vazia");
+                    return BadRequest("Lista de recursos nÃ£o pode estar vazia");
                 }
 
                 var insertedEntities = await repository.InsertBatchAsync(entities, ct);
@@ -113,7 +113,7 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.BaseStaff
 
                 if (updatedEntity == null)
                 {
-                    return NotFound($"BaseStaffingScheduleResource com ID {entity.Id} não encontrado");
+                    return NotFound($"BaseStaffingScheduleResource com ID {entity.Id} nÃ£o encontrado");
                 }
 
                 return Ok(updatedEntity);
@@ -137,7 +137,7 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.BaseStaff
 
                 if (!result)
                 {
-                    return NotFound($"BaseStaffingScheduleResource com ID {id} não encontrado");
+                    return NotFound($"BaseStaffingScheduleResource com ID {id} nÃ£o encontrado");
                 }
 
                 return NoContent();

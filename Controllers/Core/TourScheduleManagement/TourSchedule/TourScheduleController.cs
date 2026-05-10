@@ -28,7 +28,7 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourSchedule
 
                 if (entity == null)
                 {
-                    return NotFound($"TourSchedule com ID {id} n„o encontrado");
+                    return NotFound($"TourSchedule com ID {id} n√£o encontrado");
                 }
 
                 return Ok(entity);
@@ -76,12 +76,12 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourSchedule
 
                 if (entity == null)
                 {
-                    return NotFound($"TourSchedule com ID {id} n„o encontrado");
+                    return NotFound($"TourSchedule com ID {id} n√£o encontrado");
                 }
 
                 if (entity.EnvironmentId != environmentId)
                 {
-                    return NotFound($"TourSchedule com ID {id} n„o pertence ao Environment {environmentId}");
+                    return NotFound($"TourSchedule com ID {id} n√£o pertence ao Environment {environmentId}");
                 }
 
                 return Ok(entity);
@@ -99,7 +99,7 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourSchedule
             {
                 if (entity == null)
                 {
-                    return BadRequest("Dados da entidade s„o obrigatÛrios");
+                    return BadRequest("Dados da entidade s√£o obrigat√≥rios");
                 }
 
                 var insertedEntity = await repository.InsertAsync(entity, ct);
@@ -123,12 +123,12 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourSchedule
             {
                 if (entity == null)
                 {
-                    return BadRequest("Dados da entidade s„o obrigatÛrios");
+                    return BadRequest("Dados da entidade s√£o obrigat√≥rios");
                 }
 
                 if (id != entity.Id)
                 {
-                    return BadRequest("ID da rota n„o corresponde ao ID da entidade");
+                    return BadRequest("ID da rota n√£o corresponde ao ID da entidade");
                 }
 
                 // Log para debug
@@ -149,7 +149,7 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourSchedule
 
                 if (updatedEntity == null)
                 {
-                    return NotFound($"TourSchedule com ID {id} n„o encontrado");
+                    return NotFound($"TourSchedule com ID {id} n√£o encontrado");
                 }
 
                 Console.WriteLine($"TourScheduleController.UpdateAsync: Updated entity has {updatedEntity.Demands?.Count ?? 0} demands");
@@ -178,7 +178,7 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourSchedule
 
                 if (!result)
                 {
-                    return NotFound($"TourSchedule com ID {id} n„o encontrado");
+                    return NotFound($"TourSchedule com ID {id} n√£o encontrado");
                 }
 
                 return NoContent();

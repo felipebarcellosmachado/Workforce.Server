@@ -28,7 +28,7 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
 
                 if (entity == null)
                 {
-                    return NotFound($"StaffingSchedule com ID {id} não encontrado");
+                    return NotFound($"StaffingSchedule com ID {id} nÃ£o encontrado");
                 }
 
                 return Ok(entity);
@@ -76,12 +76,12 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
 
                 if (entity == null)
                 {
-                    return NotFound($"StaffingSchedule com ID {id} não encontrado");
+                    return NotFound($"StaffingSchedule com ID {id} nÃ£o encontrado");
                 }
 
                 if (entity.EnvironmentId != environmentId)
                 {
-                    return NotFound($"StaffingSchedule com ID {id} não pertence ao Environment {environmentId}");
+                    return NotFound($"StaffingSchedule com ID {id} nÃ£o pertence ao Environment {environmentId}");
                 }
 
                 return Ok(entity);
@@ -99,7 +99,7 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
             {
                 if (entity == null)
                 {
-                    return BadRequest("Dados da entidade são obrigatórios");
+                    return BadRequest("Dados da entidade sÃ£o obrigatÃ³rios");
                 }
 
                 var insertedEntity = await repository.InsertAsync(entity, ct);
@@ -123,19 +123,19 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
             {
                 if (entity == null)
                 {
-                    return BadRequest("Dados da entidade são obrigatórios");
+                    return BadRequest("Dados da entidade sÃ£o obrigatÃ³rios");
                 }
 
                 if (id != entity.Id)
                 {
-                    return BadRequest("ID da rota não corresponde ao ID da entidade");
+                    return BadRequest("ID da rota nÃ£o corresponde ao ID da entidade");
                 }
 
                 var updatedEntity = await repository.UpdateAsync(entity, ct);
 
                 if (updatedEntity == null)
                 {
-                    return NotFound($"StaffingSchedule com ID {id} não encontrado");
+                    return NotFound($"StaffingSchedule com ID {id} nÃ£o encontrado");
                 }
 
                 return Ok(updatedEntity);
@@ -159,7 +159,7 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
 
                 if (!result)
                 {
-                    return NotFound($"StaffingSchedule com ID {id} não encontrado");
+                    return NotFound($"StaffingSchedule com ID {id} nÃ£o encontrado");
                 }
 
                 return NoContent();
@@ -170,16 +170,16 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
             }
         }
 
-        // ─────────────────────────────────────────────────────────────────────
+        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         // Period
-        // ─────────────────────────────────────────────────────────────────────
+        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [HttpPost("period")]
         public async Task<ActionResult<StaffingSchedulePeriod>> InsertPeriodAsync([FromBody] StaffingSchedulePeriod period, CancellationToken ct = default)
         {
             try
             {
-                if (period == null) return BadRequest("Dados do período são obrigatórios");
+                if (period == null) return BadRequest("Dados do perÃ­odo sÃ£o obrigatÃ³rios");
                 var inserted = await repository.InsertPeriodAsync(period, ct);
                 return Created($"/api/core/staffing-schedule-management/staffingschedule/period/{inserted.Id}", inserted);
             }
@@ -194,10 +194,10 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
         {
             try
             {
-                if (period == null) return BadRequest("Dados do período são obrigatórios");
-                if (id != period.Id) return BadRequest("ID não corresponde");
+                if (period == null) return BadRequest("Dados do perÃ­odo sÃ£o obrigatÃ³rios");
+                if (id != period.Id) return BadRequest("ID nÃ£o corresponde");
                 var updated = await repository.UpdatePeriodAsync(period, ct);
-                if (updated == null) return NotFound($"StaffingSchedulePeriod com ID {id} não encontrado");
+                if (updated == null) return NotFound($"StaffingSchedulePeriod com ID {id} nÃ£o encontrado");
                 return Ok(updated);
             }
             catch (Exception ex)
@@ -212,7 +212,7 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
             try
             {
                 var result = await repository.DeletePeriodAsync(id, ct);
-                if (!result) return NotFound($"StaffingSchedulePeriod com ID {id} não encontrado");
+                if (!result) return NotFound($"StaffingSchedulePeriod com ID {id} nÃ£o encontrado");
                 return NoContent();
             }
             catch (Exception ex)
@@ -221,16 +221,16 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
             }
         }
 
-        // ─────────────────────────────────────────────────────────────────────
+        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         // Demand
-        // ─────────────────────────────────────────────────────────────────────
+        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [HttpPost("demand")]
         public async Task<ActionResult<StaffingScheduleDemand>> InsertDemandAsync([FromBody] StaffingScheduleDemand demand, CancellationToken ct = default)
         {
             try
             {
-                if (demand == null) return BadRequest("Dados da demanda são obrigatórios");
+                if (demand == null) return BadRequest("Dados da demanda sÃ£o obrigatÃ³rios");
                 var inserted = await repository.InsertDemandAsync(demand, ct);
                 return Created($"/api/core/staffing-schedule-management/staffingschedule/demand/{inserted.Id}", inserted);
             }
@@ -245,10 +245,10 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
         {
             try
             {
-                if (demand == null) return BadRequest("Dados da demanda são obrigatórios");
-                if (id != demand.Id) return BadRequest("ID não corresponde");
+                if (demand == null) return BadRequest("Dados da demanda sÃ£o obrigatÃ³rios");
+                if (id != demand.Id) return BadRequest("ID nÃ£o corresponde");
                 var updated = await repository.UpdateDemandAsync(demand, ct);
-                if (updated == null) return NotFound($"StaffingScheduleDemand com ID {id} não encontrado");
+                if (updated == null) return NotFound($"StaffingScheduleDemand com ID {id} nÃ£o encontrado");
                 return Ok(updated);
             }
             catch (Exception ex)
@@ -263,7 +263,7 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
             try
             {
                 var result = await repository.DeleteDemandAsync(id, ct);
-                if (!result) return NotFound($"StaffingScheduleDemand com ID {id} não encontrado");
+                if (!result) return NotFound($"StaffingScheduleDemand com ID {id} nÃ£o encontrado");
                 return NoContent();
             }
             catch (Exception ex)
@@ -272,16 +272,16 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
             }
         }
 
-        // ─────────────────────────────────────────────────────────────────────
+        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         // Resource
-        // ─────────────────────────────────────────────────────────────────────
+        // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
         [HttpPost("resource")]
         public async Task<ActionResult<StaffingScheduleResource>> InsertResourceAsync([FromBody] StaffingScheduleResource resource, CancellationToken ct = default)
         {
             try
             {
-                if (resource == null) return BadRequest("Dados do recurso são obrigatórios");
+                if (resource == null) return BadRequest("Dados do recurso sÃ£o obrigatÃ³rios");
                 var inserted = await repository.InsertResourceAsync(resource, ct);
                 return Created($"/api/core/staffing-schedule-management/staffingschedule/resource/{inserted.Id}", inserted);
             }
@@ -296,10 +296,10 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
         {
             try
             {
-                if (resource == null) return BadRequest("Dados do recurso são obrigatórios");
-                if (id != resource.Id) return BadRequest("ID não corresponde");
+                if (resource == null) return BadRequest("Dados do recurso sÃ£o obrigatÃ³rios");
+                if (id != resource.Id) return BadRequest("ID nÃ£o corresponde");
                 var updated = await repository.UpdateResourceAsync(resource, ct);
-                if (updated == null) return NotFound($"StaffingScheduleResource com ID {id} não encontrado");
+                if (updated == null) return NotFound($"StaffingScheduleResource com ID {id} nÃ£o encontrado");
                 return Ok(updated);
             }
             catch (Exception ex)
@@ -314,7 +314,7 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
             try
             {
                 var result = await repository.DeleteResourceAsync(id, ct);
-                if (!result) return NotFound($"StaffingScheduleResource com ID {id} não encontrado");
+                if (!result) return NotFound($"StaffingScheduleResource com ID {id} nÃ£o encontrado");
                 return NoContent();
             }
             catch (Exception ex)

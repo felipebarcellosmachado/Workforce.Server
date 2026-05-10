@@ -22,7 +22,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.HumanResourc
                 var humanResource = await _humanResourceRepository.GetById(id);
                 if (humanResource == null)
                 {
-                    return NotFound($"HumanResource com ID {id} n„o encontrado");
+                    return NotFound($"HumanResource com ID {id} n√£o encontrado");
                 }
                 return Ok(humanResource);
             }

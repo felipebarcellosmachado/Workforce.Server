@@ -7,8 +7,8 @@ using Workforce.Realization.Infrastructure.Persistence.Core.FacilityManagement.W
 namespace Workforce.Server.Controllers.Infra.Party
 {
     /// <summary>
-    /// Controller tempor·rio para execuÁ„o de scripts de dados
-    /// IMPORTANTE: Remover ou proteger apÛs uso em produÁ„o
+    /// Controller tempor√°rio para execu√ß√£o de scripts de dados
+    /// IMPORTANTE: Remover ou proteger ap√≥s uso em produ√ß√£o
     /// </summary>
     [ApiController]
     [Route("api/admin/[controller]")]
@@ -32,7 +32,7 @@ namespace Workforce.Server.Controllers.Infra.Party
         }
 
         /// <summary>
-        /// Executa o script de inserÁ„o de pessoas (agentes)
+        /// Executa o script de inser√ß√£o de pessoas (agentes)
         /// POST /api/admin/datascripts/insert-persons
         /// </summary>
         [HttpPost("insert-persons")]
@@ -43,7 +43,7 @@ namespace Workforce.Server.Controllers.Infra.Party
                 var script = new InsertPersonsScript(_personRepository);
                 var count = await script.ExecuteAsync();
 
-                _logger.LogInformation("Script de inserÁ„o de pessoas executado com sucesso. {Count} pessoas inseridas.", count);
+                _logger.LogInformation("Script de inser√ß√£o de pessoas executado com sucesso. {Count} pessoas inseridas.", count);
 
                 return Ok(new
                 {
@@ -54,7 +54,7 @@ namespace Workforce.Server.Controllers.Infra.Party
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Erro ao executar script de inserÁ„o de pessoas");
+                _logger.LogError(ex, "Erro ao executar script de inser√ß√£o de pessoas");
                 return StatusCode(500, new
                 {
                     success = false,
@@ -94,7 +94,7 @@ namespace Workforce.Server.Controllers.Infra.Party
         }
 
         /// <summary>
-        /// Executa o script de inserÁ„o de recursos humanos
+        /// Executa o script de inser√ß√£o de recursos humanos
         /// POST /api/admin/datascripts/insert-humanresources
         /// </summary>
         [HttpPost("insert-humanresources")]
@@ -105,7 +105,7 @@ namespace Workforce.Server.Controllers.Infra.Party
                 var script = new InsertHumanResourcesScript(_personRepository, _humanResourceRepository);
                 var count = await script.ExecuteAsync();
 
-                _logger.LogInformation("Script de inserÁ„o de recursos humanos executado com sucesso. {Count} recursos criados.", count);
+                _logger.LogInformation("Script de inser√ß√£o de recursos humanos executado com sucesso. {Count} recursos criados.", count);
 
                 return Ok(new
                 {
@@ -116,7 +116,7 @@ namespace Workforce.Server.Controllers.Infra.Party
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Erro ao executar script de inserÁ„o de recursos humanos");
+                _logger.LogError(ex, "Erro ao executar script de inser√ß√£o de recursos humanos");
                 return StatusCode(500, new
                 {
                     success = false,
@@ -156,7 +156,7 @@ namespace Workforce.Server.Controllers.Infra.Party
         }
 
         /// <summary>
-        /// Executa o script de inserÁ„o de WorkUnits
+        /// Executa o script de inser√ß√£o de WorkUnits
         /// POST /api/admin/datascripts/insert-workunits
         /// </summary>
         [HttpPost("insert-workunits")]
@@ -167,7 +167,7 @@ namespace Workforce.Server.Controllers.Infra.Party
                 var script = new InsertWorkUnitsScript(_workUnitRepository);
                 var count = await script.ExecuteAsync();
 
-                _logger.LogInformation("Script de inserÁ„o de WorkUnits executado com sucesso. {Count} WorkUnits inseridas.", count);
+                _logger.LogInformation("Script de inser√ß√£o de WorkUnits executado com sucesso. {Count} WorkUnits inseridas.", count);
 
                 return Ok(new
                 {
@@ -178,7 +178,7 @@ namespace Workforce.Server.Controllers.Infra.Party
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Erro ao executar script de inserÁ„o de WorkUnits");
+                _logger.LogError(ex, "Erro ao executar script de inser√ß√£o de WorkUnits");
                 return StatusCode(500, new
                 {
                     success = false,

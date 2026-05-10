@@ -23,7 +23,7 @@ namespace Workforce.Server.Controllers.Core.TourSchedule.Management.BaseTourSche
                 var baseTourScheduleTourSchedule = await repository.GetByIdAsync(id, ct);
                 if (baseTourScheduleTourSchedule == null)
                 {
-                    return NotFound($"BaseTourScheduleTourSchedule com ID {id} n„o encontrado");
+                    return NotFound($"BaseTourScheduleTourSchedule com ID {id} n√£o encontrado");
                 }
                 return Ok(baseTourScheduleTourSchedule);
             }
@@ -86,13 +86,13 @@ namespace Workforce.Server.Controllers.Core.TourSchedule.Management.BaseTourSche
             {
                 if (id != entity.Id)
                 {
-                    return BadRequest("ID da URL n„o corresponde ao ID do objeto");
+                    return BadRequest("ID da URL n√£o corresponde ao ID do objeto");
                 }
 
                 var updatedEntity = await repository.UpdateAsync(entity, ct);
                 if (updatedEntity == null)
                 {
-                    return NotFound($"BaseTourScheduleTourSchedule com ID {id} n„o encontrado");
+                    return NotFound($"BaseTourScheduleTourSchedule com ID {id} n√£o encontrado");
                 }
                 return Ok(updatedEntity);
             }
@@ -114,7 +114,7 @@ namespace Workforce.Server.Controllers.Core.TourSchedule.Management.BaseTourSche
                 var deleted = await repository.DeleteByIdAsync(id, ct);
                 if (!deleted)
                 {
-                    return NotFound($"BaseTourScheduleTourSchedule com ID {id} n„o encontrado");
+                    return NotFound($"BaseTourScheduleTourSchedule com ID {id} n√£o encontrado");
                 }
                 return NoContent();
             }

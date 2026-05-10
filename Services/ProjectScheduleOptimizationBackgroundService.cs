@@ -12,7 +12,7 @@ using Workforce.Realization.Infrastructure.Persistence.Core.ProjectScheduleManag
 namespace Workforce.Server.Services
 {
     /// <summary>
-    /// Serviço responsável por processar otimizações de Project Scheduling em background usando Hangfire.
+    /// ServiÃ§o responsÃ¡vel por processar otimizaÃ§Ãµes de Project Scheduling em background usando Hangfire.
     /// Paralelo a <c>StaffingScheduleOptimizationBackgroundService</c>.
     /// </summary>
     public class ProjectScheduleOptimizationBackgroundService
@@ -29,15 +29,15 @@ namespace Workforce.Server.Services
         }
 
         /// <summary>
-        /// Executa a otimização de Project Scheduling em background via Hangfire.
-        /// Attempts=0 evita retentativas automáticas para erros de validação de dados
-        /// (ex: projeto sem atividades) que não são falhas transitórias.
+        /// Executa a otimizaÃ§Ã£o de Project Scheduling em background via Hangfire.
+        /// Attempts=0 evita retentativas automÃ¡ticas para erros de validaÃ§Ã£o de dados
+        /// (ex: projeto sem atividades) que nÃ£o sÃ£o falhas transitÃ³rias.
         /// </summary>
         [AutomaticRetry(Attempts = 0)]
         public async Task ProcessOptimizationAsync(ProjectScheduleOptimizationParameters parameters)
         {
             _logger.LogInformation(
-                "Iniciando otimização de Project Scheduling em background. OptimizationId: {OptimizationId}",
+                "Iniciando otimizaÃ§Ã£o de Project Scheduling em background. OptimizationId: {OptimizationId}",
                 parameters.ProjectScheduleOptimizationId);
 
             using var scope = _serviceProvider.CreateScope();
@@ -55,13 +55,13 @@ namespace Workforce.Server.Services
                 await solverService.SolveAsync(parameters);
 
                 _logger.LogInformation(
-                    "Otimização de Project Scheduling concluída. OptimizationId: {OptimizationId}",
+                    "OtimizaÃ§Ã£o de Project Scheduling concluÃ­da. OptimizationId: {OptimizationId}",
                     parameters.ProjectScheduleOptimizationId);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex,
-                    "Erro ao processar otimização de Project Scheduling. OptimizationId: {OptimizationId}",
+                    "Erro ao processar otimizaÃ§Ã£o de Project Scheduling. OptimizationId: {OptimizationId}",
                     parameters.ProjectScheduleOptimizationId);
                 throw;
             }

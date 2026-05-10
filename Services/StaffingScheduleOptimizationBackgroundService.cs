@@ -12,7 +12,7 @@ using Workforce.Realization.Infrastructure.Persistence.Core.StaffingScheduleMana
 namespace Workforce.Server.Services
 {
     /// <summary>
-    /// Serviço responsável por processar otimizações de Staffing Schedule em background usando Hangfire.
+    /// ServiÃ§o responsÃ¡vel por processar otimizaÃ§Ãµes de Staffing Schedule em background usando Hangfire.
     /// Paralelo a <c>TourScheduleOptimizationBackgroundService</c>.
     /// </summary>
     public class StaffingScheduleOptimizationBackgroundService
@@ -29,15 +29,15 @@ namespace Workforce.Server.Services
         }
 
         /// <summary>
-        /// Executa a otimização de Staffing Schedule em background via Hangfire.
-        /// Attempts=0 evita retentativas automáticas para erros de validação de dados
-        /// (ex: StaffingSchedule sem Resources) que não são falhas transitórias.
+        /// Executa a otimizaÃ§Ã£o de Staffing Schedule em background via Hangfire.
+        /// Attempts=0 evita retentativas automÃ¡ticas para erros de validaÃ§Ã£o de dados
+        /// (ex: StaffingSchedule sem Resources) que nÃ£o sÃ£o falhas transitÃ³rias.
         /// </summary>
         [AutomaticRetry(Attempts = 0)]
         public async Task ProcessOptimizationAsync(StaffingScheduleOptimizationParameters parameters)
         {
             _logger.LogInformation(
-                "Iniciando otimização de Staffing em background. OptimizationId: {OptimizationId}",
+                "Iniciando otimizaÃ§Ã£o de Staffing em background. OptimizationId: {OptimizationId}",
                 parameters.StaffingScheduleOptimizationId);
 
             using var scope = _serviceProvider.CreateScope();
@@ -55,13 +55,13 @@ namespace Workforce.Server.Services
                 await solverService.SolveAsync(parameters);
 
                 _logger.LogInformation(
-                    "Otimização de Staffing concluída. OptimizationId: {OptimizationId}",
+                    "OtimizaÃ§Ã£o de Staffing concluÃ­da. OptimizationId: {OptimizationId}",
                     parameters.StaffingScheduleOptimizationId);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex,
-                    "Erro ao processar otimização de Staffing. OptimizationId: {OptimizationId}",
+                    "Erro ao processar otimizaÃ§Ã£o de Staffing. OptimizationId: {OptimizationId}",
                     parameters.StaffingScheduleOptimizationId);
                 throw;
             }

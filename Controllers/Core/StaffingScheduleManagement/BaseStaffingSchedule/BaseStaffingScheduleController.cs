@@ -28,7 +28,7 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.BaseStaff
                 
                 if (entity == null)
                 {
-                    return NotFound($"BaseStaffingSchedule com ID {id} não encontrado");
+                    return NotFound($"BaseStaffingSchedule com ID {id} nÃ£o encontrado");
                 }
 
                 return Ok(entity);
@@ -85,7 +85,7 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.BaseStaff
                 
                 if (entity == null || entity.EnvironmentId != environmentId)
                 {
-                    return NotFound($"BaseStaffingSchedule com ID {id} não encontrado no Environment {environmentId}");
+                    return NotFound($"BaseStaffingSchedule com ID {id} nÃ£o encontrado no Environment {environmentId}");
                 }
 
                 return Ok(entity);
@@ -103,7 +103,7 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.BaseStaff
             {
                 if (entity == null)
                 {
-                    return BadRequest("Dados da entidade são obrigatórios");
+                    return BadRequest("Dados da entidade sÃ£o obrigatÃ³rios");
                 }
 
                 var insertedEntity = await repository.InsertAsync(entity, ct);
@@ -127,19 +127,19 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.BaseStaff
             {
                 if (entity == null)
                 {
-                    return BadRequest("Dados da entidade são obrigatórios");
+                    return BadRequest("Dados da entidade sÃ£o obrigatÃ³rios");
                 }
 
                 if (id != entity.Id)
                 {
-                    return BadRequest("ID da rota não corresponde ao ID da entidade");
+                    return BadRequest("ID da rota nÃ£o corresponde ao ID da entidade");
                 }
 
                 var updatedEntity = await repository.UpdateAsync(entity, ct);
                 
                 if (updatedEntity == null)
                 {
-                    return NotFound($"BaseStaffingSchedule com ID {id} não encontrado");
+                    return NotFound($"BaseStaffingSchedule com ID {id} nÃ£o encontrado");
                 }
 
                 return Ok(updatedEntity);
@@ -163,7 +163,7 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.BaseStaff
                 
                 if (!result)
                 {
-                    return NotFound($"BaseStaffingSchedule com ID {id} não encontrado");
+                    return NotFound($"BaseStaffingSchedule com ID {id} nÃ£o encontrado");
                 }
 
                 return NoContent();

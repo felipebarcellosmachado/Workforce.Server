@@ -26,15 +26,15 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement
             {
                 var headers = new[] 
                 { 
-                    "Data Início", 
-                    "Hora Início", 
+                    "Data InÃ­cio", 
+                    "Hora InÃ­cio", 
                     "Data Fim", 
                     "Hora Fim", 
                     "Recurso", 
                     "Unidade de Trabalho", 
                     "Cargo", 
-                    "Período", 
-                    "Duração (horas)" 
+                    "PerÃ­odo", 
+                    "DuraÃ§Ã£o (horas)" 
                 };
 
                 var csvBytes = _exportService.ExportToCsv(

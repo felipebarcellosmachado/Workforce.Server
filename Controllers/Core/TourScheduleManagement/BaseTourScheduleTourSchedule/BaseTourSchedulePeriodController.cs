@@ -28,7 +28,7 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.BaseTourSched
                 
                 if (entity == null)
                 {
-                    return NotFound($"BaseTourSchedulePeriod com ID {id} n„o encontrado");
+                    return NotFound($"BaseTourSchedulePeriod com ID {id} n√£o encontrado");
                 }
 
                 return Ok(entity);
@@ -74,7 +74,7 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.BaseTourSched
             {
                 if (entity == null)
                 {
-                    return BadRequest("Dados da entidade s„o obrigatÛrios");
+                    return BadRequest("Dados da entidade s√£o obrigat√≥rios");
                 }
 
                 var insertedEntity = await repository.InsertAsync(entity, ct);
@@ -98,19 +98,19 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.BaseTourSched
             {
                 if (entity == null)
                 {
-                    return BadRequest("Dados da entidade s„o obrigatÛrios");
+                    return BadRequest("Dados da entidade s√£o obrigat√≥rios");
                 }
 
                 if (id != entity.Id)
                 {
-                    return BadRequest("ID da rota n„o corresponde ao ID da entidade");
+                    return BadRequest("ID da rota n√£o corresponde ao ID da entidade");
                 }
 
                 var updatedEntity = await repository.UpdateAsync(entity, ct);
                 
                 if (updatedEntity == null)
                 {
-                    return NotFound($"BaseTourSchedulePeriod com ID {id} n„o encontrado");
+                    return NotFound($"BaseTourSchedulePeriod com ID {id} n√£o encontrado");
                 }
 
                 return Ok(updatedEntity);
@@ -134,7 +134,7 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.BaseTourSched
                 
                 if (!result)
                 {
-                    return NotFound($"BaseTourSchedulePeriod com ID {id} n„o encontrado");
+                    return NotFound($"BaseTourSchedulePeriod com ID {id} n√£o encontrado");
                 }
 
                 return NoContent();

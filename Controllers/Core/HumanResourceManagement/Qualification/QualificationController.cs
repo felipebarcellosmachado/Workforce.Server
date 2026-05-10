@@ -23,7 +23,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.Qualificatio
                 var qualification = await _qualificationRepository.GetById(id);
                 if (qualification == null)
                 {
-                    return NotFound($"Qualification com ID {id} n„o encontrado");
+                    return NotFound($"Qualification com ID {id} n√£o encontrado");
                 }
                 return Ok(qualification);
             }
@@ -42,7 +42,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.Qualificatio
                 var qualification = await _qualificationRepository.GetById(id);
                 if (qualification == null || qualification.EnvironmentId != environmentId)
                 {
-                    return NotFound($"Qualification com ID {id} n„o encontrado para o Environment {environmentId}");
+                    return NotFound($"Qualification com ID {id} n√£o encontrado para o Environment {environmentId}");
                 }
                 return Ok(qualification);
             }
@@ -90,7 +90,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.Qualificatio
             {
                 if (id != qualification.Id)
                 {
-                    return BadRequest("ID da URL n„o corresponde ao ID do objeto");
+                    return BadRequest("ID da URL n√£o corresponde ao ID do objeto");
                 }
 
                 var updatedQualification = await _qualificationRepository.Update(qualification);
@@ -130,7 +130,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.Qualificatio
                 var deleted = await _qualificationRepository.DeleteById(id);
                 if (!deleted)
                 {
-                    return NotFound($"Qualification com ID {id} n„o encontrado");
+                    return NotFound($"Qualification com ID {id} n√£o encontrado");
                 }
                 return NoContent();
             }

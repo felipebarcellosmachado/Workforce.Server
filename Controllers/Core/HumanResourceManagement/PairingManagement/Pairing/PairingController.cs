@@ -23,7 +23,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.PairingManag
                 var pairing = await pairingRepository.GetByIdAsync(id, ct);
                 if (pairing == null)
                 {
-                    return NotFound($"Pairing com ID {id} n„o encontrado");
+                    return NotFound($"Pairing com ID {id} n√£o encontrado");
                 }
                 return Ok(pairing);
             }
@@ -41,7 +41,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.PairingManag
                 var pairing = await pairingRepository.GetByEnvironmentIdAndIdAsync(environmentId, id, ct);
                 if (pairing == null)
                 {
-                    return NotFound($"Pairing com ID {id} n„o encontrado para o Environment {environmentId}");
+                    return NotFound($"Pairing com ID {id} n√£o encontrado para o Environment {environmentId}");
                 }
                 return Ok(pairing);
             }
@@ -132,13 +132,13 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.PairingManag
             {
                 if (id != pairing.Id)
                 {
-                    return BadRequest("ID da URL n„o corresponde ao ID do objeto");
+                    return BadRequest("ID da URL n√£o corresponde ao ID do objeto");
                 }
 
                 var updatedPairing = await pairingRepository.UpdateAsync(pairing, ct);
                 if (updatedPairing == null)
                 {
-                    return NotFound($"Pairing com ID {id} n„o encontrado");
+                    return NotFound($"Pairing com ID {id} n√£o encontrado");
                 }
                 return Ok(updatedPairing);
             }
@@ -160,7 +160,7 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.PairingManag
                 var deleted = await pairingRepository.DeleteByIdAsync(id, ct);
                 if (!deleted)
                 {
-                    return NotFound($"Pairing com ID {id} n„o encontrado");
+                    return NotFound($"Pairing com ID {id} n√£o encontrado");
                 }
                 return NoContent();
             }

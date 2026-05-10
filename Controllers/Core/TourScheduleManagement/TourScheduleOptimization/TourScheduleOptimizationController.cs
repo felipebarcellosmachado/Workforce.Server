@@ -88,14 +88,14 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
             [FromBody] TourScheduleOptimizationParameters parameters,
             CancellationToken ct)
         {
-            // Buscar a otimizaÁ„o antes de enfileirar (SEM assignments para melhor performance)
+            // Buscar a otimiza√ß√£o antes de enfileirar (SEM assignments para melhor performance)
             var optimization = await repository.GetByIdSingleAsync(parameters.TourScheduleOptimizationId, ct);
             if (optimization == null)
             {
                 return NotFound(new { error = "Optimization not found" });
             }
 
-            // Definir status como Pending (ser· alterado para InProgress pelo background service)
+            // Definir status como Pending (ser√° alterado para InProgress pelo background service)
             optimization.Status = TourScheduleOptimizationStatus.Pending;
             await repository.UpdateAsync(optimization, ct);
 
@@ -136,7 +136,7 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
                 Message = v.Message
             }).ToList();
 
-            // Buscar score da otimizaÁ„o (primeiro score, se existir)
+            // Buscar score da otimiza√ß√£o (primeiro score, se existir)
             var score = entity.Scores?.FirstOrDefault();
             TourScheduleScoreResponse? scoreResponse = null;
             if (score != null)
@@ -169,7 +169,7 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
                 .Where(hr => humanResourceIds.Contains(hr.Id))
                 .ToDictionaryAsync(hr => hr.Id, hr => hr.Person?.Name ?? "Unknown", ct);
 
-            // Carregar nomes dos perÌodos envolvidos nos desvios
+            // Carregar nomes dos per√≠odos envolvidos nos desvios
             var periodIds = deviations
                 .SelectMany(d => new[] { d.BaselinePeriodId, d.NewPeriodId })
                 .Where(id => id.HasValue)
@@ -238,7 +238,7 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
         [HttpPost("{id:int}/reset-status")]
         public async Task<ActionResult<Domain.Core.TourScheduleManagement.TourScheduleOptimization.Entity.TourScheduleOptimization>> ResetStatusAsync(int id, CancellationToken ct)
         {
-            // Para reset de status, n„o precisamos dos assignments
+            // Para reset de status, n√£o precisamos dos assignments
             var optimization = await repository.GetByIdSingleAsync(id, ct);
             if (optimization == null) return NotFound();
 
@@ -261,31 +261,31 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
         [HttpGet("{id:int}/diagnostics/resource-usage", Name = "GetResourceUsageDiagnostics")]
         public async Task<ActionResult<string>> GetResourceUsageDiagnosticsAsync(int id, CancellationToken ct)
         {
-            Console.WriteLine($"[GetResourceUsageDiagnostics] Recebida requisiÁ„o para otimizaÁ„o ID: {id}");
+            Console.WriteLine($"[GetResourceUsageDiagnostics] Recebida requisi√ß√£o para otimiza√ß√£o ID: {id}");
 
             try
             {
-                // Validar que a otimizaÁ„o existe
-                Console.WriteLine($"[GetResourceUsageDiagnostics] Validando existÍncia da otimizaÁ„o {id}...");
+                // Validar que a otimiza√ß√£o existe
+                Console.WriteLine($"[GetResourceUsageDiagnostics] Validando exist√™ncia da otimiza√ß√£o {id}...");
                 var optimization = await repository.GetByIdSingleAsync(id, ct);
                 if (optimization == null)
                 {
-                    Console.WriteLine($"[GetResourceUsageDiagnostics] ? OtimizaÁ„o {id} N√O encontrada");
-                    return NotFound(new { error = $"OtimizaÁ„o {id} n„o encontrada" });
+                    Console.WriteLine($"[GetResourceUsageDiagnostics] ? Otimiza√ß√£o {id} N√ÉO encontrada");
+                    return NotFound(new { error = $"Otimiza√ß√£o {id} n√£o encontrada" });
                 }
 
-                Console.WriteLine($"[GetResourceUsageDiagnostics] ? OtimizaÁ„o {id} encontrada. Status: {optimization.Status}");
+                Console.WriteLine($"[GetResourceUsageDiagnostics] ? Otimiza√ß√£o {id} encontrada. Status: {optimization.Status}");
                 Console.WriteLine($"[GetResourceUsageDiagnostics] Chamando diagnosticService.GenerateDiagnosticReportAsync()...");
 
                 var report = await diagnosticService.GenerateDiagnosticReportAsync(id, ct);
 
-                Console.WriteLine($"[GetResourceUsageDiagnostics] ? RelatÛrio gerado com sucesso. Tamanho: {report.Length} caracteres");
+                Console.WriteLine($"[GetResourceUsageDiagnostics] ? Relat√≥rio gerado com sucesso. Tamanho: {report.Length} caracteres");
                 return Ok(report);
             }
             catch (Exception ex)
             {
                 // Log do erro no console do servidor
-                Console.WriteLine($"[GetResourceUsageDiagnostics] ? ERRO ao gerar diagnÛstico para otimizaÁ„o {id}:");
+                Console.WriteLine($"[GetResourceUsageDiagnostics] ? ERRO ao gerar diagn√≥stico para otimiza√ß√£o {id}:");
                 Console.WriteLine($"   Tipo: {ex.GetType().Name}");
                 Console.WriteLine($"   Mensagem: {ex.Message}");
                 Console.WriteLine($"   StackTrace: {ex.StackTrace}");
@@ -298,7 +298,7 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
 
                 return StatusCode(500, new 
                 { 
-                    error = "Erro ao gerar diagnÛstico",
+                    error = "Erro ao gerar diagn√≥stico",
                     message = ex.Message,
                     type = ex.GetType().Name,
                     details = "Verifique os logs do servidor para mais detalhes"

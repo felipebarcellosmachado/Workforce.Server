@@ -16,7 +16,7 @@ using Workforce.Realization.Infrastructure.Persistence.Core.TourScheduleManageme
 namespace Workforce.Server.Services
 {
     /// <summary>
-    /// Serviço responsável por processar otimizações de Tour Schedule em background usando Hangfire.
+    /// ServiÃ§o responsÃ¡vel por processar otimizaÃ§Ãµes de Tour Schedule em background usando Hangfire.
     /// </summary>
     public class TourScheduleOptimizationBackgroundService
     {
@@ -32,27 +32,27 @@ namespace Workforce.Server.Services
         }
 
         /// <summary>
-        /// Executa a otimização de Tour Schedule em background.
-        /// Este método é invocado pelo Hangfire.
-        /// Attempts=0 evita retentativas automáticas para erros de validação de dados
-        /// que não são falhas transitórias.
+        /// Executa a otimizaÃ§Ã£o de Tour Schedule em background.
+        /// Este mÃ©todo Ã© invocado pelo Hangfire.
+        /// Attempts=0 evita retentativas automÃ¡ticas para erros de validaÃ§Ã£o de dados
+        /// que nÃ£o sÃ£o falhas transitÃ³rias.
         /// </summary>
-        /// <param name="parameters">Parâmetros de otimização</param>
+        /// <param name="parameters">ParÃ¢metros de otimizaÃ§Ã£o</param>
         [AutomaticRetry(Attempts = 0)]
         public async Task ProcessOptimizationAsync(TourScheduleOptimizationParameters parameters)
         {
             _logger.LogInformation(
-                "Iniciando processamento de otimização em background. OptimizationId: {OptimizationId}",
+                "Iniciando processamento de otimizaÃ§Ã£o em background. OptimizationId: {OptimizationId}",
                 parameters.TourScheduleOptimizationId);
 
-            // Criar um scope para resolver dependências scoped
+            // Criar um scope para resolver dependÃªncias scoped
             using var scope = _serviceProvider.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<WorkforceDbContext>();
             var repository = scope.ServiceProvider.GetRequiredService<TourScheduleOptimizationRepository>();
             var tourScheduleRepository = scope.ServiceProvider.GetRequiredService<TourScheduleRepository>();
             var leaveTakeRepository = scope.ServiceProvider.GetRequiredService<LeaveTakeRepository>();
 
-            // Buscar a otimização
+            // Buscar a otimizaÃ§Ã£o
             var optimization = await repository.GetByIdSingleAsync(
                 parameters.TourScheduleOptimizationId,
                 CancellationToken.None);
@@ -60,12 +60,12 @@ namespace Workforce.Server.Services
             if (optimization == null)
             {
                 _logger.LogError(
-                    "Otimização não encontrada. OptimizationId: {OptimizationId}",
+                    "OtimizaÃ§Ã£o nÃ£o encontrada. OptimizationId: {OptimizationId}",
                     parameters.TourScheduleOptimizationId);
                 return;
             }
 
-            // Se as opções não foram enviadas na chamada, restaurar as opções salvas na entidade
+            // Se as opÃ§Ãµes nÃ£o foram enviadas na chamada, restaurar as opÃ§Ãµes salvas na entidade
             if (!string.IsNullOrEmpty(optimization.OptionsJson))
             {
                 parameters.Options = JsonSerializer.Deserialize<TourScheduleOptimizationOptions>(optimization.OptionsJson);
@@ -81,7 +81,7 @@ namespace Workforce.Server.Services
                     "Status atualizado para InProgress. OptimizationId: {OptimizationId}",
                     parameters.TourScheduleOptimizationId);
 
-                // Executar a otimização
+                // Executar a otimizaÃ§Ã£o
                 var solverService = new TourScheduleSolverService(
                     dbContext,
                     repository,
@@ -95,7 +95,7 @@ namespace Workforce.Server.Services
                 await repository.UpdateAsync(optimization, CancellationToken.None);
 
                 _logger.LogInformation(
-                    "Otimização concluída com sucesso. OptimizationId: {OptimizationId}, Assignments: {AssignmentCount}",
+                    "OtimizaÃ§Ã£o concluÃ­da com sucesso. OptimizationId: {OptimizationId}, Assignments: {AssignmentCount}",
                     parameters.TourScheduleOptimizationId,
                     assignments?.Count ?? 0);
             }
@@ -107,7 +107,7 @@ namespace Workforce.Server.Services
 
                 _logger.LogError(
                     ex,
-                    "Erro ao processar otimização. OptimizationId: {OptimizationId}",
+                    "Erro ao processar otimizaÃ§Ã£o. OptimizationId: {OptimizationId}",
                     parameters.TourScheduleOptimizationId);
 
                 throw; // Re-throw para que o Hangfire marque o job como falhado

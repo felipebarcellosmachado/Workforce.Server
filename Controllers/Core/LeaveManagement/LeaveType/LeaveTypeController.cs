@@ -23,7 +23,7 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveType
                 var leaveType = await repository.GetByIdAsync(id, ct);
                 if (leaveType == null)
                 {
-                    return NotFound($"LeaveType com ID {id} n„o encontrado");
+                    return NotFound($"LeaveType com ID {id} n√£o encontrado");
                 }
                 return Ok(leaveType);
             }
@@ -42,7 +42,7 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveType
                 var leaveType = await repository.GetByIdAsync(id, ct);
                 if (leaveType == null || leaveType.EnvironmentId != environmentId)
                 {
-                    return NotFound($"LeaveType com ID {id} n„o encontrado para o Environment {environmentId}");
+                    return NotFound($"LeaveType com ID {id} n√£o encontrado para o Environment {environmentId}");
                 }
                 return Ok(leaveType);
             }
@@ -114,7 +114,7 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveType
             {
                 if (id != leaveType.Id)
                 {
-                    return BadRequest("ID da URL n„o corresponde ao ID do objeto");
+                    return BadRequest("ID da URL n√£o corresponde ao ID do objeto");
                 }
 
                 if (!ModelState.IsValid)
@@ -125,7 +125,7 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveType
                 var updatedLeaveType = await repository.UpdateAsync(leaveType, ct);
                 if (updatedLeaveType == null)
                 {
-                    return NotFound($"LeaveType com ID {id} n„o encontrado");
+                    return NotFound($"LeaveType com ID {id} n√£o encontrado");
                 }
                 return Ok(updatedLeaveType);
             }
@@ -148,7 +148,7 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveType
                 var deleted = await repository.DeleteByIdAsync(id, ct);
                 if (!deleted)
                 {
-                    return NotFound($"LeaveType com ID {id} n„o encontrado");
+                    return NotFound($"LeaveType com ID {id} n√£o encontrado");
                 }
                 return NoContent();
             }

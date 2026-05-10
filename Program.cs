@@ -21,9 +21,9 @@ using Microsoft.Extensions.Localization;
 using Workforce.Client.Resources;
 using Workforce.Client.Services;
 using Workforce.Services.Core.FacilityManagement.WorkUnit;
-// using Workforce.Realization.Core.DemandManagement.DemandEstimative.Repository; // Comentado: namespace n„o existe
-// using Workforce.Realization.Core.DemandManagement.BaseDemandEstimative.Repository; // Comentado: namespace n„o existe
-// using Workforce.Realization.Core.WorkScheduleManagement.BaseWorkSchedule.Repository; // Comentado: namespace n„o existe
+// using Workforce.Realization.Core.DemandManagement.DemandEstimative.Repository; // Comentado: namespace n√£o existe
+// using Workforce.Realization.Core.DemandManagement.BaseDemandEstimative.Repository; // Comentado: namespace n√£o existe
+// using Workforce.Realization.Core.WorkScheduleManagement.BaseWorkSchedule.Repository; // Comentado: namespace n√£o existe
 using Workforce.Services.Core.HumanResourceManagement.WorkAgreement;
 using Workforce.Services.Core.HumanResourceManagement.JobTitle;
 using Workforce.Services.Core.HumanResourceManagement.WorkingTime;
@@ -104,7 +104,7 @@ builder.Services.AddHangfire(configuration => configuration
 // Adicionar o servidor do Hangfire
 builder.Services.AddHangfireServer();
 
-// Registrar o serviÁo de background
+// Registrar o servi√ßo de background
 builder.Services.AddScoped<TourScheduleOptimizationBackgroundService>();
 builder.Services.AddScoped<StaffingScheduleOptimizationBackgroundService>();
 
@@ -114,7 +114,7 @@ builder.Services.AddScoped<Workforce.Server.Services.IExportService, Workforce.S
 // Configure QuestPDF license (must be set once at startup)
 QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
-// ConfiguraÁ„o de LocalizaÁ„o para Server-side rendering
+// Configura√ß√£o de Localiza√ß√£o para Server-side rendering
 builder.Services.AddLocalization();
 builder.Services.AddSingleton<Microsoft.Extensions.Localization.IStringLocalizer<Workforce.Client.Resources.SharedResources>>(provider =>
 {
@@ -354,14 +354,14 @@ builder.Services.AddScoped<SkillRepository>();
 builder.Services.AddScoped<QualificationRepository>();
 builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.Tag.TagRepository>();
 
-// Core - DemandManagement - Comentado: namespaces n„o existem
+// Core - DemandManagement - Comentado: namespaces n√£o existem
 // builder.Services.AddScoped<DemandEstimativeRepository>();
 // builder.Services.AddScoped<BaseDemandEstimativeRepository>();
-// builder.Services.AddScoped<Workforce.RealizaÁ„o.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandRepository>();
-// builder.Services.AddScoped<Workforce.RealizaÁ„o.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandDayRepository>();
-// builder.Services.AddScoped<Workforce.RealizaÁ„o.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandPeriodRepository>();
+// builder.Services.AddScoped<Workforce.Realiza√ß√£o.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandRepository>();
+// builder.Services.AddScoped<Workforce.Realiza√ß√£o.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandDayRepository>();
+// builder.Services.AddScoped<Workforce.Realiza√ß√£o.Core.DemandManagement.BaseDemandEstimative.Repository.BaseDemandPeriodRepository>();
 
-// Core - WorkScheduleManagement - Comentado: namespace n„o existe
+// Core - WorkScheduleManagement - Comentado: namespace n√£o existe
 // builder.Services.AddScoped<BaseWorkScheduleRepository>();
 
 // Core - LeaveManagement

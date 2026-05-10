@@ -3,7 +3,7 @@ namespace Workforce.Server.Models
     public class ScheduleExportRequest
     {
         public List<ScheduleAppointmentDto> Appointments { get; set; } = new();
-        public string Title { get; set; } = "Visualização da Escala";
+        public string Title { get; set; } = "VisualizaÃ§Ã£o da Escala";
         public string Subtitle { get; set; } = "";
     }
 
