@@ -52,6 +52,14 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveRequest
             return Ok(leaveRequests);
         }
 
+        // Keep the generic CRUD route available when no environment has been
+        // restored yet. Environment-scoped callers should use the route above.
+        [HttpGet("all")]
+        public async Task<ActionResult<IList<Domain.Core.LeaveManagement.LeaveRequest.Entity.LeaveRequest>>> GetAllAsync(CancellationToken ct = default)
+        {
+            return Ok(await repository.GetAllAsync(ct));
+        }
+
         [HttpPost]
         public async Task<ActionResult<Domain.Core.LeaveManagement.LeaveRequest.Entity.LeaveRequest>> InsertAsync([FromBody] Domain.Core.LeaveManagement.LeaveRequest.Entity.LeaveRequest entity, CancellationToken ct = default)
         {

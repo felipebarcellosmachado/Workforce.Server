@@ -1,8 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using Workforce.Realization.Infrastructure.External.Db;
-using Radzen;
-using Workforce.Server.Components;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Workforce.Server.Services;
@@ -12,14 +9,10 @@ using Workforce.Services.Admin.Session;
 using Workforce.Services.Infra.Environment;
 using Workforce.Services.Infra.Party;
 using Workforce.Services.Infra.Profile;
-using Workforce.Client.State;
 using Workforce.Services.Infra.Role.User;
 using WorkUnitService = Workforce.Services.Core.FacilityManagement.WorkUnit.WorkUnitService;
 
 // Import localization
-using Microsoft.Extensions.Localization;
-using Workforce.Client.Resources;
-using Workforce.Client.Services;
 using Workforce.Services.Core.FacilityManagement.WorkUnit;
 // using Workforce.Realization.Core.DemandManagement.DemandEstimative.Repository; // Comentado: namespace não existe
 // using Workforce.Realization.Core.DemandManagement.BaseDemandEstimative.Repository; // Comentado: namespace não existe
@@ -77,18 +70,29 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-// Add services to the container.
-builder.Services.AddRazorComponents()
-      .AddInteractiveWebAssemblyComponents();
-
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
         options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
     });
-builder.Services.AddRadzenComponents();
 
+// Register the services required by the antiforgery middleware.
+builder.Services.AddAntiforgery();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("Frontend", policy =>
+    {
+        var allowedOrigins = builder.Configuration
+            .GetSection("Cors:AllowedOrigins")
+            .Get<string[]>() ?? [];
+
+        policy.WithOrigins(allowedOrigins)
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 // Configure Database Context - Aspire will provide connection string
 builder.Services.AddDbContext<WorkforceDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -113,221 +117,6 @@ builder.Services.AddScoped<Workforce.Server.Services.IExportService, Workforce.S
 
 // Configure QuestPDF license (must be set once at startup)
 QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
-
-// Configuração de Localização para Server-side rendering
-builder.Services.AddLocalization();
-builder.Services.AddSingleton<Microsoft.Extensions.Localization.IStringLocalizer<Workforce.Client.Resources.SharedResources>>(provider =>
-{
-    var environment = provider.GetRequiredService<IWebHostEnvironment>();
-    var localizationPath = Path.Combine(environment.WebRootPath, "localization");
-    return new Workforce.Client.Resources.ServerJsonStringLocalizer(localizationPath);
-});
-builder.Services.AddScoped<Workforce.Client.Services.ICultureService, Workforce.Client.Services.CultureService>();
-
-// Register HttpClient for server-side services with proper base address for prerendering
-// Use configuration to get base URL, fallback to localhost for development
-var baseUrl = builder.Configuration["BaseUrl"] ?? "https://localhost:6001/";
-builder.Services.AddHttpClient("ServerHttpClient", client =>
-{
-    client.BaseAddress = new Uri(baseUrl);
-});
-builder.Services.AddScoped(sp =>
-{
-    var httpClientFactory = sp.GetRequiredService<IHttpClientFactory>();
-    return httpClientFactory.CreateClient("ServerHttpClient");
-});
-// Register Server-side dummy services for static rendering (will be replaced by WebAssembly)
-// These are only used during the initial server-side render, not for actual functionality
-builder.Services.AddScoped<ISessionService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new SessionService(httpClient);
-});
-
-builder.Services.AddScoped<IEnvironmentService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new EnvironmentService(httpClient);
-});
-
-builder.Services.AddScoped<IPersonService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new PersonService(httpClient);
-});
-
-builder.Services.AddScoped<IOrganizationService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new OrganizationService(httpClient);
-});
-
-builder.Services.AddScoped<IProfileService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new ProfileService(httpClient);
-});
-
-builder.Services.AddScoped<IUserService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new UserService(httpClient);
-});
-
-builder.Services.AddScoped<IWorkUnitService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new WorkUnitService(httpClient);
-});
-
-builder.Services.AddScoped<IWorkAgreementService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new WorkAgreementService(httpClient);
-});
-
-builder.Services.AddScoped<IJobTitleService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new JobTitleService(httpClient);
-});
-
-builder.Services.AddScoped<IWorkingTimeService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new WorkingTimeService(httpClient);
-});
-
-builder.Services.AddScoped<IHumanResourceService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new HumanResourceService(httpClient);
-});
-
-builder.Services.AddScoped<IBehaviourService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new BehaviourService(httpClient);
-});
-
-builder.Services.AddScoped<IQualificationService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new QualificationService(httpClient);
-});
-
-builder.Services.AddScoped<ISkillService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new SkillService(httpClient);
-});
-
-builder.Services.AddScoped<ITagService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new TagService(httpClient);
-});
-
-builder.Services.AddScoped<ICompetenceLevelService>(sp =>
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new CompetenceLevelService(httpClient);
-});
-
-builder.Services.AddScoped<IRiskFactorService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new RiskFactorService(httpClient);
-});
-
-builder.Services.AddScoped<IProgramService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new ProgramService(httpClient);
-});
-
-builder.Services.AddScoped<Workforce.Services.Core.ProjectManagement.Project.IProjectService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new Workforce.Services.Core.ProjectManagement.Project.ProjectService(httpClient);
-});
-
-builder.Services.AddScoped<Workforce.Services.Core.ProjectManagement.Activity.IActivityService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new Workforce.Services.Core.ProjectManagement.Activity.ActivityService(httpClient);
-});
-
-builder.Services.AddScoped<IBaseTourScheduleService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new BaseTourScheduleService(httpClient);
-});
-
-builder.Services.AddScoped<ITourScheduleService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new TourScheduleService(httpClient);
-});
-
-builder.Services.AddScoped<Workforce.Services.Core.TourScheduleManagement.TourScheduleOptimization.ITourScheduleOptimizationService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new Workforce.Services.Core.TourScheduleManagement.TourScheduleOptimization.TourScheduleOptimizationService(httpClient);
-});
-
-builder.Services.AddScoped<IStaffingScheduleOptimizationService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new StaffingScheduleOptimizationService(httpClient);
-});
-
-builder.Services.AddScoped<IProjectScheduleOptimizationService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new ProjectScheduleOptimizationService(httpClient);
-});
-
-builder.Services.AddScoped<IPairingTypeService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new PairingTypeService(httpClient);
-});
-
-builder.Services.AddScoped<IPairingService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new PairingService(httpClient);
-});
-
-builder.Services.AddScoped<Workforce.Services.Core.LeaveManagement.LeaveRequest.ILeaveRequestService>(sp => 
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new Workforce.Services.Core.LeaveManagement.LeaveRequest.LeaveRequestService(httpClient);
-});
-
-builder.Services.AddScoped<Workforce.Services.Core.LeaveManagement.LeaveTake.ILeaveTakeService>(sp =>
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new Workforce.Services.Core.LeaveManagement.LeaveTake.LeaveTakeService(httpClient);
-});
-
-builder.Services.AddScoped<Workforce.Services.Core.LeaveManagement.LeaveType.ILeaveTypeService>(sp =>
-{
-    var httpClient = sp.GetRequiredService<HttpClient>();
-    return new Workforce.Services.Core.LeaveManagement.LeaveType.LeaveTypeService(httpClient);
-});
-
-// State Management (for server-side compatibility)
-builder.Services.AddScoped<IAppState, AppState>();
-
-// Register NavigationService for server-side rendering compatibility
-builder.Services.AddScoped<NavigationService>(sp =>
-{
-    var localizer = sp.GetRequiredService<IStringLocalizer<SharedResources>>();
-    var cultureService = sp.GetRequiredService<ICultureService>();
-    return new NavigationService(localizer, cultureService);
-});
 
 // Register Repositories from Workforce.Realization
 
@@ -431,15 +220,7 @@ builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core
 builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.StaffingScheduleManagement.BaseStaffingSchedule.Repository.BaseStaffingScheduleResourceRepository>();
 builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.StaffingScheduleManagement.StaffingSchedule.Repository.StaffingScheduleRepository>();
 
-builder.Services.AddRadzenCookieThemeService(options =>
-{
-    options.Name = "WorkforceTheme";
-    options.Duration = TimeSpan.FromDays(365);
-});
-
 var app = builder.Build();
-
-app.MapDefaultEndpoints();
 
 // Configure Hangfire Dashboard
 app.UseHangfireDashboard("/hangfire", new DashboardOptions
@@ -458,11 +239,7 @@ app.UseForwardedHeaders(forwardingOptions);
     
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseWebAssemblyDebugging();
-}
-else
+if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", createScopeForErrors: true);
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
@@ -470,16 +247,13 @@ else
 }
 
 app.UseHttpsRedirection();
-app.MapControllers();
-
-app.MapStaticAssets();
 app.UseStaticFiles();
+app.UseRouting();
+app.UseCors("Frontend");
 app.UseAntiforgery();
 
-app.MapRazorComponents<App>()
-   .AddInteractiveWebAssemblyRenderMode()
-   .AddAdditionalAssemblies(typeof(Workforce.Client._Imports).Assembly);
-
+app.MapControllers();
+app.MapStaticAssets();
 app.MapDefaultEndpoints();
 
 app.Run();
