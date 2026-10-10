@@ -154,6 +154,30 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.BaseStaff
             }
         }
 
+        [HttpPost("{id:int}/clone")]
+        public async Task<ActionResult<Domain.Core.StaffingScheduleManagement.BaseStaffingSchedule.Entity.BaseStaffingSchedule>> CloneAsync(int id, CancellationToken ct = default)
+        {
+            try
+            {
+                var clonedEntity = await repository.CloneAsync(id, ct);
+
+                if (clonedEntity == null)
+                {
+                    return NotFound($"BaseStaffingSchedule com ID {id} não encontrado");
+                }
+
+                return Created($"/api/core/staffing-schedule-management/basestaffingschedule/{clonedEntity.Id}", clonedEntity);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro interno ao clonar BaseStaffingSchedule: {ex.Message}");
+            }
+        }
+
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> DeleteByIdAsync(int id, CancellationToken ct = default)
         {
