@@ -222,6 +222,13 @@ builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core
 
 var app = builder.Build();
 
+// Garante aplicação das migrações pendentes antes de atender requisições
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<WorkforceDbContext>();
+    dbContext.Database.Migrate();
+}
+
 // Configure Hangfire Dashboard
 app.UseHangfireDashboard("/hangfire", new DashboardOptions
 {
