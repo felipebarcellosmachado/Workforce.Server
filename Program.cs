@@ -235,6 +235,11 @@ app.UseHangfireDashboard("/hangfire", new DashboardOptions
     Authorization = new[] { new HangfireAuthorizationFilter() }
 });
 
+// Limpa todos os jobs do Hangfire a cada inicializacao do programa.
+// Evita que jobs orfaos/pendentes de execucoes anteriores sejam reprocessados
+// com dados desatualizados ao subir a aplicacao.
+ClearHangfireJobs(app.Services.GetRequiredService<ILogger<Program>>());
+
 var forwardingOptions = new ForwardedHeadersOptions()
 {
     ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto
@@ -264,3 +269,62 @@ app.MapStaticAssets();
 app.MapDefaultEndpoints();
 
 app.Run();
+
+// Remove todos os jobs do Hangfire (enfileirados, agendados, em processamento,
+// falhos e aguardando) para evitar reprocessamento de execucoes antigas no startup.
+static void ClearHangfireJobs(ILogger logger)
+{
+    try
+    {
+        var monitoring = JobStorage.Current.GetMonitoringApi();
+
+        var deleted = 0;
+
+        // Enfileirados em cada fila
+        foreach (var queue in monitoring.Queues())
+        {
+            const int batch = 1000;
+            var fetched = monitoring.EnqueuedJobs(queue.Name, 0, batch);
+            foreach (var job in fetched)
+            {
+                if (BackgroundJob.Delete(job.Key))
+                {
+                    deleted++;
+                }
+            }
+        }
+
+        // Agendados
+        foreach (var job in monitoring.ScheduledJobs(0, int.MaxValue))
+        {
+            if (BackgroundJob.Delete(job.Key))
+            {
+                deleted++;
+            }
+        }
+
+        // Em processamento
+        foreach (var job in monitoring.ProcessingJobs(0, int.MaxValue))
+        {
+            if (BackgroundJob.Delete(job.Key))
+            {
+                deleted++;
+            }
+        }
+
+        // Falhos
+        foreach (var job in monitoring.FailedJobs(0, int.MaxValue))
+        {
+            if (BackgroundJob.Delete(job.Key))
+            {
+                deleted++;
+            }
+        }
+
+        logger.LogInformation("Hangfire: {Count} job(s) removido(s) na inicializacao.", deleted);
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Falha ao limpar os jobs do Hangfire na inicializacao.");
+    }
+}

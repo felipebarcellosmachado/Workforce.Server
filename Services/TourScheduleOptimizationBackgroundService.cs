@@ -65,23 +65,19 @@ namespace Workforce.Server.Services
                 return;
             }
 
-            // Se as opÃ§Ãµes nÃ£o foram enviadas na chamada, restaurar as opÃ§Ãµes salvas na entidade
-            if (!string.IsNullOrEmpty(optimization.OptionsJson))
+            // Usar as opções persistidas somente quando a chamada não trouxe opções.
+            // A UI envia as opções atuais; sobrescrevê-las aqui fazia a reotimização
+            // ignorar alterações feitas no diálogo de parâmetros.
+            if (parameters.Options == null && !string.IsNullOrEmpty(optimization.OptionsJson))
             {
                 parameters.Options = JsonSerializer.Deserialize<TourScheduleOptimizationOptions>(optimization.OptionsJson);
             }
 
             try
             {
-                // Atualizar status para InProgress
-                optimization.Status = TourScheduleOptimizationStatus.InProgress;
-                await repository.UpdateAsync(optimization, CancellationToken.None);
-
-                _logger.LogInformation(
-                    "Status atualizado para InProgress. OptimizationId: {OptimizationId}",
-                    parameters.TourScheduleOptimizationId);
-
-                // Executar a otimizaÃ§Ã£o
+                // Executar a otimizaÃ§Ã£o.
+                // O solver Ã© responsÃ¡vel por persistir status, violaÃ§Ãµes,
+                // diagnÃ³sticos e totais da otimizaÃ§Ã£o.
                 var solverService = new TourScheduleSolverService(
                     dbContext,
                     repository,
@@ -90,10 +86,6 @@ namespace Workforce.Server.Services
 
                 var assignments = await solverService.SolveAsync(parameters, CancellationToken.None);
 
-                // Atualizar status para Completed
-                optimization.Status = TourScheduleOptimizationStatus.Completed;
-                await repository.UpdateAsync(optimization, CancellationToken.None);
-
                 _logger.LogInformation(
                     "OtimizaÃ§Ã£o concluÃ­da com sucesso. OptimizationId: {OptimizationId}, Assignments: {AssignmentCount}",
                     parameters.TourScheduleOptimizationId,
@@ -101,9 +93,15 @@ namespace Workforce.Server.Services
             }
             catch (Exception ex)
             {
-                // Atualizar status para Failed
-                optimization.Status = TourScheduleOptimizationStatus.Failed;
-                await repository.UpdateAsync(optimization, CancellationToken.None);
+                var failedOptimization = await repository.GetByIdSingleAsync(
+                    parameters.TourScheduleOptimizationId,
+                    CancellationToken.None);
+
+                if (failedOptimization != null)
+                {
+                    failedOptimization.Status = TourScheduleOptimizationStatus.Failed;
+                    await repository.UpdateAsync(failedOptimization, CancellationToken.None);
+                }
 
                 _logger.LogError(
                     ex,
