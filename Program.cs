@@ -37,6 +37,7 @@ using Workforce.Services.Core.HumanResourceManagement.PairingManagement.Pairing;
 using Workforce.Services.Core.LeaveManagement.LeaveRequest;
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.RiskFactor;
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.WorkingTime;
+using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.WorkingTimeType;
 using Workforce.Realization.Infrastructure.Persistence.Core.LeaveManagement.LeaveTake;
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.HumanResource.Repository;
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.WorkAgreement.Repository;
@@ -168,6 +169,7 @@ builder.Services.AddScoped<WorkAgreementRepository>();
 // Infra - WorkingTime
 builder.Services.AddScoped<WorkingTimeRepository>();
 builder.Services.AddScoped<JourRepository>();
+builder.Services.AddScoped<WorkingTimeTypeRepository>();
 
 // Infra - WorkUnit
 builder.Services.AddScoped<WorkUnitRepository>();
