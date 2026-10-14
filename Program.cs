@@ -170,6 +170,7 @@ builder.Services.AddScoped<WorkAgreementRepository>();
 builder.Services.AddScoped<WorkingTimeRepository>();
 builder.Services.AddScoped<JourRepository>();
 builder.Services.AddScoped<WorkingTimeTypeRepository>();
+builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.StaffingScheduleManagement.StaffingScheduleType.Repository.StaffingScheduleTypeRepository>();
 
 // Infra - WorkUnit
 builder.Services.AddScoped<WorkUnitRepository>();
