@@ -240,6 +240,12 @@ app.UseHangfireDashboard("/hangfire", new DashboardOptions
 // com dados desatualizados ao subir a aplicacao.
 ClearHangfireJobs(app.Services.GetRequiredService<ILogger<Program>>());
 
+// Reseta no banco as otimizacoes que ficaram em estados nao-terminais
+// (Pending/InProgress) de execucoes anteriores. Como os jobs do Hangfire foram
+// removidos acima, esses registros sao orfaos e nunca mais seriam processados;
+// marca-os como Failed para que a UI nao os exiba como "Pending" indefinidamente.
+await ResetOrphanedOptimizationsAsync(app.Services, app.Services.GetRequiredService<ILogger<Program>>());
+
 var forwardingOptions = new ForwardedHeadersOptions()
 {
     ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedFor | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto
@@ -326,5 +332,47 @@ static void ClearHangfireJobs(ILogger logger)
     catch (Exception ex)
     {
         logger.LogError(ex, "Falha ao limpar os jobs do Hangfire na inicializacao.");
+    }
+}
+
+// Marca como Failed as otimizacoes que ficaram em estados nao-terminais
+// (Pending/InProgress) de execucoes anteriores. Os jobs correspondentes do Hangfire
+// ja foram removidos por ClearHangfireJobs, portanto esses registros sao orfaos e
+// nunca mais seriam processados. Sem este reset, a UI continuaria exibindo "Pending".
+static async Task ResetOrphanedOptimizationsAsync(IServiceProvider services, ILogger logger)
+{
+    try
+    {
+        using var scope = services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<WorkforceDbContext>();
+
+        var tourReset = await db.TourScheduleOptimizations
+            .Where(o => o.Status == Workforce.Domain.Core.TourScheduleManagement.TourScheduleOptimization.Entity.TourScheduleOptimizationStatus.Pending
+                     || o.Status == Workforce.Domain.Core.TourScheduleManagement.TourScheduleOptimization.Entity.TourScheduleOptimizationStatus.InProgress)
+            .ExecuteUpdateAsync(s => s.SetProperty(
+                o => o.Status,
+                Workforce.Domain.Core.TourScheduleManagement.TourScheduleOptimization.Entity.TourScheduleOptimizationStatus.Failed));
+
+        var staffingReset = await db.StaffingScheduleOptimizations
+            .Where(o => o.Status == Workforce.Domain.Core.StaffingScheduleManagement.StaffingScheduleOptimization.Entity.StaffingScheduleOptimizationStatus.Pending
+                     || o.Status == Workforce.Domain.Core.StaffingScheduleManagement.StaffingScheduleOptimization.Entity.StaffingScheduleOptimizationStatus.InProgress)
+            .ExecuteUpdateAsync(s => s.SetProperty(
+                o => o.Status,
+                Workforce.Domain.Core.StaffingScheduleManagement.StaffingScheduleOptimization.Entity.StaffingScheduleOptimizationStatus.Failed));
+
+        var projectReset = await db.ProjectScheduleOptimizations
+            .Where(o => o.Status == Workforce.Domain.Core.ProjectScheduleManagement.ProjectScheduleOptimization.Entity.ProjectScheduleOptimizationStatus.Pending
+                     || o.Status == Workforce.Domain.Core.ProjectScheduleManagement.ProjectScheduleOptimization.Entity.ProjectScheduleOptimizationStatus.InProgress)
+            .ExecuteUpdateAsync(s => s.SetProperty(
+                o => o.Status,
+                Workforce.Domain.Core.ProjectScheduleManagement.ProjectScheduleOptimization.Entity.ProjectScheduleOptimizationStatus.Failed));
+
+        logger.LogInformation(
+            "Otimizacoes orfas resetadas para Failed na inicializacao. Tour: {Tour}, Staffing: {Staffing}, Project: {Project}.",
+            tourReset, staffingReset, projectReset);
+    }
+    catch (Exception ex)
+    {
+        logger.LogError(ex, "Falha ao resetar otimizacoes orfas na inicializacao.");
     }
 }
