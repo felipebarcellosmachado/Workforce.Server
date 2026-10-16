@@ -45,6 +45,7 @@ using Workforce.Realization.Infrastructure.Persistence.Core.TourScheduleManageme
 using Workforce.Realization.Infrastructure.Persistence.Core.TourScheduleManagement.TourSchedule.Repository;
 using Workforce.Realization.Infrastructure.Persistence.Core.TourScheduleManagement.TourScheduleOptimization;
 using Workforce.Realization.Infrastructure.Persistence.Core.StaffingScheduleManagement.StaffingScheduleOptimization;
+using Workforce.Realization.Application.Core.StaffingScheduleManagement.Service;
 using Workforce.Realization.Infrastructure.Persistence.Core.ProjectScheduleManagement.ProjectScheduleOptimization;
 using Workforce.Services.Core.ProjectScheduleManagement.ProjectScheduleOptimization;
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.PairingManagement.PairingType.Repository;
@@ -112,6 +113,8 @@ builder.Services.AddHangfireServer();
 // Registrar o serviço de background
 builder.Services.AddScoped<TourScheduleOptimizationBackgroundService>();
 builder.Services.AddScoped<StaffingScheduleOptimizationBackgroundService>();
+builder.Services.AddScoped<IStaffingScheduleComparisonService, StaffingScheduleComparisonService>();
+builder.Services.AddScoped<IStaffingScheduleComparisonNarrativeEnricher, NullStaffingScheduleComparisonNarrativeEnricher>();
 
 // Register Export Service
 builder.Services.AddScoped<Workforce.Server.Services.IExportService, Workforce.Server.Services.ExportService>();

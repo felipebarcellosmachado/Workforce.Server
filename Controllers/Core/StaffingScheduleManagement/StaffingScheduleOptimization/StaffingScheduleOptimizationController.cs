@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Hangfire;
 using Workforce.Domain.Core.StaffingScheduleManagement.StaffingScheduleOptimization.Dto;
 using Workforce.Domain.Core.StaffingScheduleManagement.StaffingScheduleOptimization.Entity;
+using Workforce.Realization.Application.Core.StaffingScheduleManagement.Service;
 using Workforce.Realization.Infrastructure.Persistence.Core.StaffingScheduleManagement.StaffingScheduleOptimization;
 using Workforce.Server.Services;
 
@@ -17,10 +18,70 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
     public class StaffingScheduleOptimizationController : ControllerBase
     {
         private readonly StaffingScheduleOptimizationRepository repository;
+        private readonly IStaffingScheduleComparisonService comparisonService;
+        private readonly IStaffingScheduleComparisonNarrativeEnricher narrativeEnricher;
 
-        public StaffingScheduleOptimizationController(StaffingScheduleOptimizationRepository repository)
+        public StaffingScheduleOptimizationController(
+            StaffingScheduleOptimizationRepository repository,
+            IStaffingScheduleComparisonService comparisonService,
+            IStaffingScheduleComparisonNarrativeEnricher narrativeEnricher)
         {
             this.repository = repository;
+            this.comparisonService = comparisonService;
+            this.narrativeEnricher = narrativeEnricher;
+        }
+
+        [HttpGet("compare/{optimizationAId:int}/{optimizationBId:int}")]
+        public async Task<ActionResult<StaffingScheduleComparisonResult>> CompareAsync(
+            int optimizationAId,
+            int optimizationBId,
+            CancellationToken ct = default)
+        {
+            if (optimizationAId == optimizationBId)
+                return BadRequest("As otimizações devem ser diferentes.");
+
+            try
+            {
+                return Ok(await comparisonService.CompareAsync(optimizationAId, optimizationBId, ct));
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("compare/narrative")]
+        public async Task<ActionResult<StaffingScheduleComparisonNarrativeResponse>> EnrichNarrativeAsync(
+            [FromBody] StaffingScheduleComparisonNarrativeRequest request,
+            CancellationToken ct = default)
+        {
+            if (request?.Comparison == null)
+                return BadRequest();
+
+            if (!narrativeEnricher.IsEnabled)
+            {
+                return Ok(new StaffingScheduleComparisonNarrativeResponse
+                {
+                    Enabled = false,
+                    Message = "O enriquecimento por IA não está configurado."
+                });
+            }
+
+            var narrative = await narrativeEnricher.EnrichAsync(request.Comparison, ct);
+            return Ok(new StaffingScheduleComparisonNarrativeResponse
+            {
+                Enabled = true,
+                GeneratedByLlm = narrative != null,
+                Narrative = narrative
+            });
         }
 
         [HttpGet("{id:int}", Name = "GetStaffingScheduleOptimizationById")]
