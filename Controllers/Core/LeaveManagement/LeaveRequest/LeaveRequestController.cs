@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Workforce.Realization.Infrastructure.Persistence.Core.LeaveManagement.LeaveRequest;
+using Workforce.Domain.Core.LeaveManagement.LeaveRequest.Enum;
 
 namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveRequest
 {
@@ -25,6 +26,27 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveRequest
             }
 
             return Ok(leaveRequest);
+        }
+
+        [HttpPost("{id:int}/approve")]
+        public Task<ActionResult<Domain.Core.LeaveManagement.LeaveRequest.Entity.LeaveRequest>> ApproveAsync(int id, CancellationToken ct = default) =>
+            UpdateStatusAsync(id, LeaveRequestStatus.Approved, ct);
+
+        [HttpPost("{id:int}/reject")]
+        public Task<ActionResult<Domain.Core.LeaveManagement.LeaveRequest.Entity.LeaveRequest>> RejectAsync(int id, CancellationToken ct = default) =>
+            UpdateStatusAsync(id, LeaveRequestStatus.Rejected, ct);
+
+        [HttpPost("{id:int}/cancel")]
+        public Task<ActionResult<Domain.Core.LeaveManagement.LeaveRequest.Entity.LeaveRequest>> CancelAsync(int id, CancellationToken ct = default) =>
+            UpdateStatusAsync(id, LeaveRequestStatus.Cancelled, ct);
+
+        private async Task<ActionResult<Domain.Core.LeaveManagement.LeaveRequest.Entity.LeaveRequest>> UpdateStatusAsync(
+            int id,
+            LeaveRequestStatus status,
+            CancellationToken ct)
+        {
+            var updatedEntity = await repository.UpdateStatusAsync(id, status, ct);
+            return updatedEntity == null ? NotFound() : Ok(updatedEntity);
         }
 
         [HttpGet("environment/{environmentId:int}/{id:int}")]
@@ -67,6 +89,9 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveRequest
             {
                 return BadRequest(ModelState);
             }
+
+            entity.Status = LeaveRequestStatus.Required;
+            entity.EvaluationDate = null;
 
             var insertedEntity = await repository.InsertAsync(entity, ct);
             
