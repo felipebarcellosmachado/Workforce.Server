@@ -40,13 +40,24 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveRequest
         public Task<ActionResult<Domain.Core.LeaveManagement.LeaveRequest.Entity.LeaveRequest>> CancelAsync(int id, CancellationToken ct = default) =>
             UpdateStatusAsync(id, LeaveRequestStatus.Cancelled, ct);
 
+        [HttpPost("{id:int}/reopen")]
+        public Task<ActionResult<Domain.Core.LeaveManagement.LeaveRequest.Entity.LeaveRequest>> ReopenAsync(int id, CancellationToken ct = default) =>
+            UpdateStatusAsync(id, LeaveRequestStatus.Required, ct);
+
         private async Task<ActionResult<Domain.Core.LeaveManagement.LeaveRequest.Entity.LeaveRequest>> UpdateStatusAsync(
             int id,
             LeaveRequestStatus status,
             CancellationToken ct)
         {
-            var updatedEntity = await repository.UpdateStatusAsync(id, status, ct);
-            return updatedEntity == null ? NotFound() : Ok(updatedEntity);
+            try
+            {
+                var updatedEntity = await repository.UpdateStatusAsync(id, status, ct);
+                return updatedEntity == null ? NotFound() : Ok(updatedEntity);
+            }
+            catch (InvalidOperationException exception)
+            {
+                return Conflict(new { message = exception.Message });
+            }
         }
 
         [HttpGet("environment/{environmentId:int}/{id:int}")]
@@ -93,9 +104,15 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveRequest
             entity.Status = LeaveRequestStatus.Required;
             entity.EvaluationDate = null;
 
-            var insertedEntity = await repository.InsertAsync(entity, ct);
-            
-            return Created($"{Request.Path}/{insertedEntity.Id}", insertedEntity);
+            try
+            {
+                var insertedEntity = await repository.InsertAsync(entity, ct);
+                return Created($"{Request.Path}/{insertedEntity.Id}", insertedEntity);
+            }
+            catch (InvalidOperationException exception)
+            {
+                return BadRequest(new { message = exception.Message });
+            }
         }
 
         [HttpPut("{id:int}")]
@@ -111,14 +128,15 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveRequest
                 return BadRequest();
             }
 
-            var updatedEntity = await repository.UpdateAsync(entity, ct);
-            
-            if (updatedEntity == null)
+            try
             {
-                return NotFound();
+                var updatedEntity = await repository.UpdateAsync(entity, ct);
+                return updatedEntity == null ? NotFound() : Ok(updatedEntity);
             }
-
-            return Ok(updatedEntity);
+            catch (InvalidOperationException exception)
+            {
+                return BadRequest(new { message = exception.Message });
+            }
         }
 
         [HttpDelete("{id:int}")]

@@ -60,9 +60,15 @@ namespace Workforce.Server.Controllers.Core.LeaveManagement.LeaveTake
                 return BadRequest(ModelState);
             }
 
-            var insertedEntity = await repository.InsertAsync(entity, ct);
-            
-            return Created($"{Request.Path}/{insertedEntity.Id}", insertedEntity);
+            try
+            {
+                var insertedEntity = await repository.InsertAsync(entity, ct);
+                return Created($"{Request.Path}/{insertedEntity.Id}", insertedEntity);
+            }
+            catch (InvalidOperationException exception)
+            {
+                return Conflict(new { message = exception.Message });
+            }
         }
 
         [HttpPut("{id:int}")]
