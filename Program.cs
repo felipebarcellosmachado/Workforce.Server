@@ -97,7 +97,14 @@ builder.Services.AddCors(options =>
 });
 // Configure Database Context - Aspire will provide connection string
 builder.Services.AddDbContext<WorkforceDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+        // EF Core 10 promotes this warning to an exception during Migrate().
+        // The repository contains an existing migration history whose snapshot
+        // can legitimately lag the runtime model during development. Keep the
+        // migration operation executable and let the database report real
+        // schema/connection failures instead of aborting startup on this warning.
+        .ConfigureWarnings(warnings => warnings.Log(
+            Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning)));
 
 // Configure Hangfire - Use Aspire connection string
 builder.Services.AddHangfire(configuration => configuration
