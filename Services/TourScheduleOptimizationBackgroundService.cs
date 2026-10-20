@@ -45,36 +45,37 @@ namespace Workforce.Server.Services
                 "Iniciando processamento de otimizaÃ§Ã£o em background. OptimizationId: {OptimizationId}",
                 parameters.TourScheduleOptimizationId);
 
-            // Criar um scope para resolver dependÃªncias scoped
-            using var scope = _serviceProvider.CreateScope();
-            var dbContext = scope.ServiceProvider.GetRequiredService<WorkforceDbContext>();
-            var repository = scope.ServiceProvider.GetRequiredService<TourScheduleOptimizationRepository>();
-            var tourScheduleRepository = scope.ServiceProvider.GetRequiredService<TourScheduleRepository>();
-            var leaveTakeRepository = scope.ServiceProvider.GetRequiredService<LeaveTakeRepository>();
-
-            // Buscar a otimizaÃ§Ã£o
-            var optimization = await repository.GetByIdSingleAsync(
-                parameters.TourScheduleOptimizationId,
-                CancellationToken.None);
-
-            if (optimization == null)
-            {
-                _logger.LogError(
-                    "OtimizaÃ§Ã£o nÃ£o encontrada. OptimizationId: {OptimizationId}",
-                    parameters.TourScheduleOptimizationId);
-                return;
-            }
-
-            // Usar as opções persistidas somente quando a chamada não trouxe opções.
-            // A UI envia as opções atuais; sobrescrevê-las aqui fazia a reotimização
-            // ignorar alterações feitas no diálogo de parâmetros.
-            if (parameters.Options == null && !string.IsNullOrEmpty(optimization.OptionsJson))
-            {
-                parameters.Options = JsonSerializer.Deserialize<TourScheduleOptimizationOptions>(optimization.OptionsJson);
-            }
-
             try
             {
+                // O scope deve abranger também a leitura inicial, para que falhas
+                // antes do solver caiam no catch e atualizem status para Failed.
+                using var scope = _serviceProvider.CreateScope();
+                var dbContext = scope.ServiceProvider.GetRequiredService<WorkforceDbContext>();
+                var repository = scope.ServiceProvider.GetRequiredService<TourScheduleOptimizationRepository>();
+                var tourScheduleRepository = scope.ServiceProvider.GetRequiredService<TourScheduleRepository>();
+                var leaveTakeRepository = scope.ServiceProvider.GetRequiredService<LeaveTakeRepository>();
+
+                // Buscar a otimizaÃ§Ã£o
+                var optimization = await repository.GetByIdSingleAsync(
+                    parameters.TourScheduleOptimizationId,
+                    CancellationToken.None);
+
+                if (optimization == null)
+                {
+                    _logger.LogError(
+                        "OtimizaÃ§Ã£o nÃ£o encontrada. OptimizationId: {OptimizationId}",
+                        parameters.TourScheduleOptimizationId);
+                    return;
+                }
+
+                // Usar as opções persistidas somente quando a chamada não trouxe opções.
+                // A UI envia as opções atuais; sobrescrevê-las aqui fazia a reotimização
+                // ignorar alterações feitas no diálogo de parâmetros.
+                if (parameters.Options == null && !string.IsNullOrEmpty(optimization.OptionsJson))
+                {
+                    parameters.Options = JsonSerializer.Deserialize<TourScheduleOptimizationOptions>(optimization.OptionsJson);
+                }
+
                 // Executar a otimizaÃ§Ã£o.
                 // O solver Ã© responsÃ¡vel por persistir status, violaÃ§Ãµes,
                 // diagnÃ³sticos e totais da otimizaÃ§Ã£o.
@@ -93,14 +94,26 @@ namespace Workforce.Server.Services
             }
             catch (Exception ex)
             {
-                var failedOptimization = await repository.GetByIdSingleAsync(
-                    parameters.TourScheduleOptimizationId,
-                    CancellationToken.None);
-
-                if (failedOptimization != null)
+                try
                 {
-                    failedOptimization.Status = TourScheduleOptimizationStatus.Failed;
-                    await repository.UpdateAsync(failedOptimization, CancellationToken.None);
+                    using var failureScope = _serviceProvider.CreateScope();
+                    var failureRepository = failureScope.ServiceProvider.GetRequiredService<TourScheduleOptimizationRepository>();
+                    var failedOptimization = await failureRepository.GetByIdSingleAsync(
+                        parameters.TourScheduleOptimizationId,
+                        CancellationToken.None);
+
+                    if (failedOptimization != null)
+                    {
+                        failedOptimization.Status = TourScheduleOptimizationStatus.Failed;
+                        await failureRepository.UpdateAsync(failedOptimization, CancellationToken.None);
+                    }
+                }
+                catch (Exception statusException)
+                {
+                    _logger.LogError(
+                        statusException,
+                        "NÃ£o foi possÃ­vel persistir Failed. OptimizationId: {OptimizationId}",
+                        parameters.TourScheduleOptimizationId);
                 }
 
                 _logger.LogError(
