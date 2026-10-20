@@ -179,7 +179,9 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
                     PeriodId = v.PeriodId,
                     PeriodName = v.PeriodName,
                     WorkUnitId = v.WorkUnitId,
-                    WorkUnitName = v.WorkUnitName,
+                    WorkUnitName = entity.StaffingSchedule?.Demands
+                        ?.FirstOrDefault(d => d.Id == v.DemandId)?.WorkUnit?.FullName
+                        ?? v.WorkUnitName,
                     JobTitleId = v.JobTitleId,
                     JobTitleName = v.JobTitleName,
                     RequiredCount = v.RequiredCount,
