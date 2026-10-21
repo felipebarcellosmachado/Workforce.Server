@@ -149,6 +149,7 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
                 return NotFound(new { error = "Optimization not found" });
 
             optimization.Status = StaffingScheduleOptimizationStatus.Pending;
+            optimization.IsInfeasible = true;
             await repository.UpdateAsync(optimization, ct);
 
             var jobId = BackgroundJob.Enqueue<StaffingScheduleOptimizationBackgroundService>(
@@ -216,7 +217,10 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
                     TotalAllocatedWorkers = score.TotalAllocatedWorkers,
                     UniqueProfilesUsed = score.UniqueProfilesUsed,
                     TotalCost = score.TotalCost,
-                    TotalDeficit = score.TotalDeficit
+                    TotalDeficit = score.TotalDeficit,
+                    ObjectiveValue = score.ObjectiveValue,
+                    SolveTimeSeconds = score.SolveTimeSeconds,
+                    GeneratedAt = score.GeneratedAt
                 };
             }
 
