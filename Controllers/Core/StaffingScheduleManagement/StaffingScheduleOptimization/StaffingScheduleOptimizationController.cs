@@ -196,7 +196,7 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
                 .Select(demand => new StaffingScheduleOptimizationDemandCoverageResponse
                 {
                     DemandId = demand.Id,
-                    AvailabilityCount = GetAvailabilityCount(entity, demand)
+                    AvailabilityCount = StaffingScheduleCoverageCalculator.GetAllocatedCount(entity, demand)
                 })
                 .ToList();
             StaffingScheduleOptimizationScoreResponse? scoreResponse = null;
@@ -242,24 +242,6 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
                 DemandCoverage = demandCoverage,
                 DashboardUrl = "/hangfire"
             });
-        }
-
-        private static int GetAvailabilityCount(
-            Domain.Core.StaffingScheduleManagement.StaffingScheduleOptimization.Entity.StaffingScheduleOptimization optimization,
-            Domain.Core.StaffingScheduleManagement.StaffingSchedule.Entity.StaffingScheduleDemand demand)
-        {
-            var periodLabel = demand.Period == null
-                ? string.Empty
-                : $"{demand.Period.StartTime:HH\\:mm} - {demand.Period.EndTime:HH\\:mm}";
-
-            return (optimization.Allocations ?? new List<Domain.Core.StaffingScheduleManagement.StaffingScheduleOptimization.Entity.StaffingScheduleOptimizationAllocation>())
-                .Where(allocation => allocation.AllocatedCount > 0
-                    && allocation.WorkAgreement?.JobTitleId == demand.JobTitleId
-                    && allocation.Resource?.WorkUnits.Any(workUnit => workUnit.WorkUnitId == demand.WorkUnitId) == true)
-                .Where(allocation => allocation.Segments.Any(segment =>
-                    segment.PeriodName == periodLabel
-                    && segment.Date == demand.Date))
-                .Sum(allocation => allocation.AllocatedCount);
         }
 
         [HttpPost("{id:int}/reset-status")]
