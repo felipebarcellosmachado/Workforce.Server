@@ -95,8 +95,11 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
                 return NotFound(new { error = "Optimization not found" });
             }
 
-            // Definir status como Pending (será alterado para InProgress pelo background service)
+            // Marcar a execução como sem solução até o solver confirmar uma solução viável.
             optimization.Status = TourScheduleOptimizationStatus.Pending;
+            optimization.IsInfeasible = true;
+            optimization.IsFeasible = false;
+            optimization.FeasibleSolutionTimeSeconds = null;
             await repository.UpdateAsync(optimization, ct);
 
             // Enfileirar o job no Hangfire
@@ -220,6 +223,8 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
                 EnvironmentId = entity.EnvironmentId,
                 DashboardUrl = shouldShowDashboard ? "/hangfire" : string.Empty,
                 IsInfeasible = entity.IsInfeasible,
+                IsFeasible = entity.IsFeasible,
+                FeasibleSolutionTimeSeconds = entity.FeasibleSolutionTimeSeconds,
                 TotalViolations = entity.TotalViolations,
                 TotalDeficit = entity.TotalDeficit,
                 TotalExcess = entity.TotalExcess,
@@ -243,6 +248,9 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
             if (optimization == null) return NotFound();
 
             optimization.Status = TourScheduleOptimizationStatus.Pending;
+            optimization.IsInfeasible = false;
+            optimization.IsFeasible = false;
+            optimization.FeasibleSolutionTimeSeconds = null;
             var updated = await repository.UpdateAsync(optimization, ct);
             return Ok(updated);
         }
