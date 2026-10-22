@@ -40,6 +40,7 @@
     <Folder Include="Components\" />
     <Folder Include="Controllers\Core\DemandManagement\" />
     <Folder Include="Controllers\Core\HumanResourceManagement\WorkingHour\" />
+    <Folder Include="Controllers\Core\TourScheduleManagement\TourScheduleType\" />
     <Folder Include="Controllers\Core\WorkManagement\WorkingTimeType\" />
   </ItemGroup>
 </Project>

@@ -179,7 +179,6 @@ builder.Services.AddScoped<WorkAgreementRepository>();
 // Infra - WorkingTime
 builder.Services.AddScoped<WorkingTimeRepository>();
 builder.Services.AddScoped<JourRepository>();
-builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.TourScheduleManagement.TourScheduleType.Repository.TourScheduleTypeRepository>();
 
 // Infra - WorkUnit
 builder.Services.AddScoped<WorkUnitRepository>();
