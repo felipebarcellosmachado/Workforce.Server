@@ -64,6 +64,23 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkAgreemen
             }
         }
 
+        [HttpGet("all/environment/{environmentId}/open-contexts")]
+        public async Task<ActionResult<IList<Domain.Core.WorkManagement.WorkAgreement.Entity.WorkAgreement>>> GetAllOpenByEnvironmentIdAsync(
+            int environmentId,
+            [FromQuery] int? contextId,
+            CancellationToken ct = default)
+        {
+            try
+            {
+                var workAgreements = await _workAgreementRepository.GetAllOpenByEnvironmentIdAsync(environmentId, contextId, ct);
+                return Ok(workAgreements);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
         [HttpPost]
         public async Task<ActionResult<Domain.Core.WorkManagement.WorkAgreement.Entity.WorkAgreement>> Insert([FromBody] Domain.Core.WorkManagement.WorkAgreement.Entity.WorkAgreement workAgreement)
         {
