@@ -57,6 +57,7 @@ using Workforce.Realization.Infrastructure.Persistence.Admin.Session;
 using Workforce.Realization.Infrastructure.Persistence.Core.FacilityManagement.Facility;
 using Workforce.Realization.Infrastructure.Persistence.Core.FacilityManagement.WorkUnit;
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.Availability;
+using Workforce.Realization.Infrastructure.Persistence.Core.ContextManagement.Context;
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.Behaviour;
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.CompetenceLevel;
 using Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.Holiday;
@@ -201,6 +202,7 @@ builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core
 
 // Core - Availability
 builder.Services.AddScoped<AvailabilityRepository>();
+builder.Services.AddScoped<ContextRepository>();
 
 // Core - Class
 builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.Class.ClassRepository>();
