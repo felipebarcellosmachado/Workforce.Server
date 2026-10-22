@@ -64,6 +64,20 @@ namespace Workforce.Server.Controllers.Core.HumanResourceManagement.WorkingTime
             }
         }
 
+        [HttpGet("all/environment/{environmentId}/open-contexts")]
+        public async Task<ActionResult<IList<Domain.Core.WorkManagement.WorkingTime.Entity.WorkingTime>>> GetAllOpenByEnvironmentId(int environmentId, [FromQuery] int? contextId, CancellationToken ct = default)
+        {
+            try
+            {
+                var workingTimes = await _workingTimeRepository.GetAllOpenByEnvironmentIdAsync(environmentId, contextId, ct);
+                return Ok(workingTimes);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
         [HttpGet("all")]
         public async Task<ActionResult<IList<Domain.Core.WorkManagement.WorkingTime.Entity.WorkingTime>>> GetAll()
         {

@@ -76,6 +76,19 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.BaseTourSched
             }
         }
 
+        [HttpGet("all/environment/{environmentId:int}/open-contexts")]
+        public async Task<ActionResult<IList<BaseTourSchedule>>> GetAllOpenByEnvironmentIdAsync(int environmentId, [FromQuery] int? contextId, CancellationToken ct = default)
+        {
+            try
+            {
+                return Ok(await repository.GetAllOpenByEnvironmentIdAsync(environmentId, contextId, ct));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao obter BaseTourSchedules por contexto: {ex.Message}");
+            }
+        }
+
         [HttpGet("environment/{environmentId:int}/{id:int}")]
         public async Task<ActionResult<BaseTourSchedule>> GetByEnvironmentIdAndIdAsync(int environmentId, int id, CancellationToken ct = default)
         {

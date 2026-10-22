@@ -76,6 +76,19 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.BaseStaff
             }
         }
 
+        [HttpGet("all/environment/{environmentId:int}/open-contexts")]
+        public async Task<ActionResult<IList<Domain.Core.StaffingScheduleManagement.BaseStaffingSchedule.Entity.BaseStaffingSchedule>>> GetAllOpenByEnvironmentIdAsync(int environmentId, [FromQuery] int? contextId, CancellationToken ct = default)
+        {
+            try
+            {
+                return Ok(await repository.GetAllOpenByEnvironmentIdAsync(environmentId, contextId, ct));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao obter BaseStaffingSchedules por contexto: {ex.Message}");
+            }
+        }
+
         [HttpGet("environment/{environmentId:int}/{id:int}")]
         public async Task<ActionResult<Domain.Core.StaffingScheduleManagement.BaseStaffingSchedule.Entity.BaseStaffingSchedule>> GetByEnvironmentIdAndIdAsync(int environmentId, int id, CancellationToken ct = default)
         {

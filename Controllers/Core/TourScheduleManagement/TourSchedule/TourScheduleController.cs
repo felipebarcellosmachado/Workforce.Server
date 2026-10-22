@@ -67,6 +67,19 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourSchedule
             }
         }
 
+        [HttpGet("all/environment/{environmentId:int}/open-contexts")]
+        public async Task<ActionResult<IList<Domain.Core.TourScheduleManagement.TourSchedule.Entity.TourSchedule>>> GetAllOpenByEnvironmentIdAsync(int environmentId, [FromQuery] int? contextId, CancellationToken ct = default)
+        {
+            try
+            {
+                return Ok(await repository.GetAllOpenByEnvironmentIdAsync(environmentId, contextId, ct));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Erro ao obter TourSchedules por contexto: {ex.Message}");
+            }
+        }
+
         [HttpGet("environment/{environmentId:int}/{id:int}")]
         public async Task<ActionResult<Domain.Core.TourScheduleManagement.TourSchedule.Entity.TourSchedule>> GetByEnvironmentIdAndIdAsync(int environmentId, int id, CancellationToken ct = default)
         {
