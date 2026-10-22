@@ -106,6 +106,13 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
             return Ok(list);
         }
 
+        [HttpGet("all/environment/{environmentId:int}/open-contexts")]
+        public async Task<ActionResult<IList<Domain.Core.StaffingScheduleManagement.StaffingScheduleOptimization.Entity.StaffingScheduleOptimization>>> GetAllOpenByEnvironmentIdAsync(int environmentId, [FromQuery] int? contextId, CancellationToken ct = default)
+        {
+            var list = await repository.GetAllOpenByEnvironmentIdAsync(environmentId, contextId, ct);
+            return Ok(list);
+        }
+
         [HttpGet("{id:int}/single")]
         public async Task<ActionResult<Domain.Core.StaffingScheduleManagement.StaffingScheduleOptimization.Entity.StaffingScheduleOptimization>> GetByIdSingleAsync(int id, CancellationToken ct = default)
         {

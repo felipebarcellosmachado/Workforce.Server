@@ -59,6 +59,13 @@ namespace Workforce.Server.Controllers.Core.TourScheduleManagement.TourScheduleO
             return Ok(list);
         }
 
+        [HttpGet("all/environment/{environmentId:int}/open-contexts")]
+        public async Task<ActionResult<IList<Domain.Core.TourScheduleManagement.TourScheduleOptimization.Entity.TourScheduleOptimization>>> GetAllOpenByEnvironmentIdAsync(int environmentId, [FromQuery] int? contextId, CancellationToken ct)
+        {
+            var list = await repository.GetAllOpenByEnvironmentIdAsync(environmentId, contextId, ct);
+            return Ok(list);
+        }
+
         [HttpPost]
         public async Task<ActionResult<Domain.Core.TourScheduleManagement.TourScheduleOptimization.Entity.TourScheduleOptimization>> InsertAsync(Domain.Core.TourScheduleManagement.TourScheduleOptimization.Entity.TourScheduleOptimization entity, CancellationToken ct)
         {
