@@ -92,6 +92,14 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
             return Ok(entity);
         }
 
+        [HttpGet("{id:int}/dashboard-details")]
+        public async Task<ActionResult<Domain.Core.StaffingScheduleManagement.StaffingScheduleOptimization.Entity.StaffingScheduleOptimization>> GetDashboardDetailsAsync(int id, CancellationToken ct = default)
+        {
+            var entity = await repository.GetForDashboardDetailsAsync(id, ct);
+            if (entity == null) return NotFound();
+            return Ok(entity);
+        }
+
         [HttpGet("all")]
         public async Task<ActionResult<IList<Domain.Core.StaffingScheduleManagement.StaffingScheduleOptimization.Entity.StaffingScheduleOptimization>>> GetAllAsync(CancellationToken ct = default)
         {
@@ -173,9 +181,14 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
         }
 
         [HttpGet("{id:int}/status", Name = "GetStaffingScheduleOptimizationStatus")]
-        public async Task<ActionResult<StaffingScheduleOptimizationStatusResponse>> GetStatusAsync(int id, CancellationToken ct = default)
+        public async Task<ActionResult<StaffingScheduleOptimizationStatusResponse>> GetStatusAsync(
+            int id,
+            [FromQuery] bool includeDemandCoverage = true,
+            CancellationToken ct = default)
         {
-            var entity = await repository.GetByIdAsync(id, ct);
+            var entity = includeDemandCoverage
+                ? await repository.GetForCoverageAsync(id, ct)
+                : await repository.GetForStatusAsync(id, ct);
             if (entity == null) return NotFound();
 
             var violations = (entity.Violations ?? new List<StaffingScheduleOptimizationViolation>())
@@ -199,13 +212,11 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
                 }).ToList();
 
             var score = entity.Scores?.FirstOrDefault();
-            var demandCoverage = (entity.StaffingSchedule?.Demands ?? new List<Domain.Core.StaffingScheduleManagement.StaffingSchedule.Entity.StaffingScheduleDemand>())
-                .Select(demand => new StaffingScheduleOptimizationDemandCoverageResponse
-                {
-                    DemandId = demand.Id,
-                    AvailabilityCount = StaffingScheduleCoverageCalculator.GetAllocatedCount(entity, demand)
-                })
-                .ToList();
+            var demands = entity.StaffingSchedule?.Demands
+                ?? new List<Domain.Core.StaffingScheduleManagement.StaffingSchedule.Entity.StaffingScheduleDemand>();
+            var demandCoverage = includeDemandCoverage
+                ? StaffingScheduleCoverageCalculator.GetDemandCoverage(entity, demands)
+                : new List<StaffingScheduleOptimizationDemandCoverageResponse>();
             StaffingScheduleOptimizationScoreResponse? scoreResponse = null;
             if (score != null)
             {
@@ -236,6 +247,14 @@ namespace Workforce.Server.Controllers.Core.StaffingScheduleManagement.StaffingS
                 Id = entity.Id,
                 Status = entity.Status.ToString(),
                 StaffingScheduleId = entity.StaffingScheduleId,
+                StaffingScheduleName = entity.StaffingSchedule?.Name ?? string.Empty,
+                StartDate = entity.StaffingSchedule?.StartDate ?? default,
+                EndDate = entity.StaffingSchedule?.EndDate ?? default,
+                AbsenteeismRate = entity.StaffingSchedule?.AbsenteeismRate,
+                Mode = entity.Mode,
+                AvailabilityCost = entity.AvailabilityCost,
+                OccasionalCost = entity.OccasionalCost,
+                ExtraCost = entity.ExtraCost,
                 EnvironmentId = entity.EnvironmentId,
                 TotalAllocatedWorkers = entity.TotalAllocatedWorkers,
                 TotalProfilesUsed = entity.TotalProfilesUsed,
