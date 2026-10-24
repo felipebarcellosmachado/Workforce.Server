@@ -203,9 +203,6 @@ builder.Services.AddScoped<ContextRepository>();
 // Core - Class
 builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.Class.ClassRepository>();
 
-// Core - FunctionalUnit
-builder.Services.AddScoped<Workforce.Realization.Infrastructure.Persistence.Core.HumanResourceManagement.FunctionalUnit.FunctionalUnitRepository>();
-
 // Core - Holiday
 builder.Services.AddScoped<HolidayRepository>();
 
